@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>映画一覧</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #0b0e14;
+          --card-bg: rgba(22, 28, 38, 0.65);
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding-bottom: 60px; 
+        }
+
+        header {
+            background-color: var(--marvel-red);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(230, 0, 51, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #111827;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--marvel-red);
+            box-shadow: 0 0 8px var(--marvel-red);
+        }
+
+        main {
+            padding: 3rem 1rem 4rem 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container {
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .search-box:focus {
+            border-color: var(--marvel-red);
+            box-shadow: 0 0 12px rgba(230, 0, 51, 0.4);
+            background-color: #111827;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .filter-btn {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 700;
+            background-color: #1f2937;
+            color: var(--text-light);
+            border: 1px solid #374151;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--marvel-red);
+            color: #fff;
+        }
+
+        .filter-btn.active {
+            background-color: var(--marvel-red);
+            border-color: var(--marvel-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(230, 0, 51, 0.4);
+        }
+
+        .movie-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .movie-item {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 0; 
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .movie-item.fade-out {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        .movie-item a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: 320px; 
+            object-fit: cover; 
+            transition: transform 0.5s ease;
+        }
+
+        .movie-item h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-grow: 1; 
+            color: #e5e7eb;
+        }
+
+        .movie-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 0, 51, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 0, 51, 0.2);
+            background-color: #1f2937;
+        }
+
+        .movie-item:hover img {
+            transform: scale(1.03); 
+        }
+
+        footer {
+            background-color: #111827;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MARVEL映画とドラマシリーズ一覧</h1>
+    </header>
+    <nav>
+        <a href="index.html">TOP</a>
+        <a href="映画一覧.html" class="active">映画一覧</a>
+        <a href="視聴順.html">時系列順</a>
+        <a href="キャラ紹介ページ.html">キャラ解説</a>
+        <a href="用語解説.html">用語解説</a>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="searchBox" class="search-box" placeholder="映画タイトルやシリーズ名で検索">
+            </div>            
+
+            <div class="filter-container">
+                <button class="filter-btn active" data-target="all">すべて</button>
+                <button class="filter-btn" data-target="mcu">MCU作品</button>
+                <button class="filter-btn" data-target="spider">スパイダーマン</button>
+                <button class="filter-btn" data-target="xmen">X-MENシリーズ</button>
+                <button class="filter-btn" data-target="other">ヴェノム／その他</button>
+            </div>
+
+            <div class="movie-list">
+                <div class="movie-item" data-series="mcu">
+                    <a href="アイアンマン.html">
+                        <img src="画像ファイル/アイアンマン.jpg" alt="アイアンマン">
+                        <h3>アイアンマン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アイアンマン２.html">
+                        <img src="画像ファイル/アイアンマン２.jpg" alt="アイアンマン2">
+                        <h3>アイアンマン2</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="インクレディブルハルク.html">
+                        <img src="画像ファイル/インクレディブルハルク.jpeg" alt="インクレディブル・ハルク">
+                        <h3>インクレディブル・ハルク</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="キャプテンアメリカ＿ザ・ファーストアベンジャー.html">
+                        <img src="画像ファイル/キャプテン・アメリカ.jpeg" alt="キャプテン・アメリカ: ザ・ファースト・アベンジャー">
+                        <h3>キャプテン・アメリカ: ザ・ファースト・アベンジャー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="マイティ・ソー.html">
+                        <img src="画像ファイル/マイティソー.jpg" alt="マイティ・ソー">
+                        <h3>マイティ・ソー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アベンジャーズ.html">
+                        <img src="画像ファイル/アベンジャーズ.jpg" alt="アベンジャーズ">
+                        <h3>アベンジャーズ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アイアンマン３.html">
+                        <img src="画像ファイル/アイアンマン３.jpg" alt="アイアンマン3">
+                        <h3>アイアンマン3</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン.html">
+                        <img src="画像ファイル/スパイダーマン.jpg" alt="スパイダーマン">
+                        <h3>スパイダーマン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン２.html">
+                        <img src="画像ファイル/スパイダーマン２.jpg" alt="スパイダーマン2">
+                        <h3>スパイダーマン2</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン３.html">
+                        <img src="画像ファイル/スパイダーマン３.jpg" alt="スパイダーマン3">
+                        <h3>スパイダーマン3</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="アメイジングスパイダーマン.html">
+                        <img src="画像ファイル/アメイジングスパイダーマン.jpg" alt="アメイジングスパイダーマン">
+                        <h3>アメイジングスパイダーマン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="アメイジングスパイダーマン２.html">
+                        <img src="画像ファイル/アメイジングスパイダーマン２.jpg" alt="アメイジングスパイダーマン2">
+                        <h3>アメイジングスパイダーマン2</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="キャプテンアメリカ＿ウィンターソルジャー.html">
+                        <img src="画像ファイル/キャプテンアメリカ＿ウィンターソルジャー.jpg" alt="キャプテン・アメリカ: ウィンター・ソルジャー">
+                        <h3>キャプテン・アメリカ: ウィンター・ソルジャー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="マイティーソー＿ダークワールド.html">
+                        <img src="画像ファイル/マイティーソー＿ダークワールド.jpg" alt="マイティ・ソー: ダーク・ワールド">
+                        <h3>マイティ・ソー: ダーク・ワールド</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アベンジャーズAOU.html">
+                        <img src="画像ファイル/アベンジャーズ＿AOU.jpg" alt="アベンジャーズ: エイジ・オブ・ウルトロン">
+                        <h3>アベンジャーズ: エイジ・オブ・ウルトロン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アントマン.html">
+                        <img src="画像ファイル/アントマン.jpg" alt="アントマン">
+                        <h3>アントマン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="other">
+                    <a href="ヴェノム.html">
+                        <img src="画像ファイル/ヴェノム.jpg" alt="ヴェノム">
+                        <h3>ヴェノム</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="シビルウォー.html">
+                        <img src="画像ファイル/シビルウォー.jpg" alt="シビル・ウォー">
+                        <h3>シビル・ウォー/キャプテン・アメリカ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ドクターストレンジ.html">
+                        <img src="画像ファイル/ドクターストレンジ.jpg" alt="ドクター・ストレンジ">
+                        <h3>ドクター・ストレンジ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="マイティソー＿バトルロイヤル.html">
+                        <img src="画像ファイル/マイティーソー＿バトルロイヤル.jpg" alt="マイティ・ソー: バトルロイヤル">
+                        <h3>マイティ・ソー: バトルロイヤル</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ブラックパンサー.html">
+                        <img src="画像ファイル/ブラックパンサー.jpg" alt="ブラックパンサー">
+                        <h3>ブラックパンサー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン＿ホームカミング.html">
+                        <img src="画像ファイル/スパイダーマン＿ホームカミング.jpg" alt="スパイダーマン: ホームカミング">
+                        <h3>スパイダーマン: ホームカミング</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アントマン＆ワスプ.html">
+                        <img src="画像ファイル/アントマン＆ワスプ.jpg" alt="アントマン＆ワスプ">
+                        <h3>アントマン＆ワスプ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ガーディアンズ・オブ・ギャラクシー.html">
+                        <img src="画像ファイル/ガーディアンズオブギャラクシー.jpg" alt="ガーディアンズ・オブ・ギャラクシー">
+                        <h3>ガーディアンズ・オブ・ギャラクシー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ガーディアンズ・オブ・ギャラクシー＿リミックス.html">
+                        <img src="画像ファイル/ガーディアンズオブギャラクシー＿リミックス.jpg" alt="ガーディアンズ・オブ・ギャラクシー: リミックス">
+                        <h3>ガーディアンズ・オブ・ギャラクシー: リミックス</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アベンジャーズ＿インフィニティウォー.html">
+                        <img src="画像ファイル/アベンジャーズ＿インフィニティウォー.jpg" alt="アベンジャーズ: インフィニティ・ウォー">
+                        <h3>アベンジャーズ: インフィニティ・ウォー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="キャプテン・マーベル.html">
+                        <img src="画像ファイル/キャプテンマーベル.jpg" alt="キャプテン・マーベル">
+                        <h3>キャプテン・マーベル</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アベンジャーズ＿エンドゲーム.html">
+                        <img src="画像ファイル/アベンジャーズ＿エンドゲーム.jpg" alt="アベンジャーズ: エンドゲーム">
+                        <h3>アベンジャーズ: エンドゲーム</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン＿FFH.html">
+                        <img src="画像ファイル/スパイダーマン＿FFH.jpg" alt="スパイダーマン: FFH">
+                        <h3>スパイダーマン: ファー・フロム・ホーム</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="シャンチー.html">
+                        <img src="画像ファイル/シャンチー.jpg" alt="シャン・チー">
+                        <h3>シャン・チー／テン・リングスの伝説</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ドクターストレンジ＿MOM.html">
+                        <img src="画像ファイル/ドクターストレンジ＿MOM.jpg" alt="ドクター・ストレンジ: マルチバース・オブ・マッドネス">
+                        <h3>ドクター・ストレンジ: マルチバース・オブ・マッドネス</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマン＿NWH.html">
+                        <img src="画像ファイル/スパイダーマン＿NWH.jpg" alt="スパイダーマン: NWH">
+                        <h3>スパイダーマン: ノー・ウェイ・ホーム</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ブラックパンサー＿ワカンダ・フォーエバー.html">
+                        <img src="画像ファイル/ブラックパンサー＿ワカンダ・フォーエバー.jpg" alt="ブラックパンサー ワカンダ・フォーエバー">
+                        <h3>ブラックパンサー ワカンダ・フォーエバー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="ソー＿ラブ＆サンダー.html">
+                        <img src="画像ファイル/ソー＿ラブ＆サンダー.jpg" alt="ソー ラブ＆サンダー">
+                        <h3>ソー ラブ＆サンダー</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アントマン＆ワスプ クアントマニア.html">
+                        <img src="画像ファイル/クアントマニア.jpg" alt="アントマン＆ワスプ クアントマニア">
+                        <h3>アントマン＆ワスプ クアントマニア</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="Xメン.html">
+                        <img src="画像ファイル/Xメン.jpeg" alt="X-MEN">
+                        <h3>X-MEN</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN2.html">
+                        <img src="画像ファイル/XMEN2.jpg" alt="X-MEN２">
+                        <h3>X-MEN２</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN＿ファイナル・ディシジョン.html">
+                        <img src="画像ファイル/Xメン＿ファイナル・ディシジョン.jpg" alt="XMEN ファイナル・ディシジョン">
+                        <h3>X-MEN ファイナル・ディシジョン</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMENゼロ.html">
+                        <img src="画像ファイル/XMEN＿ZERO.jpeg" alt="ウルヴァリン/XMENゼロ">
+                        <h3>ウルヴァリン/X-MEN ZERO</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN＿ファーストジェネレーション.html">
+                        <img src="画像ファイル/XMEN＿ファーストジェネレーション.jpeg" alt="X-MEN：ファーストジェネレーション">
+                        <h3>X-MEN ファーストジェネレーション</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="ウルヴァリン＿SAMURAI.html">
+                        <img src="画像ファイル/ウルヴァリン＿SAMURAI.jpg" alt="ウルヴァリン：SAMURAI">
+                        <h3>ウルヴァリン：SAMURAI</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN＿フューチャー＆パスト.html">
+                        <img src="画像ファイル/XMEN＿フューチャー＆パスト.jpg" alt="XMEN フューチャー＆パスト">
+                        <h3>X-MEN フューチャー＆パスト</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="デッドプール.html">
+                        <img src="画像ファイル/デッドプール.jpg" alt="デッドプール">
+                        <h3>デッドプール</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN＿アポカリプス.html">
+                        <img src="画像ファイル/XMEN＿アポカリプス.jpg" alt="X-MEN アポカリプス">
+                        <h3>X-MEN アポカリプス</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="xmen">
+                    <a href="ローガン.html">
+                        <img src="画像ファイル/ローガン.jpg" alt="ローガン">
+                        <h3>ローガン／LOGAN</h3>
+                    </a>
+                </div>                
+                <div class="movie-item" data-series="xmen">
+                    <a href="デッドプール２.html">
+                        <img src="画像ファイル/デッドプール２.jpg" alt="デッドプール２">
+                        <h3>デッドプール２</h3>
+                    </a>
+                </div>                
+                <div class="movie-item" data-series="xmen">
+                    <a href="XMEN＿ダークフェニックス.html">
+                        <img src="画像ファイル/XMEN＿ダークフェニックス.jpg" alt="X-MEN ダーク・フェニックス">
+                        <h3>X-MEN ダーク・フェニックス</h3>
+                    </a>
+                </div>                
+                <div class="movie-item" data-series="xmen">
+                    <a href="デッドプール＆ウルヴァリン.html">
+                        <img src="画像ファイル/デッドプール＆ウルヴァリン.png" alt="デッドプール＆ウルヴァリン">
+                        <h3>デッドプール＆ウルヴァリン</h3>
+                    </a>
+                </div>  
+                <div class="movie-item" data-series="other">
+                    <a href="ヴェノム：ザ・ラストダンス.html">
+                        <img src="画像ファイル/ヴェノム＿ザ・ラストダンス.jpg" alt="ヴェノム/ザ・ラストダンス">
+                        <h3>ヴェノム：ザ・ラストダンス</h3>
+                    </a>
+                </div> 
+                <div class="movie-item" data-series="mcu">
+                    <a href="キャプテン・アメリカ＿BNW.html">
+                        <img src="画像ファイル/キャプテン・アメリカ＿BNW.jpg" alt="キャプテン・アメリカ/ブレイブ・ニュー・ワールド">
+                        <h3>キャプテン・アメリカ：ブレイブ・ニュー・ワールド</h3>
+                    </a>
+                </div> 
+                <div class="movie-item" data-series="mcu">
+                    <a href="サンダーボルツ.html">
+                        <img src="画像ファイル/サンダーボルツ.jpg" alt="サンダーボルツ">
+                        <h3>サンダーボルツ*</h3>
+                    </a>
+                </div> 
+                <div class="movie-item" data-series="mcu">
+                    <a href="画像ファイル/ファンタスティック・フォー＿ファースト・ステップ.jpg">
+                        <img src="画像ファイル/ファンタスティック・フォー＿ファースト・ステップ.jpg" alt="ファンタスティック・フォー/ファーストステップ">
+                        <h3>ファンタスティック・フォー：ファーストステップ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="spider">
+                    <a href="スパイダーマンBND.html">
+                        <img src="画像ファイル/スパイダーマンBND.jpg" alt="スパイダーマン BND">
+                        <h3>スパイダーマン：ブランド・ニュー・デイ</h3>
+                    </a>
+                </div>
+                <div class="movie-item" data-series="mcu">
+                    <a href="アベンジャーズ＿ドゥームズデイ.html">
+                        <img src="画像ファイル/アベンジャーズ＿ドゥームズデイ.webp" alt="アベンジャーズ ドゥームズデイ">
+                        <h3>アベンジャーズ：ドゥームズデイ</h3>
+                    </a>
+                </div>              
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 MARVEL映画とドラマシリーズ一覧</p>
+    </footer>
+
+    <script>
+        let currentActiveTab = 'all';
+
+        const searchBox = document.getElementById('searchBox');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const movieItems = document.querySelectorAll('.movie-item');
+
+        function applyFilter() {
+            const searchValue = searchBox.value.toLowerCase();
+
+            movieItems.forEach(function(item) {
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const series = item.getAttribute('data-series');
+
+                let matchSeriesKeyword = false;
+                if (searchValue.includes('xmen') || searchValue.includes('xメン') || searchValue.includes('x-men')) {
+                    if (series === 'xmen') matchSeriesKeyword = true;
+                }
+                if (searchValue.includes('mcu') || searchValue.includes('アベンジャーズ')) {
+                    if (series === 'mcu') matchSeriesKeyword = true;
+                }
+                if (searchValue.includes('スパイダーマン') || searchValue.includes('spider')) {
+                    if (series === 'spider') matchSeriesKeyword = true;
+                }
+                if (searchValue.includes('ヴェノム') || searchValue.includes('venom')) {
+                    if (series === 'other') matchSeriesKeyword = true;
+                }
+
+                const matchesTab = (currentActiveTab === 'all' || series === currentActiveTab);
+                const matchesSearch = (title.includes(searchValue) || matchSeriesKeyword);
+
+                if (matchesTab && matchesSearch) {
+                    item.classList.remove('fade-out');
+                    item.style.display = '';
+                } else {
+                    item.classList.add('fade-out');
+                    setTimeout(() => {
+                        if(item.classList.contains('fade-out')) item.style.display = 'none';
+                    }, 400);
+                }
+            });
+        }
+
+        searchBox.addEventListener('input', applyFilter);
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentActiveTab = this.getAttribute('data-target');
+                applyFilter();
+            });
+        });
+    </script>
+</body>
+</html>

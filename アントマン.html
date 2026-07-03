@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【ANT-MAN】 - PIM_TECH SECURE ACCESS & MOLECULAR SCALE OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       ピム粒子・縮小プロトコル ＆ アリ通信システムUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #ff3300; /* ピム粒子の縮小エネルギー・レッド */
+      background-color: #030a08; /* ピム・テックのクリーンルームを意識したダークグリーンブラック */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 分子グリッド・マトリクスのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(255, 51, 0, 0.015) 1px, transparent 1px) 0 0 / 15px 15px,
+        linear-gradient(90deg, rgba(255, 51, 0, 0.015) 1px, transparent 1px) 0 0 / 15px 15px,
+        radial-gradient(circle at center, rgba(3, 10, 8, 0.2) 0%, #030a08 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：ピム・テック最高機密サーバーのコントロールパネル風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(4, 16, 13, 0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 51, 0, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(255, 51, 0, 0.1);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(255, 51, 0, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "PIM_TECH_VAULT_DATABASE // MOLECULAR_SCALE: COMPRESSED";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3300;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "EMP_ANT_COMMUNICATION // NET_CONNECTED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc; /* アントマンの電磁コントロール・シアン */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.5em;
+      color: #ffffff;
+      letter-spacing: 14px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(255, 51, 0, 0.6);
+    }
+
+    .header p {
+      color: #00ffcc;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 51, 0, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #00ffcc;
+      box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：基本スタイル */
+    .character-card {
+      background-color: rgba(4, 20, 16, 0.4);
+      border: 1px solid rgba(255, 51, 0, 0.15);
+      border-left: 4px solid rgba(255, 51, 0, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "DATA_NODE // SECURE";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(6, 32, 25, 0.6);
+      border-color: rgba(255, 51, 0, 0.4);
+    }
+
+    /* 🟢 開いている状態の個別クラス ＋ 各種固有アニメーション */
+    
+    /* 🐜 スコット：画像がミクロサイズに縮小／拡大ループするギミック */
+    .character-card.open.scott-override {
+      background-color: rgba(35, 10, 8, 0.95);
+      border-color: #ff3300;
+      border-left-color: #00ffcc;
+    }
+    /* スコットのカードが開いた時、顔写真を縮小・拡大させる指定 */
+    .character-card.open.scott-override .character-header img {
+      animation: scott-shrink 2.5s infinite cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    @keyframes scott-shrink {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255,51,0,0)); }
+      40% { transform: scale(0.25); filter: drop-shadow(0 0 15px #ff3300) brightness(130%); } /* アリサイズまで縮小！ */
+      60% { transform: scale(0.25); filter: drop-shadow(0 0 15px #ff3300) brightness(130%); }
+    }
+
+    /* ホープ：ピム・テック・クリーンシアン */
+    .character-card.open.hope-override {
+      background-color: rgba(8, 26, 30, 0.95);
+      border-color: #00ffcc;
+      border-left-color: #ffffff;
+    }
+
+    /* ハンク・ピム：アンティークブロンズ（初代アントマン） */
+    .character-card.open.pim-override {
+      background-color: rgba(25, 20, 12, 0.95);
+      border-color: #cca300;
+      border-left-color: #ff3300;
+    }
+
+    /* ⚡ ダレン：イエロージャケット・高圧プラズマキャノン明滅 */
+    .character-card.open.darren-override {
+      background-color: rgba(26, 24, 6, 0.98);
+      border-color: #eab308; /* ネオンイエロー */
+      border-left-color: #000000;
+      animation: darren-plasma 1.5s infinite alternate ease-in-out;
+    }
+    @keyframes darren-plasma {
+      0% { box-shadow: inset 0 0 15px rgba(234, 179, 8, 0.1); }
+      100% { box-shadow: inset 0 0 35px rgba(234, 179, 8, 0.35); border-color: #facc15; }
+    }
+    .character-card.open.darren-override::after {
+      content: "WARNING // YELLOWJACKET_PROTOCOL_ACTIVE";
+      color: #eab308;
+      text-shadow: 0 0 8px #eab308;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 51, 0, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.darren-override .character-header img {
+      border-color: #eab308;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.5);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #ffebe6;
+      position: relative;
+      z-index: 2;
+    }
+    .character-card.open.hope-override .character-details { color: #dbfbf5; }
+    .character-card.open.darren-override .character-details { color: #fefce8; }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #ff3300;
+      background: rgba(255, 51, 0, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(255, 51, 0, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.hope-override .character-role {
+      color: #00ffcc;
+      border-color: #00ffcc;
+      background: rgba(0, 255, 204, 0.15);
+    }
+    .character-card.open.darren-override .character-role {
+      color: #eab308;
+      border-color: #eab308;
+      background: rgba(234, 179, 8, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #ffccd0;
+      border-left: 2px solid rgba(255, 51, 0, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { border-left-color: #ffffff; }
+    .character-card.open.scott-override .character-description { border-left-color: #00ffcc; }
+    .character-card.open.hope-override .character-description { border-left-color: #00ffcc; }
+    .character-card.open.darren-override .character-description { border-left-color: #eab308; }
+
+    /* セリフ欄 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #010604;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #ff3300;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[PIM_SUIT_TELEMETRY // MOLECULAR_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3300;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.scott-override .character-quote::before {
+      content: "[ANT_OHEAD_MICROPHONE // FREQUENCY_SYNC]";
+      color: #00ffcc;
+    }
+    .character-card.open.darren-override .character-quote {
+      background-color: #141302;
+      border-left-color: #eab308;
+    }
+    .character-card.open.darren-override .character-quote::before {
+      content: "[YELLOWJACKET_ARMOR_LOG // PLASMA_OUTPUT]";
+      color: #eab308;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>ANT-MAN</h1>
+      <p>– PIM TECHNOLOGIES SECURE STORAGE SUB-ROUTINE –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アントマン.jpg" alt="アントマン ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this, 'scott-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スコットラング.jpg" alt="スコット・ラング">
+            <div class="character-info">
+              <h2>スコット・ラング / アントマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">元泥棒の不運な父親 // 2代目アントマン</div>
+            <div class="character-description">
+              鮮やかな手口を持つ元義賊のコソ泥。出所後、愛する娘キャシーの養育費のために挑んだ最後の空き巣で、ハンク・ピムの仕組んだ罠により「アントマン・スーツ」を盗み出す。スーツの力で身長1.5cmのサイズへと縮小し、身体能力が何倍にも跳ね上がる特性と、アリたちを指揮する電磁頭脳波マイクを武器に、ピム・テックへの超難関潜入ミッションへ挑む。
+            </div>
+            <div class="character-quote">「一つだけ訊かせてくれ。……アベンジャーズを呼ぶのは遅すぎるか？」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'hope-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ホープヴァンダイン.jpg" alt="ホープ・ヴァン・ダイン">
+            <div class="character-info">
+              <h2>ホープ・ヴァン・ダイン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピム・テック取締役 // 優れた格闘術の指導者</div>
+            <div class="character-description">
+              ハンク・ピムの娘であり、ピム・テック社の高官。ダレンの暴走を止めるために父親と和解し、不慣れなスコットに対してアリの操り方や激しい格闘術を徹底的に叩き込む。自身がスーツを着て戦う能力があるにもかかわらず、娘を危険に晒したくない父の過保護さに反発していたが、最後に「ワスプ・スーツ」のプロトタイプを託される。
+            </div>
+            <div class="character-quote">「（スコットに一撃を入れて）パンチの打ち方を教えてあげる。……ようやく（私のスーツの）出番ね。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'pim-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ハンクピム.jpg" alt="ハンク・ピム博士">
+            <div class="character-info">
+              <h2>ハンク・ピム博士 / 初代アントマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピム粒子の発見者 // 天才物理学者</div>
+            <div class="character-description">
+              原子の距離を縮めることで物質を縮小させる「ピム粒子」を開発した冷戦期のSSR天才科学者。その悪用を恐れて長年技術を封印し会社からも退いていたが、かつての弟子ダレンが軍事兵器としてピム粒子を再現したことを知り、すべてを盗み出して消し去るためにスコットを次世代のアントマンとしてスカウトする。
+            </div>
+            <div class="character-quote">「スタークの奴らにこの技術を渡すわけにはいかん。……スコット、泥棒の技術を『世界を救うため』に使ってみせるんだ。」</div>
+          </div>
+        </div>       
+
+        <div class="character-card" onclick="toggleCharacter(this, 'darren-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ダレンクロス.jpg" alt="ダレン・クロス">
+            <div class="character-info">
+              <h2>ダレン・クロス / イエロージャケット</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピム・テック現CEO // 執念の科学者</div>
+            <div class="character-description">
+              かつてハンク・ピムの助手であり、実の息子のように彼を慕っていたが、ピム粒子を隠され続けたことで愛憎が爆発、ピムを会社から追放する。執念で縮小技術を再現し、最凶の軍事用暗殺スーツ「イエロージャケット」を完成。不完全な縮小実験の副作用により脳の化学バランスが崩れ、冷酷な狂気へと染まっていく。
+            </div>
+            <div class="character-quote">「あなたは私を認めなかった……！このイエロージャケットの技術は世界を、戦争の歴史を塗り替えるのだ！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有アニメーションカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'scott-override', 'hope-override', 'pim-override', 'darren-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

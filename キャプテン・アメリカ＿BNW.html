@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>キャプテン・アメリカ　ブレイブ・ニュー・ワールド</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* 劇中の青空と桜、そしてキャプテンのシンボルカラーを意識した配色 */
+      --sky-blue-top: #3a86ff;
+      --sky-blue-bottom: #8ec5fc;
+      --sakura-pink: #ffb7c5;
+      --sakura-accent: #ff4d7d;
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --card-hover-bg: rgba(255, 255, 255, 0.75);
+      --text-main: #1e293b;
+      --text-muted: #475569;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      /* 劇中の美しい爽やかな青空を表現 */
+      background: linear-gradient(135deg, var(--sky-blue-top), var(--sky-blue-bottom));
+      background-attachment: fixed;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text-main);
+    }
+
+    /* リアル桜エフェクト用のCanvas */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .main-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      /* 青空がほんのり透ける美しいすりガラス効果 */
+      background-color: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .header h1 {
+      font-size: 2.2em;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 15px;
+      color: #ffffff;
+      /* 白文字に薄いシャドウを当てて、青空の中でもクッキリ見せる */
+      text-shadow: 0 2px 8px rgba(0, 40, 100, 0.3);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      color: #f8fafc;
+      font-weight: 500;
+      text-shadow: 0 1px 5px rgba(0, 40, 100, 0.2);
+      margin: 0;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .poster {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      max-height: 550px;
+      border-radius: 12px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 350px;
+    }
+
+    .character-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+    }
+
+    /* ホバー時に白みが増し、シールドの赤や桜をイメージしたピンクが微発光 */
+    .character-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--sakura-pink);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08), 0 0 15px rgba(255, 77, 125, 0.1);
+      background-color: var(--card-hover-bg);
+    }
+
+    .character-header {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .character-card img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .character-card:hover img {
+      transform: scale(1.05);
+      border-color: var(--sakura-accent);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-size: 1.4em;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    /* アコーディオン用のアニメーションラッパー */
+    .character-details-wrapper {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+    }
+
+    .character-details {
+      padding: 0 20px 20px 130px;
+    }
+
+    .character-role {
+      color: var(--sakura-accent);
+      font-size: 0.9em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .character-description {
+      line-height: 1.7;
+      margin-bottom: 15px;
+      color: var(--text-muted);
+      font-size: 0.95em;
+    }
+
+    .character-quote {
+      font-family: 'Kaisei Tokumin', serif;
+      font-style: italic;
+      color: #0f172a;
+      background-color: rgba(255, 255, 255, 0.5);
+      padding: 12px 16px;
+      border-left: 4px solid var(--sakura-accent); /* 桜とシールドの赤を兼ねたアクセント */
+      border-radius: 0 8px 8px 0;
+      display: block;
+      font-size: 0.95em;
+      line-height: 1.5;
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    /* アクティブ（展開時）の状態 */
+    .character-card.open {
+      background-color: rgba(255, 255, 255, 0.85);
+      border-color: var(--sakura-pink);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .character-card.open .character-details-wrapper {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .character-details {
+        padding: 0 20px 20px 20px;
+      }
+      .main-container {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 青空に映えるリアル桜エフェクト -->
+  <canvas id="sakura-canvas"></canvas>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>キャプテン・アメリカ<br class="sm-only">　ブレイブ・ニュー・ワールド</h1>
+      <p>“正義の象徴”を受け継いだ＜新たなキャプテン・アメリカ＞の物語。</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル\キャプテン・アメリカ　BNW.jpg" alt="キャプテン・アメリカ　ブレイブ・ニュー・ワールド">
+      </div>
+
+      <div class="characters">
+        <!-- サム -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/サム.jpeg" alt="サム・ウィルソン">
+            <div class="character-info">
+              <h2>サム・ウィルソン／キャプテン・アメリカ</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">今作の主人公</div>
+              <div class="character-description">
+                正義の象徴であるキャプテン・アメリカの盾を受け継いだ。一度は手放したものの、様々な葛藤を乗り越え、再び盾を手に取り新たなヒーローとして世界に立ち向かう。
+              </div>
+              <div class="character-quote">「俺には超人血清も金髪も青い目もない。俺が持つ力は人を信じる心だけ」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ロス -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/ロス.jpg" alt="ロス大統領/レッドハルク">
+            <div class="character-info">
+              <h2>サディアス・ロス大統領／レッドハルク</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">アメリカ合衆国大統領</div>
+              <div class="character-description">
+                かつてアベンジャーズを監視・批判していた元軍人。大統領となった彼は、サムにアベンジャーズの再建を要請する。しかし、裏では恐るべき変貌（レッドハルク）の秘密を秘めている。
+              </div>
+              <div class="character-quote">「君はスティーブ・ロジャースにはなれない」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ホアキン -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/ホアキン.jpeg" alt="ホアキン・トレス">
+            <div class="character-info">
+              <h2>ホアキン・トレス／二代目ファルコン</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">サムの頼れる相棒</div>
+              <div class="character-description">
+                元アメリカ空軍中尉で、サムの良き友人。圧倒的な情報収集能力とハッキングスキルでサムを支えてきた。先代ファルコンのウイングを受け継ぎ、新たな空の戦士として覚醒する。
+              </div>
+              <div class="character-quote">「あんたの言うその重みが俺は欲しかったんだ」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- イザイア -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/イザイア.webp" alt="イザイア・ブラッドリー">
+            <div class="character-info">
+              <h2>イザイア・ブラッドリー</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">歴史の闇に葬られた英雄</div>
+              <div class="character-description">
+                朝鮮戦争時代、不本意に超人血清の人体実験を施され、キャプテン・アメリカとして戦った黒人兵士。しかし政府によってその功績は隠蔽され、30年間も投獄されていた過酷な過去を持つ。
+              </div>
+              <div class="character-quote">「奴らは黒人がキャプテン・アメリカになる事を決して許す事はない。例え許したとしても、自尊心のある黒人は誰もなりたがらない。」</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleCharacter(card) {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open');
+      });
+      if (!isOpen) {
+        card.classList.add('open');
+      }
+    }
+
+    // 青空に映えるリアルな桜吹雪エフェクト
+    const canvas = document.getElementById('sakura-canvas');
+    const ctx = canvas.getContext('2d');
+    let petals = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function createPetals() {
+      petals = [];
+      const count = Math.floor((canvas.width * canvas.height) / 9000);
+      for (let i = 0; i < count; i++) {
+        petals.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          w: Math.random() * 8 + 6,  
+          h: Math.random() * 12 + 8, 
+          opacity: Math.random() * 0.4 + 0.5, // 青空でも見えやすいように不透明度を少し高めに
+          flip: Math.random(),       
+          flipSpeed: Math.random() * 0.03 + 0.01,
+          xSpeed: Math.random() * 1.2 + 0.4, 
+          ySpeed: Math.random() * 1.2 + 0.8,  
+          angle: Math.random() * Math.PI
+        });
+      }
+    }
+
+    function drawPetalShape(ctx, x, y, w, h, angle, flip) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(flip, 1); 
+      ctx.beginPath();
+      
+      ctx.moveTo(0, -h/2);
+      ctx.bezierCurveTo(-w, -h/2, -w, h/2, 0, h/2);
+      ctx.bezierCurveTo(w, h/2, w, -h/2, 0, -h/2);
+      
+      ctx.moveTo(0, -h/2);
+      ctx.lineTo(0, -h/4);
+
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawPetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let p of petals) {
+        // 青空に対してコントラストを出す、鮮やかで優しいピンク色
+        ctx.fillStyle = `rgba(255, 192, 203, ${p.opacity})`;
+        
+        drawPetalShape(ctx, p.x, p.y, p.w, p.h, p.angle, Math.sin(p.flip));
+        
+        p.y += p.ySpeed;
+        p.x += p.xSpeed;
+        p.flip += p.flipSpeed;
+        p.angle += 0.005;
+
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x > canvas.width + 20) {
+          p.x = -20;
+          p.y = Math.random() * canvas.height;
+        }
+      }
+      requestAnimationFrame(drawPetals);
+    }
+
+    createPetals();
+    drawPetals();
+  </script>
+</body>
+</html>

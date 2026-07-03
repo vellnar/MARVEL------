@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ヴェノム ザ・ラストダンス - 紹介</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #05070a;
+      --venom-purple: #1a0b2e;
+      --neon-blue: #00f0ff;
+      --neon-magenta: #ff007f;
+      --fire-orange: #ff4500;
+      --text-white: #f8fafc;
+      --card-bg: rgba(15, 18, 28, 0.85);
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--bg-black);
+      background-image: radial-gradient(circle at 50% 30%, #111424 0%, var(--bg-black) 70%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      color: var(--text-white);
+    }
+
+    /* 地獄の業火・ヌルの脅威をイメージした炎の揺らぎベース */
+    body::before {
+      content: "";
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(to top, rgba(255, 69, 0, 0.25), rgba(255, 0, 127, 0.05), transparent);
+      pointer-events: none;
+      z-index: 1;
+      animation: flicker 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.7; transform: scaleY(1) skewX(-2deg); }
+      100% { opacity: 0.9; transform: scaleY(1.08) skewX(2deg); }
+    }
+
+    /* 視認性を大幅にアップした隕石（ゼノファージの飛来ポッド） */
+    .meteor {
+      position: absolute;
+      background: linear-gradient(135deg, #fff, var(--fire-orange));
+      border-radius: 50%;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      /* 長く禍々しい光の尾を表現 */
+      filter: drop-shadow(-4px -4px 12px rgba(255, 69, 0, 0.9)) drop-shadow(4px 4px 20px rgba(255, 0, 127, 0.6));
+    }
+
+    .main-container {
+      max-width: 1100px;
+      width: 90%;
+      margin: 40px auto;
+      background-color: rgba(5, 7, 10, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 0, 127, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(26, 11, 46, 0.5);
+      position: relative;
+      z-index: 10;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #fff 30%, #8b9bb4 70%, var(--neon-magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .poster {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      max-height: 550px;
+      border-radius: 12px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 350px;
+    }
+
+    .character-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+    }
+
+    .character-card:hover {
+      transform: translateX(5px);
+      border-color: rgba(0, 240, 255, 0.4);
+      background-color: rgba(22, 26, 41, 0.9);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15), inset 0 0 15px rgba(255, 0, 127, 0.1);
+    }
+
+    .character-header {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .character-card img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .character-card:hover img {
+      border-color: var(--neon-blue);
+      transform: scale(1.03);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-size: 1.4em;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+
+    .character-details-wrapper {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+    }
+
+    .character-details {
+      padding: 0 20px 20px 130px;
+    }
+
+    .character-role {
+      color: var(--neon-blue);
+      font-size: 0.9em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .character-description {
+      line-height: 1.7;
+      margin-bottom: 15px;
+      color: #94a3b8;
+      font-size: 0.95em;
+    }
+
+    .character-quote {
+      font-family: 'Kaisei Tokumin', serif;
+      font-style: italic;
+      color: #ffebd6;
+      background-color: rgba(5, 7, 10, 0.8);
+      padding: 12px 16px;
+      border-left: 4px solid var(--fire-orange);
+      border-radius: 0 8px 8px 0;
+      display: block;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-card.open {
+      background-color: rgba(18, 16, 31, 0.95);
+      border-color: var(--neon-magenta);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 0, 127, 0.2);
+    }
+
+    .character-card.open .character-details-wrapper {
+      max-height: 400px;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .character-details {
+        padding: 0 20px 20px 20px;
+      }
+      .main-container {
+        padding: 20px;
+        margin: 20px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>ヴェノム：ザ・ラストダンス</h1>
+      <p>「俺たち2人」でいることが世界を破滅へと導く——<br>
+        壮絶な終幕“ラストダンス”が今、始まる。</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル\ヴェノム　ザ・ラストダンス.jpg" alt="ヴェノム ザ・ラストダンス ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\エディブロック.jpg" alt="エディ・ブロック">
+            <div class="character-info">
+              <h2>エディ・ブロック</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">主人公 / ジャーナリスト</div>
+              <div class="character-description">
+                元ジャーナリストであり、相棒のシンビオート「ヴェノム」と過酷な共生生活を送る男。全世界、そして宇宙からも命を狙われる絶望的な逃亡劇の中で、究極の選択を迫られる。
+              </div>
+              <div class="character-quote">「俺はトム・クルーズじゃない！」</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\ヴェノム　キャラ.jpg" alt="ヴェノム">
+            <div class="character-info">
+              <h2>ヴェノム</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">宇宙から来たシンビオート</div>
+              <div class="character-description">
+                エディの体に寄生している、一本気でユーモラスな黒い液状の宇宙生物。好物はチョコレートと悪人の脳みそ。自分たちの生みの親である「ヌル」が解き放つ最凶の刺客から地球を守るため、命がけのラストダンスへ身を投じる。
+              </div>
+              <div class="character-quote">「エディ俺たち飛んでるぞ」</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\ヌル.jpg" alt="ヌル">
+            <div class="character-info">
+              <h2>ヌル</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">シンビオートの神 / 闇の創造主</div>
+              <div class="character-description">
+                全生命を消し去り、宇宙を絶対の闇に包み込もうとする邪悪なる神。かつて自身が創り出したシンビオートたちによって惑星クリンターの奥深くに幽閉されていた。完全復活の鍵となる「コーデックス」を奪うため、凶暴な眷属ゼノファージを地球へ送り込む。
+              </div>
+              <div class="character-quote">「すべてを無に帰す、それが“はじまり”だ」</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\ゼノファージ.jpg" alt="ゼノファージ">
+            <div class="character-info">
+              <h2>ゼノファージ</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">無慈悲なるシンビオート・ハンター</div>
+              <div class="character-description">
+                創造主ヌルによって放たれた、宇宙で最も危険な捕食生命体。圧倒的な怪力、強靭な肉体、そして驚異的な再生能力を持ち、肉片が残っていれば復活する。シンビオートを容易に貪り食う。ヴェノムとエディが結合した時にだけ現れる「コーデックス」を感知し、執拗に２人を追い詰める。
+              </div>
+              <div class="character-quote">「……（おぞましい咆哮）」</div>
+            </div>
+          </div>
+        </div>
+
+      </div> </div> </div> <script>
+    // 視認性を上げた隕石（ゼノファージ飛来ポッド）を右上から左下へ走らせる
+    function createMeteor() {
+      const meteor = document.createElement('div');
+      meteor.classList.add('meteor');
+      
+      // 開始位置：画面の右上エリア
+      meteor.style.left = `${Math.random() * 100 + 30}vw`; 
+      meteor.style.top = `-${Math.random() * 60 + 40}px`;
+      
+      // 映画の緊迫感に合わせてサイズを少し大きめに（横に長く伸びる形）
+      const sizeW = Math.random() * 12 + 8; // 8px〜20px
+      const sizeH = Math.random() * 6 + 4;   // 4px〜10px
+      const duration = Math.random() * 1.2 + 1.2; // 1.2秒〜2.4秒（ハイスピード）
+      
+      meteor.style.width = `${sizeW}px`;
+      meteor.style.height = `${sizeH}px`;
+      
+      // 進行方向に合わせて角度を傾ける（右上から左下へ向くように約135度回転）
+      meteor.style.transform = 'rotate(-45deg)';
+      
+      document.body.appendChild(meteor);
+      
+      // アニメーションの実行
+      const animation = meteor.animate([
+        { transform: 'translate(0, 0) rotate(-45deg)', opacity: 0 },
+        { opacity: 0.9, offset: 0.1 }, // 落ち始めてすぐに発光
+        { opacity: 0.8, offset: 0.8 },
+        { transform: 'translate(-150vw, 150vh) rotate(-45deg)', opacity: 0 }
+      ], {
+        duration: duration * 1000,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)' // リアルな加速感
+      });
+
+      // アニメーション終了後に要素を削除
+      animation.onfinish = () => meteor.remove();
+    }
+
+    // 隕石の定期生成（1.5秒に1回程度で、画面がうるさくなりすぎないバランス）
+    setInterval(createMeteor, 1500);
+
+    // アコーディオンの制御
+    function toggleCharacter(card) {
+      const isOpen = card.classList.contains('open');
+
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open');
+      });
+
+      if (!isOpen) {
+        card.classList.add('open');
+      }
+    }
+  </script>
+</body>
+</html>

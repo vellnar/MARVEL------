@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【IRON MAN 3】 - STARK INDUSTRIES CELLULAR & ARMOR PROTOCOL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       J.A.R.V.I.S. 自律プロトコル ＆ エクストリミスUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00f0ff; /* J.A.R.V.I.S.シアン */
+      background-color: #040912;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* デジタル・ホログラム・マトリクスのレイヤー */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px) 0 0 / 20px 20px,
+        radial-gradient(circle at center, rgba(4, 9, 18, 0.2) 0%, #040912 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：ラボのホログラム作業机をイメージ */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(5, 14, 26, 0.82);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.1);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.25);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "STARK_LAB_NET v22.1 // HOMINID AUTOMATION PROTOCOL";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "HOUSE_PARTY_PROTOCOL: STANDBY";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ffaa00; /* プロトタイプ・ゴールド */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-size: 3.5em;
+      color: #ffffff;
+      letter-spacing: 12px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+
+    .header p {
+      color: #ffaa00;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ffaa00;
+      box-shadow: 0 0 35px rgba(255, 170, 0, 0.25);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：ホログラムインデックス */
+    .character-card {
+      background-color: rgba(4, 20, 36, 0.4);
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      border-left: 4px solid rgba(0, 240, 255, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "DATA // SECURE";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(0, 240, 255, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(5, 30, 54, 0.6);
+      border-color: rgba(0, 240, 255, 0.4);
+    }
+
+    /* 🟠 開いている状態の個別クラス */
+    .character-card.open.tony-override {
+      background-color: rgba(30, 22, 10, 0.9); /* トニー：シャンパンゴールドベース */
+      border-color: #ffaa00;
+      border-left-color: #ff3344;
+    }
+    .character-card.open.pepper-override {
+      background-color: rgba(10, 28, 36, 0.9); /* ペッパー：レスキュー・シアン */
+      border-color: #00f0ff;
+      border-left-color: #ffaa00;
+    }
+    .character-card.open.rhodes-override {
+      background-color: rgba(18, 24, 30, 0.9); /* ローディ：アイアン・パトリオット（星条旗カラー） */
+      border-color: #ff3344;
+      border-left-color: #3b82f6;
+    }
+    .character-card.open.killian-override {
+      background-color: rgba(35, 6, 6, 0.95); /* キリアン：危険なエクストリミス高熱レッド */
+      border-color: #ff3300;
+      border-left-color: #ffaa00;
+    }
+
+    .character-card.open.killian-override::after {
+      content: "BIO_HAZARD // EXTREMIS_OVERHEATING";
+      color: #ff3300;
+      text-shadow: 0 0 8px #ff3300;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.killian-override .character-header img {
+      border-color: #ff3300;
+      box-shadow: 0 0 12px #ff3300;
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1f4ff;
+    }
+    .character-card.open.killian-override .character-details {
+      color: #ffdacc;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00f0ff;
+      background: rgba(0, 240, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.killian-override .character-role {
+      color: #ff3300;
+      border-color: #ff3300;
+      background: rgba(255, 51, 0, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bfe7ff;
+      border-left: 2px solid rgba(0, 240, 255, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open.killian-override .character-description {
+      color: #ffebf0;
+      border-left-color: #ff3300;
+    }
+
+    /* セリフ：J.A.R.V.I.S.システムダイアログ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #030812;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00f0ff;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[J.A.R.V.I.S. DIAGNOSTIC_LOG // SYSTEM_MONITOR]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.killian-override .character-quote {
+      background-color: #140303;
+      border-left-color: #ff3300;
+    }
+    .character-card.open.killian-override .character-quote::before {
+      content: "[EXTREMIS_CELLULAR_THERMAL_BROADCAST]";
+      color: #ff3300;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>IRON MAN 3</h1>
+      <p>– SYSTEM DIAGNOSTIC & TELEMETRY –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アイアンマン３.jpg" alt="アイアンマン3 ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. トニー・スターク -->
+        <div class="character-card" onclick="toggleCharacter(this, 'tony-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン３＿トニー.webp" alt="トニー・スターク">
+            <div class="character-info">
+              <h2>トニー・スターク / アイアンマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">不眠症に苦しむ天才発明家 // 遠隔操作スーツ開発者</div>
+            <div class="character-description">
+              ニューヨーク決戦のトラウマからパワードスーツの依存症に陥り、強迫観念に駆られて大量のアーマー（ハウス・パーティー・プロトコル）を急造。パーツが個別に飛来して装着される最新型「マーク42」と共に、己の生身の価値を試される戦いに挑む。
+            </div>
+            <div class="character-quote">「家を奪われても、おもちゃを奪われても、これだけは変わらない。僕はアイアンマンだ」</div>
+          </div>
+        </div>
+
+        <!-- 2. ペッパー・ポッツ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'pepper-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン３＿ペッパー.jpg" alt="ペッパー・ポッツ">
+            <div class="character-info">
+              <h2>ペッパー・ポッツ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">スターク・インダストリーズCEO // トニーの最愛の人</div>
+            <div class="character-description">
+              悪夢にうなされ、部屋にアーマーを呼び出してしまうトニーを深く心配する。自宅が襲撃された際にはトニーの指示でマーク42を一時的に纏い彼を救うが、中盤キリアンに囚われ、強制的にエクストリミスを投与されてしまう。
+            </div>
+            <div class="character-quote">「これについて文句を言ったら、絶対に承知しないわよ」</div>
+          </div>
+        </div>
+
+        <!-- 3. ジェームズ・ローズ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'rhodes-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン３＿ローディ.jpg" alt="ジェームズ・ローディ・ローズ">
+            <div class="character-info">
+              <h2>ジェームズ・“ローディ”・ローズ / アイアン・パトリオット</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アメリカ空軍大佐 // 国家の盾</div>
+            <div class="character-description">
+              ウォーマシンを星条旗カラーにリペイントし、米政府公認のヒーロー「アイアン・パトリオット」としてテロ組織マンダリンの行方を追う。スーツのシステムをハックされ大統領を拉致される窮地に陥るが、生身でもトニーと共に抜群のコンビネーションで最前線を切り抜ける。
+            </div>
+            <div class="character-quote">「アイアン・パトリオットの方がずっとカッコいいだろ？……パスワードは『あたたかい戦争』だ、トニー。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. アルドリッチ・キリアン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'killian-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン３＿キリアン.webp" alt="アルドリッチ・キリアン">
+            <div class="character-info">
+              <h2>アルドリッチ·キリアン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">A.I.M.創設者 // エクストリミス最高傑作</div>
+            <div class="character-description">
+              1999年の大晦日にトニーに約束を反故にされ、絶望の中で自殺を考えた過去を持つ男。シンクタンク「A.I.M.」を結成し、狂暴な生体ナノテクノロジー「エクストリミス」を完成。偽りのテロリスト『マンダリン』を仕立て上げ、裏から世界を牛耳ろうとする。
+            </div>
+            <div class="character-quote">「私は、天才の脳の中に狂気を見入る」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有J.A.R.V.I.S. & エクストリミスカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'tony-override', 'pepper-override', 'rhodes-override', 'killian-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

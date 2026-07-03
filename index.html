@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARVEL映画紹介サイト</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #0b0e14;
+          --card-bg: rgba(22, 28, 38, 0.65);
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            position: relative;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: var(--marvel-red);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(230, 0, 51, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #111827;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--marvel-red);
+            box-shadow: 0 0 8px var(--marvel-red);
+        }
+
+        .hero {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: clamp(3rem, 10vw, 5rem) 1.5rem clamp(2.5rem, 8vw, 4rem) 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: clamp(2px, 1vw, 4px);
+            background: linear-gradient(to bottom, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            padding: 0 0.5rem;
+        }
+
+        main {
+            padding: 0 1rem 4rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+            background-color: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .section h2 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border-left: 4px solid var(--marvel-red);
+            padding-left: 0.8rem;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .section > p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            font-size: 0.98rem;
+            margin: 0;
+        }
+
+        .movie-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .movie-item {
+            background-color: rgba(17, 24, 39, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 0; 
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: clamp(320px, 50vh, 380px);
+            object-fit: cover; 
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .movie-item h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            padding: 1.2rem 1rem 0.5rem 1rem;
+            color: #ffffff;
+        }
+
+        .movie-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding: 0 1.1rem 1.5rem 1.1rem;
+            margin: 0;
+            flex-grow: 1;
+            text-align: justify;
+        }
+
+        .movie-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 0, 51, 0.5);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(230, 0, 51, 0.2);
+            background-color: rgba(31, 41, 55, 0.6);
+        }
+
+        .movie-item:hover img {
+            transform: scale(1.04); 
+        }
+
+        footer {
+            background-color: #111827;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+        
+        footer p {
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starCanvas"></canvas>
+
+    <header>
+        <h1>MARVEL映画紹介サイト</h1>
+    </header>
+    
+    <nav>
+        <a href="index.html" class="active">TOP</a>
+        <a href="映画一覧.html">映画一覧</a>
+        <a href="視聴順.html">時系列順</a>
+        <a href="キャラ紹介ページ.html">キャラ解説</a>
+        <a href="用語解説.html">用語解説</a>
+    </nav>
+
+    <div class="hero">
+        <h2>Unlock the Multiverse</h2>
+        <p>単なるヒーロー映画を超えた、壮大なシネマティック・ユニバースの世界へ。<br>始まりの1作から最新のマルチバースまで、そのすべての魅力をここに凝縮。</p>
+    </div>
+    
+    <main>
+        <div class="container">
+            <section class="section">
+                <h2>概要</h2>
+                <p>このサイトでは、MARVEL映画の詳細情報や、映画の時系列、演じている俳優やキャラクター、および主な用語の解説を提供しています。貴方が少しでもMARVEL映画に興味を持ってくれたら幸いです。極力ネタバレになりそうなものは避けましたが、閲覧する際は自己責任でお願いします。</p>
+            </section>
+            
+            <section class="section">
+                <h2>個人的なおすすめ</h2>
+                <div class="movie-list">
+                    <div class="movie-item">
+                        <img src="画像ファイル/デッドプール＆ウルヴァリン.png" alt="デッドプール＆ウルヴァリン">
+                        <h3>デッドプール＆ウルヴァリン</h3>
+                        <p>「普通のヒーローに飽きてない？」クソ無責任ヒーロー×凶暴アウトローの混ぜるな危険コンビが世界を救う。なんと珍しく日本が最速で公開。</p>
+                    </div>
+                    <div class="movie-item">
+                        <img src="画像ファイル/マーベルズ.jpg" alt="マーベルズ">
+                        <h3>マーベルズ</h3>
+                        <p>キャプテン・マーベルとミズ・マーベル、モニカ・ランボーの三人が、力を使う度に入れ替わる謎の現象に巻き込まれる。そんな中、最強の敵がキャプテン・マーベルの前に現れ、過酷な戦いが始まる。</p>
+                    </div>
+                    <div class="movie-item">
+                        <img src="画像ファイル/ガーディアンズオブギャラクシー＿VOLUME3.jpg" alt="ガーディアンズ・オブ・ギャラクシー VOLUME3">
+                        <h3>ガーディアンズ・オブ・ギャラクシー/VOLUME3</h3>
+                        <p>銀河の落ちこぼれヒーローチーム「ガーディアンズ・オブ・ギャラクシー」。アベンジャーズの一員として世界を救った彼らが、仲間の命と全銀河の危機を救うため、最大の敵に立ち向かっていく。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2>製作者の好きな作品</h2>
+                <div class="movie-list">
+                    <div class="movie-item">
+                        <img src="画像ファイル/ドクターストレンジ.jpg" alt="ドクター・ストレンジ">
+                        <h3>ドクター・ストレンジ</h3>
+                        <p>ニューヨークの病院で働く天才外科医の男は、交通事故で両手を怪我して医師としての道を絶たれてしまう。彼は治療法を求めて神秘の力を操る者の弟子となり、修行の果てに魔術師として生まれ変わる。そんな彼の前に、世界を破滅に導く闇の魔術師が現れる。</p>
+                    </div>
+                    <div class="movie-item">
+                        <img src="画像ファイル/アイアンマン３.jpg" alt="アイアンマン３">
+                        <h3>アイアンマン３</h3>
+                        <p>アベンジャーズの一員としてヒーローたちと手を組み、人類滅亡の危機を回避したトニー・スターク。だが、この戦いを機にヒーローとしての活動に迷いが生じていく。新型スーツの開発に没頭し、最新の「マーク42」を完成させるものの、心身共に疲弊していくトニー。</p>
+                    </div>
+                    <div class="movie-item">
+                        <img src="画像ファイル/スパイダーマン＿FFH.jpg" alt="スパイダーマン ファー・フロム・ホーム">
+                        <h3>スパイダーマン/ファー・フロム・ホーム</h3>
+                        <p>スパイダーマンとして活躍を続けてきたピーターは、夏休みに学校の仲間たちとヨーロッパ旅行に出かける。そんな中、水の都ベネチアでモンスターが出現し、異次元から来た謎のヒーロー・ミステリオが人々の危機を救う。一方、ピーターは元S.H.I.E.L.D.長官のニック・フューリーと再会。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 MARVELファンサイト</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const stars = [];
+        const numStars = 80;
+
+        function createStar() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 1.5 + 0.5,
+                speedX: Math.random() * 0.15 - 0.075,
+                speedY: Math.random() * 0.15 - 0.075,
+                alpha: Math.random(),
+                twinkleSpeed: Math.random() * 0.02 + 0.005
+            };
+        }
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push(createStar());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach(star => {
+                star.alpha += star.twinkleSpeed;
+                const currentAlpha = 0.2 + Math.abs(Math.sin(star.alpha)) * 0.6;
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                star.x += star.speedX;
+                star.y += star.speedY;
+
+                if (star.x < 0) star.x = canvas.width;
+                if (star.x > canvas.width) star.x = 0;
+                if (star.y < 0) star.y = canvas.height;
+                if (star.y > canvas.height) star.y = 0;
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

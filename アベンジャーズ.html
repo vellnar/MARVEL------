@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【THE AVENGERS】 - S.H.I.E.L.D. HELICARRIER OPERATING SYSTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       S.H.I.E.L.D.管制モニター＆アベンジャーズ結成UI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00d2ff; /* シールドの近未来シアンブルー */
+      background-color: #030a16; /* ヘリキャリア内部のダークネイビー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* シールド・ホログラフィック・グリッドのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 210, 255, 0.02) 1px, transparent 1px) 0 0 / 25px 25px,
+        linear-gradient(90deg, rgba(0, 210, 255, 0.02) 1px, transparent 1px) 0 0 / 25px 25px,
+        radial-gradient(circle at center, rgba(3, 10, 22, 0.3) 0%, #030a16 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：作戦会議用大型ディスプレイ風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(4, 14, 30, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 210, 255, 0.15);
+    }
+
+    /* ヘッダー：アベンジャーズ・イニシアチブ発動モード */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid rgba(0, 210, 255, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "S.H.I.E.L.D. EMERGENCY PROTOCOL // LEVEL 7 REQUIRED";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00d2ff;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "PROJECT: AVENGERS INITIATIVE // ACTIVE";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3366; /* 警告赤 */
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.8em;
+      color: #ffffff;
+      letter-spacing: 14px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(0, 210, 255, 0.7);
+    }
+
+    .header p {
+      color: #ff3366;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 8px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 210, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ffffff;
+      box-shadow: 0 0 35px rgba(0, 210, 255, 0.4);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：S.H.I.E.L.D.データベースパネル */
+    .character-card {
+      background-color: rgba(4, 22, 46, 0.4);
+      border: 1px solid rgba(0, 210, 255, 0.15);
+      border-left: 4px solid rgba(0, 210, 255, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "TARGET // TRACKING";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(0, 210, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(6, 32, 66, 0.6);
+      border-color: rgba(0, 210, 255, 0.4);
+    }
+
+    /* 🔵 開いている状態の個別クラス（各ヒーローのシグネチャーカラー） */
+    .character-card.open.tony-override {
+      background-color: rgba(6, 26, 46, 0.9); /* トニー：シアンOS */
+      border-color: #00d2ff;
+      border-left-color: #f1c40f;
+    }
+    .character-card.open.steve-override {
+      background-color: rgba(12, 22, 46, 0.9); /* スティーブ：スターブルー */
+      border-color: #3b82f6;
+      border-left-color: #ef4444;
+    }
+    .character-card.open.thor-override {
+      background-color: rgba(22, 20, 15, 0.9); /* ソー：ゴッドゴールド */
+      border-color: #d4af37;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.loki-override {
+      background-color: rgba(26, 8, 22, 0.95); /* ロキ：不気味なマゼンタヴィランカラー */
+      border-color: #ff3366;
+      border-left-color: #a855f7;
+    }
+
+    .character-card.open::after {
+      content: "STATUS // ASSEMBLED";
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+    .character-card.open.loki-override::after {
+      content: "STATUS // HOSTILE";
+      color: #ff3366;
+      text-shadow: 0 0 8px #ff3366;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d2f1ff;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00d2ff;
+      background: rgba(0, 210, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 210, 255, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bfe7ff;
+      border-left: 2px solid rgba(0, 210, 255, 0.3);
+      padding-left: 10px;
+    }
+
+    .character-card.open .character-description {
+      border-left-color: #ffffff;
+    }
+
+    /* セリフ：ヘリキャリア通信インターセプトログ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020710;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00d2ff;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[S.H.I.E.L.D. INTERCEPTED_AUDIO_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00d2ff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote {
+      border-left-color: currentColor;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THE AVENGERS</h1>
+      <p>– S.H.I.E.L.D. TACTICAL OVERVIEW –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アベンジャーズ.jpg" alt="アベンジャーズ ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this, 'tony-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アベンジャーズ＿アイアンマン.jpg" alt="トニー・スターク">
+            <div class="character-info">
+              <h2>トニー・スターク / アイアンマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">億万長者 / 天才発明家 // チームの頭脳</div>
+            <div class="character-description">
+              最初はチームプレイを拒み、スティーブとも衝突するが、コールソン捜査官の死をきっかけに真に戦う意味を見出す。最新スーツ「マーク7」をまとい、核ミサイルを背負ってワームホールへ飛び込む決死の覚悟を見せる。
+            </div>
+            <div class="character-quote">「天才、金持ち、プレイボーイ、博愛主義者。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'steve-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アベンジャーズ＿キャプテン.jpg" alt="スティーブ・ロジャース">
+            <div class="character-info">
+              <h2>スティーブ・ロジャース / キャプテン・アメリカ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">70年の眠りから覚めた英雄 // チームのリーダー</div>
+            <div class="character-description">
+              現代の複雑な世界とシールドの隠し事に困惑しつつも、ニューヨーク決戦では卓越した戦術眼で警察や他のメンバーへ見事な指揮を下す。誰もが認めるアベンジャーズの絶対的現場指揮官。
+            </div>
+            <div class="character-quote">「鋼鉄の鎧を着た無敵の男。脱いだら何が残る？」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'thor-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ソー.jpg" alt="ソー">
+            <div class="character-info">
+              <h2>ソー / 雷神</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アスガルドの神 // 義弟を追う者</div>
+            <div class="character-description">
+              地球を支配しようとする義弟ロキを止め、四次元キューブを回収するために雷鳴と共に再び地球へ降臨。ロキを心から憎みきれず苦悩するが、彼の凶行を止めるためアベンジャーズと共に最前線で激突する。
+            </div>
+            <div class="character-quote">「ロキはアスガルドの人間であり、私の弟だ！……いや、確かにここ数日で80人殺したが、彼は養子なのだ。」</div>
+          </div>
+        </div>       
+
+        <div class="character-card" onclick="toggleCharacter(this, 'loki-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ロキ.jpg" alt="ロキ">
+            <div class="character-info">
+              <h2>ロキ / 悪戯の神</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">地球の侵略者 // チタウリを率いる黒幕</div>
+            <div class="character-description">
+              未知の種族「チタウリ」と手を結び、地球の王になるために四次元キューブ（テッセラクト）を強奪。セプター（杖）の力でクリント/ホークアイやセルヴィグ博士の精神を支配し、ヘリキャリアを襲撃、地球を未曾有の混乱に陥れる。
+            </div>
+            <div class="character-quote">「お前たちは生まれながらに支配されるのを望んでいる。自由という名の嘘から解放してやろう。」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有S.H.I.E.L.D.カラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'tony-override', 'steve-override', 'thor-override', 'loki-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

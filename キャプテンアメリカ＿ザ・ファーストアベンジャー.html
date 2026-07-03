@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【CAPTAIN AMERICA】 - SSR STRATEGIC SCIENCE RESERVE ARCHIVE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Special+Elite&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       SSR（戦略科学予備軍）極秘ミリタリーファイルスタイル
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1547619292-8816ee7cdd50?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #c2c9d6; /* くすんだスチールグレー */
+      background-color: #0f141d; /* 深みのある軍用ネイビー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ヴィンテージ・ミリタリーのオーバーレイ（古い紙やレティクルを意識） */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at center, rgba(15, 20, 29, 0.4) 0%, #0f141d 95%),
+        linear-gradient(rgba(194, 201, 214, 0.02) 1px, transparent 1px) 0 0 / 30px 30px;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：軍用トランクや機密指令書をイメージ */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(20, 27, 38, 0.93);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid #2e3b4e;
+      border-radius: 4px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ヘッダー：タイプライター調とSSRロゴ風 */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid #2e3b4e;
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "TOP SECRET // SSR SECURITY CLEARANCE LEVEL 4";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85em;
+      color: #94a3b8;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "CLASSIFICATION: DECLASSIFIED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85em;
+      color: #64748b;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-size: 3em;
+      color: #e2e8f0;
+      letter-spacing: 6px;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .header p {
+      color: #38bdf8; /* スカイブルーのミリタリーアクセント */
+      font-family: 'Special Elite', cursive;
+      font-size: 1.1em;
+      letter-spacing: 4px;
+      margin: 12px 0 0 0;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid #2e3b4e;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      filter: sepia(10%) contrast(105%);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #38bdf8;
+      filter: sepia(0%) contrast(100%);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：軍用ファイルフォルダ風 */
+    .character-card {
+      background-color: #161f2c;
+      border: 1px solid #2e3b4e;
+      border-left: 4px solid #475569;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "FILE // REF_41-SSR";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.7em;
+      color: #475569;
+    }
+
+    .character-card:hover {
+      background-color: #1d293a;
+      border-color: #475569;
+    }
+
+    /* 🔵 開いている状態の個別クラス（ミリタリー・トリコロール / ハイドラ） */
+    .character-card.open.steve-override {
+      background-color: rgba(15, 32, 67, 0.95); /* キャプテンのディープブルー */
+      border-color: #3b82f6;
+      border-left-color: #ef4444; /* 星条旗の赤 */
+    }
+    .character-card.open.bucky-override {
+      background-color: rgba(24, 34, 45, 0.95); /* バッキーの軍用ヴィンテージネイビー */
+      border-color: #64748b;
+      border-left-color: #94a3b8;
+    }
+    .character-card.open.peggy-override {
+      background-color: rgba(45, 25, 25, 0.95); /* ペギーの気品あるブラウンレッド */
+      border-color: #b91c1c;
+      border-left-color: #f59e0b;
+    }
+    .character-card.open.schmidt-override {
+      background-color: rgba(28, 10, 15, 0.95); /* ヒドラの邪悪なダークバイオレットレッド */
+      border-color: #ff0033;
+      border-left-color: #000000;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid #2e3b4e;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #e2e8f0;
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #f1f5f9;
+      letter-spacing: 0.5px;
+    }
+
+    .character-card.open .character-info h2 {
+      color: #ffffff;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #e2e8f0;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Special Elite', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .character-card.open.schmidt-override .character-role {
+      color: #ff0033;
+      background: rgba(255, 0, 51, 0.1);
+      border-color: rgba(255, 0, 51, 0.4);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #cbd5e1;
+      border-left: 2px solid #475569;
+      padding-left: 10px;
+    }
+
+    /* セリフ：タイプライター／報告書調 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      background-color: #0b1017;
+      color: #e2e8f0;
+      padding: 12px 16px;
+      border-left: 3px solid #38bdf8;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-card.open.schmidt-override .character-quote {
+      border-left-color: #ff0033;
+    }
+
+    .character-quote::before {
+      content: "[SSR_TRANSCRIPT_LOG // WIRELESS_INTERCEPT]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #64748b;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open.schmidt-override .character-quote::before {
+      content: "[HYDRA_INTERCEPTED_BROADCAST]";
+      color: #ff0033;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>CAPTAIN AMERICA</h1>
+      <p>– STRATEGIC SCIENCE RESERVE FILE DECLASSIFIED –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/キャプテン・アメリカ.jpeg" alt="キャプテン・アメリカ ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this, 'steve-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ファーストアベンジャー＿スティーブ.jpg" alt="スティーブ・ロジャース">
+            <div class="character-info">
+              <h2>スティーブ・ロジャース / キャプテン・アメリカ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">スーパーソルジャー // 愛国心あふれる不屈の英雄</div>
+            <div class="character-description">
+              元々は病弱で不条約な青年だったが、強い正義感と愛国心を認められSSRの「超人兵士計画」の被験者に選ばれる。最高硬度のヴィブラニウム製シールドを手に、不屈の精神でヒドラの野望に立ち向かう。
+            </div>
+            <div class="character-quote">「僕は誰も殺したくない。いじめっ子が嫌いなだけだ。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'bucky-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ファーストアベンジャー＿バッキー.jpg" alt="バッキー・バーンズ">
+            <div class="character-info">
+              <h2>ジェームズ・“バッキー”・バーンズ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">第107連隊軍曹 / スティーブの親友</div>
+            <div class="character-description">
+              スティーブの幼馴染であり、頼れる兄貴分。先に戦地へ赴くがヒドラの捕虜となり、キャプテンとなったスティーブに救出される。その後、精鋭部隊「ハウリング・コマンドーズ」の狙撃手として共に戦線を駆ける。
+            </div>
+            <div class="character-quote">「俺が付いていくのは、弱いくせに逃げないもやし野郎だけだ。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'peggy-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ファーストアベンジャー＿ペギー.jpg" alt="ペギー·カーター">
+            <div class="character-info">
+              <h2>ペギー・カーター</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">SSR（戦略科学予備軍）エージェント</div>
+            <div class="character-description">
+              SSRの優秀な女性士官。周囲の男尊女卑な空気を跳ね除け、前線で指揮を執る。スティーブの内に秘めた「強さ」と「優しさ」を最初に見抜き、次第に彼と深く心を通わせていく。
+            </div>
+            <div class="character-quote">「次の土曜の夜、ストーク・クラブよ。遅れないでね。ダンスのステップを教えてもらうんだから。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'schmidt-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ファーストアベンジャー＿ヨハンシュミット.jpg" alt="ヨハン・シュミット">
+            <div class="character-info">
+              <h2>ヨハン・シュミット / レッド・スカル</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ナチス科学部門「ヒドラ」の指導者</div>
+            <div class="character-description">
+              アースキン博士の開発した不完全な超人血清を自身に投与し、副作用で赤黒い骸骨のような素顔となった男。無限のエネルギーを秘めた「テッセラクト（四次元キューブ）」を手に入れ、世界征服を企む。
+            </div>
+            <div class="character-quote">「神を恐れぬのではない、私自身が神なのだ！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有ミリタリーカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードのクラスとスタイルをリセット
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'steve-override', 'bucky-override', 'peggy-override', 'schmidt-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

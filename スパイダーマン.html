@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【SPIDER-MAN】 - MIDTOWN ARCHIVE & OSCORP SYSTEMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       スパイダー・ウェブ ＆ オズコープ・テクノロジーUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #e2e8f0; 
+      background-color: #0b132b; /* スパイダー・ディープブルー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 蜘蛛の巣（ウェブ・グリッド）をイメージした背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at center, rgba(11, 19, 43, 0.4) 0%, #0b132b 95%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px) 0 0 / 30px 30px;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：アメコミのコマ割りとサイバーの融合 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(11, 22, 44, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(227, 28, 45, 0.25); /* スパイダーレッドの細い枠線 */
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ヘッダー：アメコミのポップさとタイトルの重厚感 */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid #e31c2d;
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "WITH GREAT POWER COMES GREAT RESPONSIBILITY";
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-family: 'Bangers', cursive;
+      font-size: 1.2em;
+      color: #e31c2d; /* スパイダーレッド */
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "OSCORP BIOLAB // SUBJECT: GENETIC_SPIDER_00";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7em;
+      color: #00ff66; /* オズコープグリーン */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Bangers', 'Orbitron', sans-serif;
+      font-size: 4.5em;
+      color: #ffffff;
+      letter-spacing: 8px;
+      margin: 0;
+      text-shadow: 3px 3px 0px #e31c2d, 6px 6px 0px #1d4ed8; /* 赤と青のダブルシャドウ */
+    }
+
+    .header p {
+      color: #1d4ed8; /* スパイダーブルー */
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(29, 78, 216, 0.5);
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #e31c2d;
+      box-shadow: 0 0 35px rgba(227, 28, 45, 0.3);
+      transform: scale(1.01);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：ウェブネット・フレーム */
+    .character-card {
+      background-color: rgba(15, 32, 67, 0.4);
+      border: 1px solid rgba(29, 78, 216, 0.2);
+      border-left: 4px solid rgba(29, 78, 216, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "DAILY_BUGLE // ARCHIVE";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(20, 40, 80, 0.6);
+      border-color: rgba(227, 28, 45, 0.4);
+    }
+
+    /* 🕷️ 開いている状態の個別クラス（キャラごとのテーマカラー） */
+    .character-card.open.peter-override {
+      background-color: rgba(20, 35, 75, 0.9); /* ピーター：クラシック・スパイダーブルー */
+      border-color: #e31c2d;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.mj-override {
+      background-color: rgba(45, 20, 30, 0.9); /* MJ：赤髪をイメージしたウォームバーガンディ */
+      border-color: #f43f5e;
+      border-left-color: #fda4af;
+    }
+    .character-card.open.harry-override {
+      background-color: rgba(25, 30, 40, 0.9); /* ハリー：少し影のあるダークグレー */
+      border-color: #94a3b8;
+      border-left-color: #00ff66;
+    }
+    .character-card.open.norman-override {
+      background-color: rgba(12, 35, 18, 0.95); /* ノーマン：狂気のゴブリン・メタリックグリーン */
+      border-color: #00ff66;
+      border-left-color: #ff6600; /* パンプキンボムのオレンジ */
+    }
+
+    .character-card.open.norman-override::after {
+      content: "OSCORP // GREEN_GOBLIN_ALERT";
+      color: #ff6600;
+      text-shadow: 0 0 8px #ff6600;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.norman-override .character-header img {
+      border-color: #00ff66;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #e2e8f0;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #e31c2d;
+      background: rgba(227, 28, 45, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(227, 28, 45, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.norman-override .character-role {
+      color: #ff6600;
+      border-color: #ff6600;
+      background: rgba(255, 102, 0, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #cbd5e1;
+      border-left: 2px solid rgba(29, 78, 216, 0.4);
+      padding-left: 10px;
+    }
+    .character-card.open.norman-override .character-description {
+      border-left-color: #00ff66;
+    }
+
+    /* セリフ：アメコミの吹き出し・メッセージ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #060b18;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #e31c2d;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[HERO_VOICE_TRACK // NEW_YORK_CITY]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #e31c2d;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.norman-override .character-quote {
+      background-color: #051408;
+      border-left-color: #00ff66;
+    }
+    .character-card.open.norman-override .character-quote::before {
+      content: "[GOBLIN_PSYCHOTIC_BROADCAST]";
+      color: #00ff66;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>SPIDER-MAN</h1>
+      <p>– THE CHRONICLES OF NEW YORK'S HERO –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/スパイダーマン.jpg" alt="スパイダーマン ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ピーター・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン1＿トビー.jpg" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / スパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">冴えない高校生 // 親愛なる隣人</div>
+            <div class="character-description">
+              見学先の見学ラボで遺伝子組み換えの蜘蛛（スーパースパイダー）に噛まれたことで、メガネが必要なくなり、超人的な身体能力、壁に張り付く力、危機を察知する「スパイダーセンス」を手に入れる。最愛のベンおじさんの死をキッカケに、正義のヒーローとして生きる誓いを立てる。
+            </div>
+            <div class="character-quote">「大いなる力には、大いなる責任が伴う。これが僕の運命だ。僕が誰かって？……親愛なる隣人、スパイダーマンさ。」</div>
+          </div>
+        </div>
+
+        <!-- 2. メリー・ジェーン・ワトソン（MJ） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'mj-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン1＿MJ.webp" alt="メリー・ジェーン・ワトソン">
+            <div class="character-info">
+              <h2>メリー・ジェーン・ワトソン (MJ)</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピーターの幼馴染 // 女優を夢見るヒロイン</div>
+            <div class="character-description">
+              ピーターが幼い頃からずっと片想いをしている隣の家の女の子。女優になる夢を追いかけながら不遇な現実に葛藤している。危機を何度も救ってくれたミステリアスなヒーロー「スパイダーマン」に惹かれ、あの伝説の「逆さキス」を交わす。
+            </div>
+            <div class="character-quote">「ねえ、スパイダーマンに伝えて。……私を助けてくれたお礼を、まだちゃんと言ってないって。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ハリー・オズボーン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'harry-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン1＿ハリー.webp" alt="ハリー・オズボーン">
+            <div class="character-info">
+              <h2>ハリー・オズボーン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピーターの親友 // オズコープ社の御曹司</div>
+            <div class="character-description">
+              巨大軍需企業オズコープ社の社長ノーマン・オズボーンの息子であり、ピーターの唯一無二の親友。偉大すぎる父親からの重圧に常に苦悩しており、次第にMJを巡ってピーターとの関係や、スパイダーマンへの複雑な愛憎に巻き込まれていく。
+            </div>
+            <div class="character-quote">「ピーター、お前は俺の最高の兄弟だ。……でも、親父はいつもお前のことばかり褒めるんだ。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. ノーマン・オズボーン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'norman-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン1＿ノーマン.jpg" alt="ノーマン・オズボーン">
+            <div class="character-info">
+              <h2>ノーマン・オズボーン / グリーン・ゴブリン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">オズコープ社社長 // 狂気の緑の悪魔</div>
+            <div class="character-description">
+              軍との契約を急ぐあまり、未完成の身体能力増強薬を自らに投与。その副作用で邪悪な別人格「グリーン・ゴブリン」が誕生してしまう。最新鋭の飛行ボード（グライダー）とパンプキンボムを武器に、自分を裏切った取締役たち、そしてスパイダーマンを執拗に追い詰める。
+            </div>
+            <div class="character-quote">「スパイダーマン、お前と私は似ている。……ヒーローでいることに疲れたら、私と共に街を支配しようじゃないか！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有カラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'mj-override', 'harry-override', 'norman-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

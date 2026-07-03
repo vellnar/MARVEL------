@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARVELキャラクター紹介</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #0b0e14;
+          --card-bg: rgba(22, 28, 38, 0.65);
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding-bottom: 60px; 
+        }
+
+        header {
+            background-color: var(--marvel-red);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(230, 0, 51, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #111827;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--marvel-red);
+            box-shadow: 0 0 8px var(--marvel-red);
+        }
+
+        main {
+            padding: 3rem 1rem 4rem 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container {
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .search-box:focus {
+            border-color: var(--marvel-red);
+            box-shadow: 0 0 12px rgba(230, 0, 51, 0.4);
+            background-color: #111827;
+        }
+
+        .group {
+            margin-bottom: 3.5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .group h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .sub-group {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-sizing: border-box;
+        }
+
+        .sub-group h3 {
+            margin: 0 0 2rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            border-left: 4px solid var(--marvel-red);
+            padding-left: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .character-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .character-item {
+            background-color: rgba(31, 41, 55, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-sizing: border-box;
+        }
+
+        .character-item.is-hidden {
+            display: none !important;
+        }
+
+        .character-item img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .character-item h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 1.2rem 1rem 0.5rem 1rem;
+            color: #f3f4f6;
+            text-align: center;
+        }
+
+        .character-item blockquote {
+            position: relative;
+            width: 100%;
+            margin: 0.5rem 0 0.8rem 0;
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--marvel-red);
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #ffffff;
+            line-height: 1.5;
+            box-sizing: border-box;
+        }
+
+        .character-item blockquote::before {
+            content: "“";
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            color: rgba(230, 0, 51, 0.25);
+            position: absolute;
+            top: -4px;
+            left: 6px;
+            line-height: 1;
+        }
+
+        .character-item blockquote p {
+            padding: 0 !important;
+            margin: 0 !important;
+            text-align: left;
+        }
+
+        .character-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            line-height: 1.6;
+            padding: 0 1.2rem 1.5rem 1.2rem;
+            margin: 0;
+            text-align: justify;
+            flex-grow: 1;
+        }
+
+        .character-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 0, 51, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 0, 51, 0.2);
+            background-color: #1f2937;
+        }
+
+        .character-item:hover img {
+            transform: scale(1.03);
+        }
+
+        footer {
+            background-color: #111827;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MARVELキャラクター紹介</h1>
+    </header>
+    <nav>
+        <a href="index.html">TOP</a>
+        <a href="映画一覧.html">映画一覧</a>
+        <a href="視聴順.html">時系列順</a>
+        <a href="キャラ紹介ページ.html" class="active">キャラ解説</a>
+        <a href="用語解説.html">用語解説</a>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="search" class="search-box" placeholder="キャラクター、キーワードを検索...">
+            </div>
+            
+            <div class="group">
+                <h2>Avengers</h2>
+                <div class="sub-group" data-group="Avengers">
+                    <h3>Avengers</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="アイアンマン/トニー・スターク">
+                            <img src="画像ファイル\トニースターク.jpg" alt="アイアンマン">
+                            <h4>アイアンマン/トニー・スターク</h4>
+                            <blockquote><p>「真実は…私がアイアンマンだ。」</p></blockquote>
+                            <p>アーマースーツを着て戦う天才的な頭脳の持ち主であり、発明家。兵器産業を続けていたが、悪事に利用されたため生産を中止、自ら開発したアーマーを着て悪事に立ち向かう。アーマーにはいくつものバージョンがあり、戦いを経る度に改良されている。</p>
+                        </div>
+                        <div class="character-item" data-name="キャプテンアメリカ/スティーブ・ロジャース">
+                            <img src="画像ファイル\キャップ.jpg" alt="キャプテンアメリカ">
+                            <h4>キャプテンアメリカ/スティーブ・ロジャース</h4>
+                            <blockquote><p>「一人でも戦うが、一人ではないと信じてる。」</p></blockquote>
+                            <p>超人兵士計画の被験者。超人血清を打たれたおかげで元来抱いていた正義の心が強く反映されている。ビームを出す等の特殊能力は持たないが、人間の能力を極限まで高めた存在であり、あらゆる面でオリンピック級の実力の持ち主であると言われている。</p>
+                        </div>
+                        <div class="character-item" data-name="ハルク/ブルース・バナー">
+                            <img src="画像ファイル\ハルク.jpg" alt="ハルク">
+                            <h4>ハルク/ブルース・バナー</h4>
+                            <blockquote><p>「僕の秘密を教えようか。いつも怒ってる」</p></blockquote>
+                            <p>生化学や核物理学、ガンマ線の研究で知られている。ブルース博士は怒りによって別人格であるハルクへと変身する。”Hulk”は英語で「廃船の残骸」や「非常に大きな物、人」を意味し、怒りが大きければ大きいほどパワーが増す。</p>
+                        </div>
+                        <div class="character-item" data-name="ホークアイ/クリント・バートン">
+                            <img src="画像ファイル\ホークアイ.jpg" alt="ホークアイ">
+                            <h4>ホークアイ/クリント・バートン</h4>
+                            <blockquote><p>「怖いならここに居ろ。外に出るなら戦え。一歩外に出たら、君はアベンジャーズだ」</p></blockquote>
+                            <p>S.H.I.E.L.Dの元特別エージェント。そしてアベンジャーズの創設メンバーの一人。何の特殊能力も持たないが、卓越した弓の技術を持ち、狙った的は外さない。矢じりには様々な仕掛けが施されており、それにより相手の意表を突くことが出来る。</p>
+                        </div>
+                        <div class="character-item" data-name="ブラックウィドウ/ナターシャ・ロマノフ">
+                            <img src="画像ファイル\ブラックウィドウ.jpg" alt="ブラックウィドウ">
+                            <h4>ブラックウィドウ/ナターシャ・ロマノフ</h4>
+                            <blockquote><p>「まったく男の子は散らかすのが好きなんだから」</p></blockquote>
+                            <p>諜報に関するあらゆる分野で訓練を積み、最新鋭の技術を装備している。S.H.I.E.L.Dの最重要エージェントの一人としていくつもの任務を成功させてきた。アベンジャーズのメンバーとしてその能力を悪に立ち向かう為に惜しみなく使用している。レッドルーム出身。</p>
+                        </div>
+                        <div class="character-item" data-name="ソー・オーディンソン">
+                            <img src="画像ファイル\ソー.jpg" alt="ソー">
+                            <h4>ソー・オーディンソン</h4>
+                            <blockquote><p>「俺は偉大な男になりたい。偉大な王よりも。」</p></blockquote>
+                            <p>神の国アスガルドから来た、アスガルドの主神オーディンの息子であり雷神。ふさわしい者しか持ち上げる事の出来ないムジョルニアというハンマーと雷, そして鋼のような肉体を使って戦う。</p>
+                        </div>
+                        <div class="character-item" data-name="スパイダーマン/ピーター・パーカー">
+                            <img src="画像ファイル\スパイダーマン＿トムホ.jpg" alt="スパイダーマン">
+                            <h4>スパイダーマン/ピーター・パーカー</h4>
+                            <blockquote><p>「もし自分に何か出来るのに、しなかったら。それで悪いことが起きたら、自分のせいだって思う。困ってる人を助けたい。」</p></blockquote>
+                            <p>１５歳の高校生。全米学力コンテストチームに所属しており頭脳明晰。トビー版やアンドリュー版に比べてポジティブでお調子者であり、よく喋る。自らウェブシューターを作成し、自警活動をしていたところをアイアンマンに見つかり、Avengersへ招待される。それ以降はトニー・スタークと師弟関係のような状態となり、スーツも作ってもらった。自分の正体が知られると身近な人に危害が及ぶと考え、正体を隠し『親愛なる隣人』として活動している。</p>
+                        </div>
+                        <div class="character-item" data-name="ドクターストレンジ/スティーブン・ストレンジ">
+                            <img src="画像ファイル\ドクスト＿ベネディクト.jpg" alt="ドクターストレンジ">
+                            <h4>ドクター・ストレンジ/スティーブン・ストレンジ</h4>
+                            <blockquote><p>「私ならもっと上手くやれる」</p></blockquote>
+                            <p>天才的神経外科医であるドクター・ステーブン・ストレンジは車の事故によって両手を負傷。そのせいで技術を失い、藁にもすがる思いで治療法を捜し歩いて放浪中、魔術の話を耳にする。そこで辿り着いた先にいたのがエンシェントワンであった。高い学習能力をもっていた為魔術の呑み込みが早く、みるみる成長を遂げ、至高の魔術師（ソーサラースプリーム）に選ばれるレベルの力を付けた。</p>
+                        </div>
+                        <div class="character-item" data-name="アントマン/スコット・ラング">
+                            <img src="画像ファイル\スコット・ラング.jpg" alt="アントマン">
+                            <h4>アントマン/スコット・ラング</h4>
+                            <blockquote><p>「家の中で１０歳の子と遊ぶには工夫がいるんだ」</p></blockquote>
+                            <p>元々空き巣泥棒だった。ある日老人の家に盗みに入ったものの、それは仕組まれた罠だった。盗みに入った家で見つけたスーツを着用した彼は、天才科学者；ハンク・ピム博士に諭され、娘の為に身体や物の大きさを自在にガジェットを使用し操るスーパーヒーロー・アントマンとなったのである。</p>
+                        </div>
+                        <div class="character-item" data-name="ヴィジョン">
+                            <img src="画像ファイル\ヴィジョン.jpg" alt="ヴィジョン">
+                            <h4>ヴィジョン</h4>
+                            <blockquote><p>「ウルトロンではない。ジャーヴィスでもない。私は…私です。」</p></blockquote>
+                            <p>映画「アベンジャーズ/エイジ・オブ・ウルトロン」にて、ウルトロンが新たな身体としてヴィブラニウムで創った器を横取りし、トニーの作った人工知能「J.A.R.V.S」を入れた結果誕生した。額にはインフィニティ・ストーンの一つであるマインド・ストーンが埋め込まれており、ビームを出したり自身の身体の密度を操ることで壁を通り抜けたりすることが出来る。</p>
+                        </div>
+                        <div class="character-item" data-name="スカーレットウィッチ/ワンダ・マキシモフ">
+                            <img src="画像ファイル\ワンダ.jpg" alt="スカーレットウィッチ/ワンダ・マキシモフ">
+                            <h4>スカーレット・ウィッチ/ワンダ・マキシモフ</h4>
+                            <blockquote><p>「あなたが私のすべてを奪ったのよ。」</p></blockquote>
+                            <p>映画「アベンジャーズ エイジ・オブ・ウルトロン」にて初登場。念力や思考操作等強力なテレキネシスパワーを持つ。故郷（ソコヴィア）をスタークインダストリーズの兵器によって破壊され、スタークに強い恨みを持つ。ウルトロンと協力してアベンジャーズの敵として立ちはだかるが、ホークアイに諭されアベンジャーズへと入る。</p>
+                        </div>
+                        <div class="character-item" data-name="ブラックパンサー/ティ・チャラ">
+                            <img src="画像ファイル/ブラックパンサー＿チャドウィック.jpg" alt="ブラックパンサー/ティ・チャラ">
+                            <h4>ブラックパンサー/ティ・チャラ</h4>
+                            <blockquote><p>「賢い者は橋を架け、愚かな者は壁を作る」</p></blockquote>
+                            <p>映画「アベンジャーズ/シビル・ウォー」にて初登場した後単独作が公開。ワカンダ王国の国王であり、「ブラックパンサー」は襲名式の称号であるため個人を指さない。肉体はハーブで強化され、スーツはワカンダ王国の進んだテクノロジーを基にヴィブラニウムで作られている。衝撃を蓄積するヴィブラニウムの特性を生かし、蓄積した衝撃を任意で放つ事が可能。キャプテンアメリカ達の超人血清とこのハーブはどちらが強力なのかは不明。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="group">
+                <h2>S.H.I.E.L.D</h2>
+                <div class="sub-group" data-group="S.H.I.E.L.D">
+                    <h3>S.H.I.E.L.D</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ニック・フューリー">
+                            <img src="画像ファイル/ニックフューリー.jpg" alt="ニック・フューリー">
+                            <h4>ニック・フューリー</h4>
+                            <blockquote><p>「彼らは戻ってくる。我々が必要とするから。」</p></blockquote>
+                            <p>S.H.I.E.L.D tendernessの長官。アベンジャーズ計画の発案者であり、アベンジャーズの創設者にあたる。自ら選んだメンバーを勧誘しに向かう。左目の眼帯の下には三本の傷跡があり、本人曰くかつて信じてた友人に裏切られたとあるが、真相は映画「キャプテン・マーベル」にて明かされる。</p>
+                        </div>
+                        <div class="character-item" data-name="フィル・コールソン">
+                            <img src="画像ファイル/コールソン.jpg" alt="フィル・コールソン">
+                            <h4>フィル・コールソン</h4>
+                            <blockquote><p>「人は行動でヒーローになる」</p></blockquote>
+                            <p>国際平和維持組織S.H.I.E.L.Dのエージェント。キャプテンアメリカのファンで、ドラマ「エージェント・オブ・シールド」でチームを率いる。</p>
+                        </div>
+                        <div class="character-item" data-name="マリア・ヒル">
+                            <img src="画像ファイル/マリア・ヒル.jpg" alt="マリア・ヒル">
+                            <h4>マリア・ヒル</h4>
+                            <blockquote><p>「あなたに仕えられて光栄です」</p></blockquote>
+                            <p>国際平和維持組織S.H.I.E.L.Dの副長官。主にニック・フューリーの右腕として活躍する。アベンジャーズの補佐も務めており、優秀な人材。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>Guardians of the Galaxy</h2>
+                <div class="sub-group" data-group="ガーディアンズ・オブ・ギャラクシー">
+                    <h3>ガーディアンズ・オブ・ギャラクシー</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="スターロード/ピーター・クイル">
+                            <img src="画像ファイル\スターロード.jpg" alt="スターロード">
+                            <h4>スターロード/ピーター・クイル</h4>
+                            <blockquote><p>「俺はピーター・クイル。別名『スター・ロード』」</p></blockquote>
+                            <p>幼くして母親を失い、悲しみから外に飛び出た所を宇宙海賊ラヴェジャーズに拉致され、そのままリーダーであるヨンドゥに育てられた。のちにガーディアンズ・オブ・ギャラクシーを率いるリーダーとなる。</p>
+                        </div>
+                        <div class="character-item" data-name="ガモーラ">
+                            <img src="画像ファイル\ガモーラ.jpg" alt="ガモーラ">
+                            <h4>ガモーラ</h4>
+                            <blockquote><p>「私はサノスの娘ではない。自分の道を歩む。」</p></blockquote>
+                            <p>幼いころに故郷の星をサノスに襲われ、両親を目の前で殺された。サノスに引き取られた後、義妹のネビュラと共に手術と訓練により少しづつ身体は改造され、強力な人間兵器へと変えられた。しかし、訓練でネビュラに勝つ度彼女の身体は機械に改造されていき、恨まれている事に気が付かなかった。</p>
+                        </div>
+                        <div class="character-item" data-name="グルート">
+                            <img src="画像ファイル\グルート.jpg" alt="グルート">
+                            <h4>グルート</h4>
+                            <blockquote><p>「アイ・アム・グルート」</p></blockquote>
+                            <p>アイとアムとグルートしか喋る事の出来ない樹木巨人。ロケットと行動を共にしていた期間が長いようで、ロケットには伝わる。作品を通して一緒に過ごす事で、ガーディアンズオブギャラクシーのメンバーも言ってる事を理解するようになっていく。</p>
+                        </div>
+                        <div class="character-item" data-name="ロケット">
+                            <img src="画像ファイル\ロケット.jpg" alt="ロケット">
+                            <h4>ロケット</h4>
+                            <blockquote><p>「俺をアライグマと呼ぶな！」</p></blockquote>
+                            <p>どこからどう見てもアライグマだが、アライグマだというと怒る。グルートとは長らく一緒にいるようで、グルートの言葉が理解できる。天才的な頭脳の持ち主であり、乗り物の操縦がとても上手い。生い立ちは「ガーディアンズオブギャラクシー３」にて語られる</p>
+                        </div>
+                        <div class="character-item" data-name="ドラックス">
+                            <img src="画像ファイル\ドラックス.jpg" alt="ドラックス">
+                            <h4>ドラックス・ザ・デストロイヤー</h4>
+                            <blockquote><p>「俺の辞書に『降伏』の文字はない。」</p></blockquote>
+                            <p>故郷の惑星で、妻子と共に幸せな日々を送っていたが、クリー人であるロナンの侵略により家族を殺されてしまい、すべてを失った。その後、ロナンへの復讐を果たすべく銀河を飛び回り、ロナンの手手下を見つけては手あたり次第に殺していき、その数は数十人以上となる。しかしノバ軍に逮捕され、キルン刑務所へと収監されてしまう。</p>
+                        </div>
+                        <div class="character-item" data-name="マンティス">
+                            <img src="画像ファイル\マンティス.jpg" alt="マンティス">
+                            <h4>マンティス</h4>
+                            <blockquote><p>「あなたの心が、私に伝わってくる。」</p></blockquote>
+                            <p>頭に二つ触覚が生えており、他人に触れるとその人の感情を自身に反映させることが出来る。逆に自分の感情等相手に伝えることで睡眠状態にすること等が可能。エゴの子供たちのうちの一人であり、ピーターとは腹違いの兄妹にあたる。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>Fantastic Four</h2>
+                <div class="sub-group" data-group="FantasticFour">
+                    <h3>ファンタスティック・フォー</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ミスター・ファンタスティック/リード・リチャーズ">
+                            <img src="画像ファイル/リード・リチャーズ.jpg" alt="ミスター・ファンタスティック">
+                            <h4>ミスター・ファンタスティック/リード・リチャーズ</h4>
+                            <blockquote><p>「未知の領域へ進むんだ、4人で一緒に。」</p></blockquote>
+                            <p>天才的な科学者であり、ファンタスティック・フォーのリーダー。宇宙線を浴びたことで、身体をゴムのように自在に伸縮・変形させる能力を得た。その頭脳は驚異的で、トニー・スタークを超える頭脳を持つ。マルチバースや量子力学の研究において並ぶ者はいない。</p>
+                        </div>
+                        <div class="character-item" data-name="インビジブル・ウーマン/スー・ストーム">
+                            <img src="画像ファイル/インビジブルウーマン.webp" alt="インビジブル・ウーマン">
+                            <h4>インビジブル・ウーマン/スー・ストーム</h4>
+                            <blockquote><p>「私たちを甘く見ないで。」</p></blockquote>
+                            <p>リードの妻。自身の身体を完全に透明化する能力と、強力な目に見えないエネルギーの防護壁（フォースフィールド）を展開する能力を持つ。チームの精神切支柱であり、攻守ともに最強クラスの戦闘力を持つ。</p>
+                        </div>
+                        <div class="character-item" data-name="ヒューマン・トーチ/ジョニー・ストーム">
+                            <img src="画像ファイル/ヒューマントーチ.avif" alt="ヒューマン・トーチ">
+                            <h4>ヒューマン・トーチ/ジョニー・ストーム</h4>
+                            <blockquote><p>「ほら言えよベン。何の時間だ？」</p></blockquote>
+                            <p>スーの弟で、破天荒でお調子者の青年。全身を灼熱の炎で包み込み、飛行する能力を持つ。炎を放って攻撃するだけでなく、周囲の熱を吸収することも可能。ピーター・パーカーを思わせるような性格をしており、恐らく気が合うと思われる。</p>
+                        </div>
+                        <div class="character-item" data-name="ザ・シング/ベン・グリム">
+                            <img src="画像ファイル/シング.avif" alt="ザ・シング">
+                            <h4>ザ・シング/ベン・グリム</h4>
+                            <blockquote><p>「お仕置きの時間だ！」</p></blockquote>
+                            <p>リードの親友であり、元腕利きのパイロット。宇宙線の影響で全身が強固な岩石のような皮膚に変貌し、圧倒的な怪力を手に入れた。その容姿に葛藤を抱えつつも、人一倍不器用で優しい心を持つチームのタフガイ。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>Thunderbolts*</h2>
+                <div class="sub-group" data-group="Thunderbolts">
+                    <h3>サンダーボルツ*</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="エレーナ・ベロワ/ブラック・ウィドウ">
+                            <img src="画像ファイル/エレーナ＊.jpg" alt="エレーナ・ベロワ">
+                            <h4>エレーナ・ベロワ</h4>
+                            <blockquote><p>「私たちはヒーローじゃない。でも、やるべきことをやる」</p></blockquote>
+                            <p>ナターシャ・ロマノフの「妹」であり、同じくレッドルームで育てられた超一流のアサシン。暗殺・格闘技術においてナターシャに引けを取らない実力を持つ。どこか冷めているが根は情に厚く、サンダーボルツの実質的な中心人物。</p>
+                        </div>
+                        <div class="character-item" data-name="バッキー・バーンズ/ウィンター・ソルジャー">
+                            <img src="画像ファイル/バッキー＊.png" alt="ウィンター・ソルジャー">
+                            <h4>ウィンター・ソルジャー/バッキー・バーンズ</h4>
+                            <blockquote><p>「過去からは逃れられないが、未来は変えられる。」</p></blockquote>
+                            <p>キャプテン・アメリカ（スティーブ）の往年の親友。ヒドラによって洗脳され「ウィンター・ソルジャー」として暗躍させられていた過去を持つ。左腕の頑強なヴィブラニウム製義手と、超人血清による高い戦闘能力を持つ。訳ありのメンバーが集まるサンダーボルツを率いる立場となる。</p>
+                        </div>
+                        <div class="character-item" data-name="USエージェント/ジョン・ウォーカー">
+                            <img src="画像ファイル/ジョン.webp" alt="USエージェント">
+                            <h4>USエージェント/ジョン・ウォーカー</h4>
+                            <blockquote><p>「俺はキャプテンアメリカだ」</p></blockquote>
+                            <p>かつて政府から「2代目キャプテン・アメリカ」に任命された元軍人。過剰な正義感とプレッシャーから事件を起こし剥奪されたが、超人血清の力と高い戦闘技術は健在。現在は星条旗を模した黒いスーツを纏い、USエージェントとして前線に立つ。</p>
+                        </div>
+                        <div class="character-item" data-name="タスクマスター/アントニア・ドレイコフ">
+                            <img src="画像ファイル/タスクマスター.jpg" alt="タスクマスター">
+                            <h4>タスクマスター/アントニア・ドレイコフ</h4>
+                            <blockquote><p>「関係ない人はおとなしくしてて」</p></blockquote>
+                            <p>相手の動きをキャプチャ（分析）し、キャプテン・アメリカやホークアイ、ブラック・ウィドウなどの戦闘スタイルを完全にコピーして戦う能力の持ち主。映画「ブラックウィドウ」にてレッドルームの呪縛から解き放たれ、ヴァレンティーナのミッションを受け保管庫に向かう。</p>
+                        </div>
+                        <div class="character-item" data-name="ゴースト/エイヴァ・スター">
+                            <img src="画像ファイル/ゴースト.jpg" alt="ゴースト">
+                            <h4>ゴースト/エイヴァ・スター</h4>
+                            <blockquote><p>「私の苦しみが、あなたに分かる？」</p></blockquote>
+                            <p>量子実験の事故により、身体の分子が不安定化し、あらゆる物質をすり抜ける能力を得た女性。その特異体質ゆえに常に激痛を伴うが、ステルススーツを纏い、フェージング能力を駆使した奇襲攻撃を得意とする。</p>
+                        </div>
+                        <div class="character-item" data-name="レッド・ガーディアン/アレクセイ・ショスタコフ">
+                            <img src="画像ファイル/レッドガーディアン.jpg" alt="レッド・ガーディアン">
+                            <h4>レッド・ガーディアン/アレクセイ・ショスタコフ</h4>
+                            <blockquote><p>「ロシアのキャプテン・アメリカ、それが俺だ！」</p></blockquote>
+                            <p>ロシアがキャプテン・アメリカに対抗して生み出した元祖・ソ連の超人兵士。ナターシャやエレーナにとっては「父親」のような存在。全盛期を過ぎて体型は崩れているが、超人血清による凄まじい怪力とタフさは今なお健在。</p>
+                        </div>
+                        <div class="character-item" data-name="ボブ/セントリー/ヴォイド">
+                            <img src="画像ファイル/ボブ＊.jpg" alt="ボブ/セントリー/ヴォイド">
+                            <h4>セントリー/ヴォイド/ボブ</h4>
+                            <blockquote><p>「あなたがキャップ？」『なにがおかしい』「だってあなた、やなヤツなのに笑」</p></blockquote>
+                            <p>ヴァレンティーナの治験という名の人体実験”セントリー計画”により誕生した。太陽1000個分のパワーを持っており、彼女によるとアベンジャーズ全員を合わせたよりも強い。味方としては非常に心強いものの、強すぎる光には濃い影が出来るように「ヴォイド」という人格も同時に作られてしまう。ヴォイドは手をかざすだけで相手を影にし、本人にとってのトラウマを再現した空間に閉じ込める。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>The Defenders</h2>
+                <div class="sub-group" data-group="Defenders">
+                    <h3>ディフェンダーズ (ストリート・ヒーロー)</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="デアデビル/マット・マードック">
+                            <img src="画像ファイル/デアデビル.avif" alt="デアデビル">
+                            <h4>デアデビル/マット・マードック</h4>
+                            <blockquote><p>『今のどうやったの？』「腕が良いんだ。」</p></blockquote>
+                            <p>昼は盲目の弁護士、夜は「ヘルズ・キッチン（地獄の台所）」を守る自警団の顔を持つ男。幼い頃の事故で視力を失った代わりに、残された四感が超人的に研ぎ澄まされ、レーダーのように周囲を把握する。圧倒的な格闘センスと不屈の精神で街の闇に立ち向かう。法で裁けない悪を相手取る。</p>
+                        </div>
+                        <div class="character-item" data-name="パニッシャー/フランク・キャッスル">
+                            <img src="画像ファイル/パニッシャー.webp" alt="パニッシャー">
+                            <h4>パニッシャー/フランク・キャッスル</h4>
+                            <blockquote><p>「お前たちが始めたことだ。俺がすべてを終わらせる。」</p></blockquote>
+                            <p>最愛の家族をギャングの抗争で虐殺された元海兵隊の凄腕軍人。悪党を絶対に生かしてはおかない「容赦なき処刑人」であり、超能力は持たないが、高度な軍事戦術と各種兵器の扱いを極めた、マーベル作品の中でも最も過激なダークヒーロー。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>X-MEN</h2>
+                <div class="sub-group" data-group="XMEN">
+                    <h3>X-MEN (ミュータント)</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ウルヴァリン/ローガン">
+                            <img src="画像ファイル/ウルヴァリン.jpg" alt="ウルヴァリン">
+                            <h4>ウルヴァリン/ローガン</h4>
+                            <blockquote><p>「なんか言ってみろ」</p></blockquote>
+                            <p>いかなる致命傷からも超高速で再生する能力「ヒーリング・ファクター」を持つ孤高のミュータント。過去の実験により、全身の骨格に地球最強の超金属「アダマンチウム」を埋め込まれており、両拳の隙間から鋭利な爪を突き出して戦う。</p>
+                        </div>
+                        <div class="character-item" data-name="デッドプール/ウェイド・ウィルソン">
+                            <img src="画像ファイル/ウェイドウィルソン＿デッドプール.jpg" alt="デッドプール">
+                            <h4>デッドプール/ウェイド・ウィルソン</h4>
+                            <blockquote><p>「外反母趾」</p></blockquote>
+                            <p>人体実験によりウルヴァリン譲りの桁外れの再生能力を手に入れた、お喋りで破天荒な傭兵。自分が「映画や漫画のキャラクターであること」を認知しており、観客（画面の向こう）に話しかけてくる「第四の壁」を突破する能力を持つ。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="group">
+                <h2>Spider-Man Legacy Villains</h2>
+                <div class="sub-group" data-group="SpiderVillains">
+                    <h3>歴代スパイダーマン・ヴィラン</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ヴァルチャー/エイドリアン・トゥームス">
+                            <img src="画像ファイル\バルチャー.jpg" alt="ヴァルチャー">
+                            <h4>ヴァルチャー/エイドリアン・トゥームス</h4>
+                            <blockquote><p>「世界は変わった、俺たちも変わるべきだ。」</p></blockquote>
+                            <p>一般人。映画アベンジャーズにて崩壊したNYの残骸回収作業に携わっていたが、トニー・スタークと政府の合併会社に仕事を奪われ、トニー・スタークに強い恨みを持つ。その後父親として家族の生活を守る為に悪事に手を染めていく。</p>
+                        </div>
+                        <div class="character-item" data-name="ドクターオクトパス/オットー・オクタビアス">
+                            <img src="画像ファイル\オットーオクタビアス.jpg" alt="ドクター・オクトパス">
+                            <h4>ドクターオクトパス/オットー・オクタビアス</h4>
+                            <blockquote><p>「太陽の力が我が手の中に」</p></blockquote>
+                            <p>神経系インターフェイスにより四本の触手型金属アームを操りスパイダーマンの敵として立ちはだかる存在。本人はなんの能力も持たないが、神経系インターフェイスを通じて触手により脳を支配され、ヴィランとなる。</p>
+                        </div>
+                        <div class="character-item" data-name="エレクトロ/マックス・ディロン">
+                            <img src="画像ファイル\エレクトロ.jpg" alt="エレクトロ">
+                            <h4>エレクトロ/マックス・ディロン</h4>
+                            <blockquote><p>「よぉスパイダーマン。」</p></blockquote>
+                            <p>アメイジングスパイダーマンに登場。電気ウナギの水槽に落ちて電気人間となった。電気エネルギーそのものであり、スパイダーマンが糸を飛ばしても通り抜けた。</p>
+                        </div>
+                        <div class="character-item" data-name="サンドマン/フリント・マルコ">
+                            <img src="画像ファイル\サンドマン.jpg" alt="サンドマン">
+                            <h4>サンドマン/フリント・マルコ</h4>
+                            <blockquote><p>「私は悪人ではない。ただ、運が悪かっただけだ。」</p></blockquote>
+                            <p>娘の命が危険な状態であったため、金が必要だったフリントは、相棒と共に強盗を企てた。フリントはピーター・パーカーの叔父ベンの乗っていた車を奪おうとしたが、ベンにやめるよう諭された。そこに相棒が駆け寄ってきて、フリントの握っていた銃が暴発し、ベンを殺してしまった。フリントはこの事件で捕まっていたが、脱獄し娘に会いに行くも妻に追い出されてしまう。警察に追われたフリントは素粒子物理実験場の柵を超え、穴に落ち、分子分解の実験に巻き込まれて全身が砂になってしまった。</p>
+                        </div>
+                        <div class="character-item" data-name="グリーンゴブリン/ノーマン・オズボーン">
+                            <img src="画像ファイル\グリーンゴブリン.jpg" alt="グリーンゴブリン">
+                            <h4>グリーンゴブリン/ノーマン・オズボーン</h4>
+                            <blockquote><p>「お前には何も守れない。」</p></blockquote>
+                            <p>ノーマン・オズボーンは科学者であり、オズコープ社の社長でもある。彼は人体パワー増強薬の研究を進めていて、ネズミを使った実験ではパワーが８倍に上がった。しかし１例で凶暴性・攻撃性・錯乱状態の副作用が見られた。軍からは２週間以内に人体実験が成功しなければ研究資金を他社に回すと言われてしまったため、共同で研究していた博士の反対を押し切り、自らを実験台として薬を吸引。肉体の効果には成功したが、副作用により、凶暴な人格が生まれてしまう。ノーマンにとって邪魔な存在は別人格であるグリーンゴブリンによって消されていくが、彼自身は別人格がしたことを知らない。</p>
+                        </div>
+                        <div class="character-item" data-name="ニューゴブリン/ハリー・オズボーン">
+                            <img src="画像ファイル\ニューゴブリン.jpg" alt="ニューゴブリン">
+                            <h4>ニューゴブリン/ハリー・オズボーン</h4>
+                            <blockquote><p>「父の仇だ」</p></blockquote>
+                            <p>ある夜、スパイダーマンがノーマンの遺体を屋敷に運び込んだのを目撃したハリーは、スパイダーマンが父親を殺したと思い込む。その夜、ハリーの中に生きているノーマンが屋敷の鏡に現れ、ハリーに復讐を呼び掛けた。反対したハリーがナイフを投げて鏡を砕くと、ノーマンがグリーンゴブリンとして使っていた装備や、人体強化薬のある部屋につながっていた。ハリーはノーマンと異なる装備やグライダーを揃え、薬を吸引。スパイダーマンへの復讐を目的とする。</p>
+                        </div>
+                        <div class="character-item" data-name="リザード">
+                            <img src="画像ファイル\リザード.jpg" alt="リザード">
+                            <h4>リザード/カーティス・コナーズ博士</h4>
+                            <blockquote><p>「人類は進化すべきだ」</p></blockquote>
+                            <p>右前腕を欠損しており、オズコープ社で働く。ピーター・パーカーと打ち解け、研究が進みはしたものの、同僚から人体実験の結果を急かされてしまう。まだ危険な段階だと反対するも会社を解雇されかけ、自身の身体を実験に使う。無事右前腕は再生したものの、完全に馴染む事はなくトカゲの怪物へと変貌する。</p>
+                        </div>
+                        <div class="character-item" data-name="ミステリオ/クエンティン・ベック">
+                            <img src="画像ファイル\ミステリオ.png" alt="ミステリオ">
+                            <h4>ミステリオ/クエンティン・ベック</h4>
+                            <blockquote><p>「僕は真実を操作する。僕こそがミステリオだ。」</p></blockquote>
+                            <p>元トニー・スタークの部下であり、トニーからピーター・パーカーに渡ったE.D.I.T.Hグラスを奪う為にあらゆる技術を使ってピーターを懐柔し、E.D.I.T.Hグラスを奪う事に成功。トニー・スタークのドローンを使い、大規模な立体映像で敵を創り出し、スパイダーマンと対決する。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>Sony's Spider-Man Universe</h2>
+                <div class="sub-group" data-group="SSU">
+                    <h3>SSUキャラクター</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ヴェノム">
+                            <img src="画像ファイル\ヴェノム＿キャラ.jpg" alt="ヴェノム">
+                            <h4>ヴェノム</h4>
+                            <blockquote><p>「俺たちはヴェノムだ」</p></blockquote>
+                            <p>ライフ財団が持ち帰った地球外生命体（シンビオート）のうちの一個体。寄生する宿主を見つけなければ生きられない為、現在エディ・ブロックに寄生している。好物は人間の脳みそとチョコレート。高い再生能力や形状変化能力を持ち、腕を硬質化したり触手等を出して戦う。超音波や炎が弱点。</p>
+                        </div>
+                        <div class="character-item" data-name="ブラックスーツヴェノム">
+                            <img src="画像ファイル\スパイダーマン３＿ヴェノム.jpg" alt="ブラックスーツヴェノム">
+                            <h4>ブラックスーツヴェノム</h4>
+                            <blockquote><p>「キシャァァァァァァァァ！！！！」</p></blockquote>
+                            <p>スパイダーマン３で出てきたヴェノム。隕石によって宇宙から地球へと降り立ち、始めはスパイダーマンのブラックスーツとして登場。このスーツを着ると気分が高揚し、破壊衝動が強くなる。ピーターは教会の鐘を使ってなんとか自身から引きはがしたものの、下にいたエディ・ブロックに寄生。映画のヴェノムとは別物であるが、世界の壁をまたぐ記憶共有能力により映画のヴェノムもスパイダーマンの存在を認知している。</p>
+                        </div>
+                        <div class="character-item" data-name="カーネイジ/クレタス・キャサディ">
+                            <img src="画像ファイル\カーネイジ.jpg" alt="カーネイジ">
+                            <h4>カーネイジ/クレタス・キャサディ</h4>
+                            <blockquote><p>「大殺戮（カーネイジ）だ」</p></blockquote>
+                            <p>面会に来たエディ・ブロックの指を噛み、その血を舐めた事でクレタス・キャサディの体内にヴェノムの一部が混入・寄生した姿。寄生されたキャサディもさることながら、新たに生まれたシンビオート自体も凶悪であることから、他のヴィランに比べて純度１００％の悪役となった。性格は残忍にして狡猾、嗜虐的であり凶暴である。</p>
+                        </div>
+                        <div class="character-item" data-name="ライオット/カールトン・ドレイク">
+                            <img src="画像ファイル\ライオット.jpg" alt="ライオット">
+                            <h4>ライオット/カールトン・ドレイク</h4>
+                            <blockquote><p>「人類の進化には、犠牲が必要だ。」</p></blockquote>
+                            <p>天才的な起業家で、億万長者。24才で革命的な遺伝子療法を開発しライフ財団を創設、最高経営責任者となる。地球の気候変動の問題から、宇宙探査機を飛ばして人類が住める惑星を探していた所、探査機の一機が地球外生命体を持ち帰った。そのうちの一個体が寄生してライオットとなった。</p>
+                        </div>
+                        <div class="character-item" data-name="マダムウェブ">
+                            <img src="画像ファイル/キャシーウェブ.webp" alt="マダムウェブ">
+                            <h4>マダムウェブ/キャシー・ウェブ</h4>
+                            <blockquote><p>「いいから私の言う事聞きなさい」</p></blockquote>
+                            <p>NYで救命士として働いていたキャシーは、生死の境を彷徨う事故に合った影響で未来予知の能力を得る。突然の事に混乱していたキャシーだが、ある時偶然出会った３人の少女が黒いマスクとスーツの男に殺される悪夢のような未来を観た事で、図らずもその男から少女三人を守る事となる。</p>
+                        </div>
+                        <div class="character-item" data-name="クレイヴン・ザ・ハンター">
+                            <img src="画像ファイル/クレイヴン.jpg" alt="クレイヴン・ザ・ハンター">
+                            <h4>クレイヴン・ザ・ハンター/クレイヴン</h4>
+                            <blockquote><p>「人類の進化には、犠牲が必要だ。」</p></blockquote>
+                            <p>幼い頃に裏社会を牛耳る冷酷な父と狩りに出かけた際、巨大なライオンに襲われた。それをきっかけとして百獣の王の力を手に入れ、自身の父が世にもたらした悪を始末するという目的を抱いたクレイヴンは、金のために動物を殺める人間を狩り始める。一度狙った獲物は決して逃さず、どこまでも追い続ける。身体能力は恐らくキャプテンら超人血清組や、ブラックパンサー達ハーブ組と同等レベルであると考えられる。</p>
+                        </div>
+                        <div class="character-item" data-name="モービウス">
+                            <img src="画像ファイル/モービウス＿キャラ.jpg" alt="モービウス">
+                            <h4>モービウス/マイケル・モービウス</h4>
+                            <blockquote><p>「人類の進化には、犠牲が必要だ。」</p></blockquote>
+                            <p>治療法の無い血液の難病を抱える天才医師が、自身の命を救うために危険な実験を行う。結果、超人的な力と吸血衝動に襲われてしまう。医師としての使命感と怪物としての宿命の狭間でもがく</p>
+                        </div>
+                        <div class="character-item" data-name="ヌル">
+                            <img src="画像ファイル/ヌル.jpg" alt="ヌル">
+                            <h4>ヌル</h4>
+                            <blockquote><p>「コーデックスを探せ」</p></blockquote>
+                            <p>ヴェノム達シンビオートの生みの親、闇の帝王。あまりに危険すぎる為シンビオート達が協力し惑星クリンターにヌルを監禁する。惑星とは言うものの実態は専用の巨大な監獄である。監獄から抜け出す為に必要な鍵であるコーデックスを持つヴェノムとエディを狙い追手を仕向ける。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="group">
+                <h2>MCU Villains</h2>
+                <div class="sub-group" data-group="MCUVillains">
+                    <h3>MCUヴィラン</h3>
+                    <div class="character-list">
+                        <div class="character-item" data-name="ロキ">
+                            <img src="画像ファイル\ロキ.jpg" alt="ロキ">
+                            <h4>ロキ・ラウフェイソン</h4>
+                            <blockquote><p>「全てのトリックは私が作った」</p></blockquote>
+                            <p>映画「アベンジャーズ」にてサノスの手手下としてチタウリを引き連れニューヨークを襲撃。ヨトゥンヘイムの霜の巨人の王ラウフェイの息子。神の国アスガルドでソーの弟として育てられた。裏切りの神・悪戯の神である。</p>
+                        </div>
+                        <div class="character-item" data-name="ウルトロン">
+                            <img src="画像ファイル\ウルトロン.jpg" alt="ウルトロン">
+                            <h4>ウルトロン</h4>
+                            <blockquote><p>「お前達全員対私全員。願ってもない戦いだ。その数でどうやって私を止める？」</p></blockquote>
+                            <p>映画「アベンジャーズ/エイジ・オブ・ウルトロン」にて登場。トニー・スタークが世界中にアーマーを配置し、世界の安全を守ろうとしてAIを作った結果、人間を守る価値がないと判断したウルトロンは逆に配配備されたアーマーを操り人類を滅ぼす為に動き出した。ファンの間では考察として、考え方や思想がヒドラに似ている為、ヒドラの研究施設からデータを持ち帰った際、そこで作っていたAIをトニーが気が付かず回収、起動してしまったのではと噂されている。</p>
+                        </div>
+                        <div class="character-item" data-name="チタウリ">
+                            <img src="画像ファイル\チタウリ.jpg" alt="チタウリ">
+                            <h4>チタウリ</h4>
+                            <blockquote><p>「（咆哮）」</p></blockquote>
+                            <p>映画「アベンジャーズ」にて登場。宇宙人の種族であり、サノスに従属している。ロキの手先として地球に侵攻し、無慈悲に人々を襲う。</p>
+                        </div>
+                        <div class="character-item" data-name="サノス">
+                            <img src="画像ファイル\サノス.jpg" alt="サノス">
+                            <h4>サノス</h4>
+                            <blockquote><p>「小さな代償で大勢を救っただけだ。これは簡単な計算だ。宇宙は限られてる。資源も限られてる。命が増えるがままにしておいたら、やがては全滅する。修正が必要なんだ。」</p></blockquote>
+                            <p>映画「アベンジャーズ」から「エンドゲーム」までのアベンジャーズのメインヴィラン。人口増加のせいで物資が足りず滅びゆく姿をみて、半分の命を消してもう半分の命を救おうと考えた。そのために必要なインフィニティ・ストーンを探し求め、数多の星を滅ぼし虐殺を繰り返しながら宇宙の生命を消していった。</p>
+                        </div>
+                        <div class="character-item" data-name="征服者カーン/ナサニエル・リチャーズ">
+                            <img src="画像ファイル\カーン.jpg" alt="征服者カーン">
+                            <h4>征服者カーン/ナサニエル・リチャーズ</h4>
+                            <blockquote><p>「お前には娘が居て、お前はアベンジャーズで。私は以前お前を殺したかな？」</p></blockquote>
+                            <p>映画「アベンジャーズ/カーン・ダイナスティ」にてメインヴィランとして君臨する予定だったが脚本変更により映画「アントマン/クワントマニア」でのヴィランに留まった。ドラマ「Loki」では”在り続ける者”として登場。３０世紀に生まれており、超常的なパワーは持たないが、未来人ということもあって最先端の知識と優れた頭脳を持ち、未来の科学技術を使う。タイムトラベル技術を使って、さまざまな時代や場所に移動し、その世界で別の名前を名乗っている事もある。別の次元で何度もアベンジャーズと戦い勝利していることが示唆されている</p>
+                        </div>
+                        <div class="character-item" data-name="ギャラクタス">
+                            <img src="画像ファイル/ギャラクタス.webp" alt="ギャラクタス">
+                            <h4>ギャラクタス</h4>
+                            <blockquote><p>「私の飢えが、この世界を喰らい尽くす。」</p></blockquote>
+                            <p>映画「ファンタスティック・フォー/ファースト・ステップ」にて登場。惑星を破壊してその星のエネルギーを喰らう。</p>
+                        </div>
+                        <div class="character-item" data-name="ドクター・ドゥーム/ビクター・フォン・ドゥーム">
+                            <img src="画像ファイル/RDJ＿ドゥーム.jpg" alt="ドゥーム">
+                            <h4>ドクター・ドゥーム</h4>
+                            <blockquote><p>「ドゥームの前にひれ伏せ。」</p></blockquote>
+                            <p>映画「アベンジャーズ/ドゥームズデイ」にて登場予定。映画「ファンタスティック・フォー/ファースト・ステップ」のポストクレジットにて初登場を果たした。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 MARVELファンサイト</p>
+    </footer>
+
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const characterItems = document.querySelectorAll('.character-item');
+
+            characterItems.forEach(item => {
+                const name = item.getAttribute('data-name').toLowerCase();
+                const description = item.querySelector('p').textContent.toLowerCase();
+                const quote = item.querySelector('blockquote') ? item.querySelector('blockquote').textContent.toLowerCase() : '';
+                
+                if (name.includes(query) || description.includes(query) || quote.includes(query)) {
+                    item.classList.remove('is-hidden');
+                } else {
+                    item.classList.add('is-hidden');
+                }
+            });
+
+            document.querySelectorAll('.sub-group').forEach(subGroup => {
+                const totalItems = subGroup.querySelectorAll('.character-item').length;
+                const hiddenItems = subGroup.querySelectorAll('.character-item.is-hidden').length;
+                subGroup.style.display = (totalItems === hiddenItems) ? 'none' : 'block';
+            });
+
+            document.querySelectorAll('.group').forEach(group => {
+                const subGroups = group.querySelectorAll('.sub-group');
+                let allSubGroupsHidden = true;
+                subGroups.forEach(subGroup => {
+                    if (subGroup.style.display !== 'none') allSubGroupsHidden = false;
+                });
+                group.style.display = allSubGroupsHidden ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>

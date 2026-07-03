@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>MARVELオープニングアニメーション</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            animation: backgroundChange 3s forwards;
+        }
+        .marvel {
+            font-family: 'Arial', sans-serif;
+            font-size: 5rem;
+            color: white;
+            letter-spacing: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards 1s, glow 1.5s infinite alternate 3s;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000;
+            }
+            to {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000, 0 0 60px #ff0000;
+            }
+        }
+        @keyframes backgroundChange {
+            0% {
+                background-color: black;
+            }
+            100% {
+                background-color: red;
+            }
+        }
+        @keyframes textGlowToBlack {
+            0% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000, 0 0 60px #ff0000;
+            }
+            100% {
+                text-shadow: 0 0 10px black, 0 0 20px black, 0 0 30px black, 0 0 40px black, 0 0 50px black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="marvel">MARVEL</div>
+    <script>
+        // 背景の色が変わるタイミングでテキストの光の色も変える
+        setTimeout(() => {
+            document.querySelector('.marvel').style.animation = 'textGlowToBlack 3s forwards';
+        }, 3000); // 3秒後に実行
+    </script>
+</body>
+</html>

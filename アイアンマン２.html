@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【アイアンマン２】 - SYSTEM HACKED // WHIPLASH OVERRIDE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       イワン・ヴァンコ / ハッキング・システムUIスタイル
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #020604; /* 漆黒に近いディープグリーンブラック */
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00ff66; /* 鮮やかなハッカーグリーン */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 走査線（スキャンライン）エフェクト */
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 102, 0.04) 0px,
+        rgba(0, 255, 102, 0.04) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      z-index: 1000;
+    }
+
+    /* 背景ハッキングマトリクス（不透明度を調整して文字の視認性を確保） */
+    .log-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 13px;
+      color: rgba(0, 255, 102, 0.08);
+      font-family: 'Share Tech Mono', monospace;
+      line-height: 1.4;
+      white-space: pre;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* 左側のハッキングステータスパネル */
+    .log-panel {
+      position: fixed;
+      top: 30px;
+      left: 20px;
+      width: 260px;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: rgba(1, 15, 5, 0.85);
+      color: #00ff66;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85em;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      border-radius: 4px;
+      padding: 12px;
+      z-index: 999;
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+      scrollbar-width: none; /* Firefox用 */
+    }
+    .log-panel::-webkit-scrollbar { display: none; } /* Chrome, Safari用 */
+
+    .log-line {
+      margin-bottom: 6px;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(0, 255, 102, 0.05);
+      padding-bottom: 2px;
+    }
+
+    /* メインコンテナ：サイバーフレーム */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 50px auto 50px 320px; /* 左パネルを避けるマージン */
+      padding: 40px 30px;
+      background-color: rgba(2, 12, 6, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0, 255, 102, 0.1);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "NETWORK_STATUS: COMPROMISED";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3366; /* 警告の赤 */
+      letter-spacing: 2px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; text-shadow: 0 0 8px #ff3366; }
+      100% { opacity: 0.6; }
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-size: 3em;
+      color: #00ffff; /* シアン */
+      letter-spacing: 8px;
+      margin: 0;
+    }
+
+    .header p {
+      color: #00ff66;
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 10px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
+      transition: all 0.5s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #00ffff;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：サーバーラック風 */
+    .character-card {
+      background-color: rgba(1, 20, 8, 0.6);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-left: 4px solid rgba(0, 255, 102, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "NODE // DISCONNECTED";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(0, 255, 102, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(1, 35, 15, 0.8);
+      border-color: rgba(0, 255, 102, 0.5);
+    }
+
+    /* 🔴 開いている状態の個別クラス */
+    .character-card.open.tony-override {
+      background-color: rgba(25, 5, 6, 0.9); /* トニーは赤 */
+      border-color: #ff3344;
+      border-left-color: #ffcc00;
+    }
+    .character-card.open.rhodes-override {
+      background-color: rgba(20, 22, 25, 0.9); /* ローディはウォーマシンのガンメタ */
+      border-color: #94a3b8;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.pepper-override {
+      background-color: rgba(25, 15, 5, 0.9); /* ペッパーはブロンズ/オレンジ */
+      border-color: #f97316;
+      border-left-color: #fdba74;
+    }
+    .character-card.open.ivan-override {
+      background-color: rgba(20, 5, 25, 0.9); /* イワンは不気味なパープル */
+      border-color: #d946ef;
+      border-left-color: #ff0066;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：サンダーボルツ準拠のスクエア＆サイズ */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #00ffff;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-info h2 {
+      color: #00ffff;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #ccffdd;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00ff66;
+      background: rgba(0, 255, 102, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 255, 102, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #a3ffd6;
+      border-left: 2px solid rgba(0, 255, 102, 0.3);
+      padding-left: 10px;
+    }
+
+    /* セリフ：ハッキング暗号化通信ログ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #010a04;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00ff66;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[ENCRYPTED_COMMS_LOG // OVERRIDE]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ff66;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    /* グリッチエフェクト */
+    .glitch {
+      position: relative;
+      animation: glitch 1.5s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 #ff3366, -2px 0 #00ffff; }
+      25% { text-shadow: -1px -1px #ff3366, 2px 1px #00ffff; }
+      50% { text-shadow: 2px -2px #ff3366, -1px 2px #00ffff; }
+      75% { text-shadow: -2px 1px #ff3366, 1px -1px #00ffff; }
+      100% { text-shadow: 2px 0 #ff3366, -2px 0 #00ffff; }
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 992px) {
+      .log-panel { display: none; }
+      .main-container { margin-left: auto; }
+    }
+    @media (max-width: 768px) {
+      .character-details { padding-left: 20px; }
+      .character-card::after { display: none; }
+    }
+  </style>
+</head>
+<body class="scanlines">
+  <div class="log-background" id="log-background"></div>
+  <div class="log-panel" id="log-panel"></div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1 class="glitch">IRON MAN 2</h1>
+      <p>– SYSTEM PENETRATION DETECTED –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アイアンマン２.jpg" alt="アイアンマン２">
+      </div>
+
+      <div class="characters">
+        <!-- 1. トニー・スターク（引数を正しくトニー用に修正） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'tony-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン２＿トニー.jpg" alt="トニー・スターク">
+            <div class="character-info">
+              <h2>トニー・スターク / アイアンマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">合金のスーツと共に空を飛ぶアイアンマン</div>
+            <div class="character-description">
+              自らがアイアンマンであると公言してから半年。アーマーの動力源であるパラジウムによりトニーの身体は蝕まれていく。
+            </div>
+            <div class="character-quote">「私がアイアンマンだ。スーツと私は、一体です。アイアンマンスーツを差し出すというのは私自身を差し出す事。即ち、身体を売る事に等しい。」</div>
+          </div>
+        </div>
+
+        <!-- 2. ジェームズ・ローズ（引数を正しくローディ用に修正） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'rhodes-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン２＿ローディ.jpg" alt="ジェームズ・ローズ">
+            <div class="character-info">
+              <h2>ジェームズ・ローズ / ウォーマシン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">空軍中佐。職業軍人</div>
+            <div class="character-description">
+              胸のリアクターの毒素に身体を蝕まれ、自暴自棄になって暴走しかけていたトニーをアイアンマンスーツMark IIを装着して制止する。
+            </div>
+            <div class="character-quote">「.....次は最初からそれ出せよ。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ペッパー・ポッツ（引数を正しくペッパー用に修正） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'pepper-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ペッパー.webp" alt="ペッパー・ポッツ">
+            <div class="character-info">
+              <h2>ペッパー・ポッツ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">スターク・インダストリーズ新CEO</div>
+            <div class="character-description">
+              トニーに振り回されまくる。イチゴアレルギー。トニーから突然会社を引き継がされ、CEOとして法的な戦いやハマー社の嫌がらせに対処する。
+            </div>
+            <div class="character-quote">「普通の人はバッテリーで動いてないわ。」</div>
+          </div>
+        </div>
+
+        <!-- 4. イワン・ヴァンコ（引数を正しくイワン用に修正） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'ivan-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アイアンマン２＿イワン.webp" alt="イワン・ヴァンコ">
+            <div class="character-info">
+              <h2>イワン・ヴァンコ / ウィップラッシュ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">復讐のエンジニア // SYSTEM HACKER</div>
+            <div class="character-description">
+              ジャスティン・ハマーの協力により死を偽装しドローン型スーツを開発。陸海空軍ドローンとウォーマシンをハッキングしトニーを襲う。
+            </div>
+            <div class="character-quote">「はっはっは！スターク！貴様の負けだ！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 【修正完了】引数が足りなくてもエラーを吐かないよう安全に処理
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 一旦すべてのカードを閉じて、追加クラス（overrideClass）を消去
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'tony-override', 'rhodes-override', 'pepper-override', 'ivan-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // クリックしたカードが開いていなかった場合のみ開く
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        // 第2引数（カラー）が渡されていれば適用する
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+
+    // ハッキングログの動作
+    const logPanel = document.getElementById('log-panel');
+    const logLines = [
+      'ACCESSING STARK IND. MAINFRAME...',
+      'BYPASSING SECURITY FIREWALL...',
+      'LOCATING HULL_DATA // MARK_IV',
+      '>> PERMISSION OVERRIDE: SUCCESS',
+      'INJECTING WHIPLASH_V2.EXE...',
+      'HACKING ARMY_DRONE_MODULE...',
+      'HACKING NAVY_DRONE_MODULE...',
+      'HACKING AIR_FORCE_DRONE_MODULE...',
+      'HACKING WAR_MACHINE_OS...',
+      '>>> ALL SYSTEMS CONTROLLED BY VANKO',
+      '>>> WARNING: POWER CRITICAL'
+    ];
+    let index = 0;
+
+    setInterval(() => {
+      if (logPanel) {
+        if (index < logLines.length) {
+          const line = document.createElement('div');
+          line.className = 'log-line';
+          line.textContent = logLines[index++];
+          logPanel.appendChild(line);
+          logPanel.scrollTop = logPanel.scrollHeight;
+        } else {
+          index = 0;
+          logPanel.innerHTML = '';
+        }
+      }
+    }, 1500);
+
+    // 背景用ハッキングログ生成
+    const backgroundLog = document.getElementById('log-background');
+    if (backgroundLog) {
+      const backgroundLines = [];
+      for (let i = 0; i < 80; i++) {
+        const line = 'SYS_HACKED_LOG_//_' + Math.random().toString(36).substring(2, 25).toUpperCase() + '_VAL_' + Math.floor(Math.random() * 9999);
+        backgroundLines.push(line);
+      }
+      backgroundLog.textContent = backgroundLines.join('\n');
+    }
+  </script>
+</body>
+</html>

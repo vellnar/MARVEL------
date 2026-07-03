@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【CAPTAIN AMERICA: WINTER SOLDIER】 - PROJECT INSIGHT TACTICAL OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       インサイト計画 ＆ ヒドラ・暗殺ターゲットUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00aaff; /* シールドの次世代ステルスブルー */
+      background-color: #030710;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 衛星軌道・インサイトターゲットグリッドのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 170, 255, 0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        linear-gradient(90deg, rgba(0, 170, 255, 0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        radial-gradient(circle at center, rgba(3, 7, 16, 0.3) 0%, #030710 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：ヘリキャリア管制モニター風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(4, 10, 22, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      border-radius: 6px;
+      box-shadow: 0 0 40px rgba(0, 170, 255, 0.15);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid rgba(0, 170, 255, 0.25);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "PROJECT INSIGHT // THREE HELICARRIERS LAUNCH PROTOCOL";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00aaff;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "ALGORITHM THREAT DETERMINATION: HIGH";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3344; /* アラートレッド */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.2em;
+      color: #ffffff;
+      letter-spacing: 10px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+    }
+
+    .header p {
+      color: #94a3b8;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ff3344;
+      box-shadow: 0 0 35px rgba(255, 51, 68, 0.25);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード */
+    .character-card {
+      background-color: rgba(3, 16, 36, 0.4);
+      border: 1px solid rgba(0, 170, 255, 0.15);
+      border-left: 4px solid rgba(0, 170, 255, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "DATA // CLASSIFIED";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(4, 24, 54, 0.6);
+      border-color: rgba(0, 170, 255, 0.4);
+    }
+
+    /* 🪶 開いている状態の個別クラス（キャラごとのテーマカラー） */
+    .character-card.open.steve-override {
+      background-color: rgba(10, 20, 42, 0.95); /* スティーブ：ステルスディープブルー */
+      border-color: #94a3b8; /* シルバーグレー */
+      border-left-color: #3b82f6;
+    }
+    .character-card.open.natasha-override {
+      background-color: rgba(18, 12, 16, 0.95); /* ナターシャ：ウィドウ・シャドウブラック */
+      border-color: #ff3344;
+      border-left-color: #ff1122;
+    }
+    .character-card.open.sam-override {
+      background-color: rgba(25, 22, 20, 0.95); /* サム：タクティカルアースグレー */
+      border-color: #f97316; /* ウィングアークのオレンジ */
+      border-left-color: #94a3b8;
+    }
+
+    /* 🔴 バッキー専用：ヒドラハック＆赤い星（レッド・スター）の浮かび上がる演出 */
+    .character-card.open.bucky-override {
+      background-color: rgba(20, 4, 6, 0.98); /* より深い赤黒へ */
+      border-color: #ff1122;
+      border-left-color: #000000;
+      box-shadow: inset 0 0 25px rgba(255, 17, 34, 0.25);
+    }
+
+    /* 🛠️ バッキーのカード背景にうっすらと浮かぶ赤い星のCSS定義 */
+    .character-card.open.bucky-override::before {
+      content: "";
+      position: absolute;
+      bottom: -30px; /* 右下に大きく配置 */
+      right: 20px;
+      width: 180px;
+      height: 180px;
+      background-color: #ff1122;
+      /* CSS clip-pathで完璧な5角の星型を形成 */
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      opacity: 0.12; /* 文字を邪魔しない絶妙な薄さに調整 */
+      filter: drop-shadow(0 0 15px #ff1122); /* うっすらとしたネオンのぼかし */
+      pointer-events: none;
+      z-index: 0;
+      animation: star-pulse 3s infinite ease-in-out; /* 暗殺指令の鼓動のような明滅 */
+    }
+
+    @keyframes star-pulse {
+      0% { opacity: 0.08; filter: drop-shadow(0 0 10px #ff1122); }
+      50% { opacity: 0.15; filter: drop-shadow(0 0 20px #ff1122); }
+      100% { opacity: 0.08; filter: drop-shadow(0 0 10px #ff1122); }
+    }
+
+    .character-card.open::after {
+      content: "STATUS // ASSEMBLED";
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+    .character-card.open.bucky-override::after {
+      content: "HYDRA_OVERRIDE // TARGET_ELIMINATION";
+      color: #ff1122;
+      text-shadow: 0 0 8px #ff1122;
+      z-index: 1; /* 星の上に表示 */
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 1; /* 星の上に表示 */
+    }
+
+    /* 顔写真：スクエア型 */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.bucky-override .character-header img {
+      border-color: #ff1122;
+      box-shadow: 0 0 12px rgba(255, 17, 34, 0.5);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1f1ff;
+      position: relative;
+      z-index: 1; /* 星の上に表示 */
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00aaff;
+      background: rgba(0, 170, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 170, 255, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.bucky-override .character-role {
+      color: #ff1122;
+      border-color: #ff1122;
+      background: rgba(255, 17, 34, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bfe7ff;
+      border-left: 2px solid rgba(0, 170, 255, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { border-left-color: #ffffff; }
+    .character-card.open.bucky-override .character-description { border-left-color: #ff1122; color: #ffebed; }
+
+    /* セリフ */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020612;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00aaff;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[S.H.I.E.L.D. TACTICAL_COMMS // NETWORK_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00aaff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.bucky-override .character-quote {
+      background-color: #140204;
+      border-left-color: #ff1122;
+    }
+    .character-card.open.bucky-override .character-quote::before {
+      content: "[HYDRA_BRAINWASH_TELEMETRY // SUBJECT_GHOST]";
+      color: #ff1122;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>CAPTAIN AMERICA</h1>
+      <p>– THE WINTER SOLDIER // INSIGHT NETWORK DATA –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/キャプテンアメリカ＿ウィンターソルジャー.jpg" alt="キャプテン・アメリカ／ウィンター・ソルジャー ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this, 'steve-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ウィンターソルジャー＿スティーブ.jpg" alt="スティーブ・ロジャース">
+            <div class="character-info">
+              <h2>スティーブ・ロジャース / キャプテン・アメリカ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">S.H.I.E.L.D.ストライクチーム指導者 // 自由の守護者</div>
+            <div class="character-description">
+              シールドの暗部や「事前抑止」を名目としたインサイト計画の監視社会化に深い不信感を抱く。フューリー暗殺の濡れ衣を着せられ組織から追われる身となるが、シールドを裏から乗っ取っていた悪の組織「ヒドラ」を壊滅させるため、昔ながらの星条旗スーツに身を包み再び立ち上がる。
+            </div>
+            <div class="character-quote">「一人でも戦うが、一人ではないと信じてる。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'natasha-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ウィンターソルジャー＿ナターシャ.jpg" alt="ナターシャ・ロマノフ">
+            <div class="character-info">
+              <h2>ナターシャ・ロマノフ / ブラック・ウィドウ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">超一流のスパイ // スティーブの相棒</div>
+            <div class="character-description">
+              スティーブと共に潜入任務をこなすシールドの凄腕エージェント。フューリーの残した暗号を解読するため、孤立したスティーブと行動を共にする。自身の過去を清算するためにシールドのすべての機密データを世界中に暴露する覚悟を決め、公聴会では威然とした態度を崩さなかった。
+            </div>
+            <div class="character-quote">「私たちの正体を暴けば世界が揺らぐわ。……微々たるものだけど、あなたを一人で戦わせはしない。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'sam-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ウィンターソルジャー＿ファルコン.avif" alt="サム・ウィルソン">
+            <div class="character-info">
+              <h2>サム・ウィルソン / ファルコン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">元パラレスキュー隊員 // 空駆ける戦友</div>
+            <div class="character-description">
+              退役軍人のカウンセラーをしていた際、ランニング中のスティーブと意気投合する。シールドに追われ逃込んできたスティーブとナターシャを迷わず匿い、かつて開発に携わった軍用人工翼「ファルコン・ウイング」を奪取。広大な空中戦でキャプテンの翼として大活躍する。
+            </div>
+            <div class="character-quote">「もう言うなよ！もう聞き飽きｔ」『左から失礼』「くそっ！」</div>
+          </div>
+        </div>       
+
+        <div class="character-card" onclick="toggleCharacter(this, 'bucky-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ウィンターソルジャー＿バッキー.jpg" alt="バッキー・バーンズ / ウィンター・ソルジャー">
+            <div class="character-info">
+              <h2>バッキー・バーンズ / ウィンター・ソルジャー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ヒドラの暗殺兵器 // 過去から来た亡霊</div>
+            <div class="character-description">
+              第二次世界大戦中、列車から転落したスティーブの親友バッキー。ヒドラに密かに回収されてサイバネティックスの左腕を移植され、徹底的な洗脳と冷凍睡眠を繰り返されて、50年間歴史の影で暗殺を重ねてきた冷酷な暗殺者。スティーブの顔を見たことで、強固な洗脳に狂いが生じ始める。
+            </div>
+            <div class="character-quote">「お前を殺す。それが俺の任務だ」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有シールド＆ヒドラカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'steve-override', 'natasha-override', 'sam-override', 'bucky-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

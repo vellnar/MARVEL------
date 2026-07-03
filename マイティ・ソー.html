@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【THOR】 - ASGARD ROYAL ARCHIVE & BIFROST HUD</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       アスガルド・神聖ゴールド＆バイフレストUIスタイル
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #dfd5c6; /* 落ち着いたゴールドグレー */
+      background-color: #060913; /* 深宇宙のディープネイビー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* バイフレスト（虹の橋）の光とオーロラのエフェクト */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at 50% -20%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        linear-gradient(to right, rgba(255,0,0,0.01), rgba(0,255,0,0.01), rgba(0,0,255,0.01));
+      z-index: 1;
+    }
+
+    /* メインコンテナ：神殿の装飾パネルをイメージ */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(8, 13, 26, 0.88);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(212, 175, 55, 0.25); /* 黄金の細いフレーム */
+      border-radius: 6px;
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.1);
+    }
+
+    /* ヘッダー：神話的かつ高潔なデザイン */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "ASGARD REALM // REALM ACCESS: GRANTED";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #d4af37; /* シャンパンゴールド */
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "BIFROST STATUS: STABLE";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff; /* シアン */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Cinzel', 'Noto Sans JP', sans-serif;
+      font-size: 3.5em;
+      color: #ffffff;
+      letter-spacing: 12px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .header p {
+      color: #d4af37;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.5s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #d4af37;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：宮殿の格子風 */
+    .character-card {
+      background-color: rgba(14, 22, 41, 0.5);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-left: 4px solid rgba(212, 175, 55, 0.4);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "REALM // ASGARD";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(212, 175, 55, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(20, 32, 59, 0.7);
+      border-color: rgba(212, 175, 55, 0.4);
+    }
+
+    /* ⚡ 開いている状態の個別クラス（ソーの雷 / ロキの緑 / オーディンの金） */
+    .character-card.open.thor-override {
+      background-color: rgba(10, 24, 46, 0.9); /* ソー：雷雲のダークブルー */
+      border-color: #00ffff;
+      border-left-color: #e2e8f0; /* 稲妻の白 */
+    }
+    .character-card.open.loki-override {
+      background-color: rgba(8, 28, 16, 0.9); /* ロキ：不穏な深緑 */
+      border-color: #10b981;
+      border-left-color: #d4af37; /* マントの金 */
+    }
+    .character-card.open.jane-override {
+      background-color: rgba(28, 16, 32, 0.9); /* ジェーン：天文学のダークパープル */
+      border-color: #a855f7;
+      border-left-color: #00f0ff;
+    }
+    .character-card.open.odin-override {
+      background-color: rgba(31, 25, 12, 0.95); /* オーディン：重厚な神聖ゴールド */
+      border-color: #d4af37;
+      border-left-color: #b45309;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .character-card.open .character-info h2 {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #e9e5de;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #d4af37;
+      background: rgba(212, 175, 55, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #d1c9bd;
+      border-left: 2px solid rgba(212, 175, 55, 0.3);
+      padding-left: 10px;
+    }
+
+    .character-card.open .character-description {
+      border-left-color: #ffffff;
+    }
+
+    /* セリフ：天文観測ログ / 神々の叙事詩風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Cinzel', 'Share Tech Mono', monospace;
+      background-color: #03060f;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #d4af37;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-card.open.thor-override .character-quote { border-left-color: #00ffff; }
+    .character-card.open.loki-override .character-quote { border-left-color: #10b981; }
+
+    .character-quote::before {
+      content: "[HEAVENLY_ORACLE_RECORD // BIFROST LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #d4af37;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open.jane-override .character-quote::before {
+      content: "[ASTROPHYSICS_DATA_LOG // TELEMETRY]";
+      color: #a855f7;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THOR</h1>
+      <p>– CHRONICLES OF THE GOD OF THUNDER –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/マイティソー.jpg" alt="マイティ・ソー ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ソー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'thor-override')">
+          <div class="character-header">
+            <img src="画像ファイル/マイティ・ソー＿ソー.jpg" alt="ソー">
+            <div class="character-info">
+              <h2>ソー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アスガルドの第一王子 // 雷神</div>
+            <div class="character-description">
+              無敵のハンマー「ムジョルニア」を操る最強の戦士。しかしその傲慢さと身勝手さから父オーディンの怒りを買い、神の力と資格を剥奪され、地球へと追放されてしまう。人間との触れ合いの中で「真の王の資質」を学んでいく。
+            </div>
+            <div class="character-quote">「これがアスガルド式のおかわりだ」</div>
+          </div>
+        </div>
+
+        <!-- 2. ロキ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'loki-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ロキ.jpg" alt="ロキ">
+            <div class="character-info">
+              <h2>ロキ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アスガルドの第二王子 // 嘘の魔術師</div>
+            <div class="character-description">
+              ソーの義弟であり、優れた魔術と狡猾な知略を巡らせる「悪戯の神」。自身が出生の秘密（ヨトゥンヘイムの氷の巨人の血筋）を知ったことで、父や兄への歪んだ愛憎の念を爆発させ、王座を奪うための陰謀を開始する。
+            </div>
+            <div class="character-quote">「僕は最初から王になりたかったわけじゃない。ただ、兄さんと対等でありたかっただけだ！」</div>
+          </div>
+        </div>
+
+        <!-- 3. ジェーン・フォスター -->
+        <div class="character-card" onclick="toggleCharacter(this, 'jane-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ジェーンフォスター.jpg" alt="ジェームズ・ローズ">
+            <div class="character-info">
+              <h2>ジェーン・フォスター</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">天才天体物理学者</div>
+            <div class="character-description">
+              ニューメキシコで異常な天文現象（バイフレストの痕跡）を追う科学者。空から落ちてきた「自称・雷神」のソーと出会い、彼の案内役を務める中で惹かれ合っていく。アインシュタイン・ローゼン橋の実証に命を懸ける。
+            </div>
+            <div class="character-quote">「魔法？いいえ、それは私たちがまだ解明していないだけの科学よ。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. オーディン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'odin-override')">
+          <div class="character-header">
+            <img src="画像ファイル/オーディン.jpg" alt="オーディン">
+            <div class="character-info">
+              <h2>オーディン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アスガルドの最高神 // 諸界の統治者</div>
+            <div class="character-description">
+              ソーとロキの父親であり、九つの世界に平和をもたらした偉大な全能の王。ソーの慢心を戒めるために魔力を奪って追放し、ムジョルニアに「資格ある者がこの力を得る」という呪印を刻む。激務と心労により「オーディンの眠り」についてしまう。
+            </div>
+            <div class="character-quote">「お前は王に値せん！持てる力を剥奪し、追放する！……このハンマーを持つ資格がある者、その者がソーの力を得るであろう。」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有アスガルドカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'thor-override', 'loki-override', 'jane-override', 'odin-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

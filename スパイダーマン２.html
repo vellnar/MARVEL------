@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【SPIDER-MAN 2】 - TRITIUM FUSION OS & SPIDER DILEMMA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       トリチウム核融合 ＆ 金属アーム制御UI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #e2e8f0; 
+      background-color: #080f1d; /* 前作より少し重みのあるダークネイビー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 核融合炉のエネルギーグリッドをイメージした背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at center, rgba(8, 15, 29, 0.4) 0%, #080f1d 95%),
+        linear-gradient(rgba(227, 28, 45, 0.02) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(227, 28, 45, 0.02) 1px, transparent 1px) 0 0 / 20px 20px;
+      z-index: 1;
+    }
+
+    /* メインコンテナ */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(9, 18, 36, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(227, 28, 45, 0.2); 
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid #e31c2d;
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "SPIDER-MAN NO MORE // IDENTITY CRISIS";
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-family: 'Bangers', cursive;
+      font-size: 1.2em;
+      color: #e31c2d;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "OSCORP ENERGY PROJECT // FUSION_REACTOR: ONLINE";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7em;
+      color: #ff5500; /* トリチウムエネルギーのオレンジ */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Bangers', 'Orbitron', sans-serif;
+      font-size: 4.5em;
+      color: #ffffff;
+      letter-spacing: 8px;
+      margin: 0;
+      text-shadow: 3px 3px 0px #e31c2d, 6px 6px 0px #1d4ed8;
+    }
+
+    .header p {
+      color: #ffaa00; 
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ff5500;
+      box-shadow: 0 0 35px rgba(255, 85, 0, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード */
+    .character-card {
+      background-color: rgba(12, 25, 50, 0.4);
+      border: 1px solid rgba(29, 78, 216, 0.2);
+      border-left: 4px solid rgba(29, 78, 216, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "REF // NY_COMPILATION";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(18, 35, 70, 0.6);
+      border-color: rgba(255, 85, 0, 0.4);
+    }
+
+    /* 🕷️ 開いている状態の個別クラス */
+    .character-card.open.peter-override {
+      background-color: rgba(25, 35, 70, 0.95); /* ピーター：覚醒のスパイダーブルー */
+      border-color: #e31c2d;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.mj-override {
+      background-color: rgba(45, 20, 35, 0.95); /* MJ：演劇の舞台裏をイメージした深紅 */
+      border-color: #e31c2d;
+      border-left-color: #ffaa00;
+    }
+    .character-card.open.harry-override {
+      background-color: rgba(25, 25, 30, 0.95); /* ハリー：復讐心に染まる漆黒 */
+      border-color: #7f1d1d;
+      border-left-color: #ff0033;
+    }
+    .character-card.open.otto-override {
+      background-color: rgba(28, 20, 15, 0.95); /* オットー：インダストリアルグレー＆アーム警告赤 */
+      border-color: #ff5500;
+      border-left-color: #ff0000; /* アームのAIアイ（赤） */
+    }
+
+    .character-card.open.otto-override::after {
+      content: "NEURAL_CHIP // INHIBITOR_DESTROYED";
+      color: #ff0000;
+      text-shadow: 0 0 8px #ff0000;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型 */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.otto-override .character-header img {
+      border-color: #ff5500;
+      box-shadow: 0 0 12px rgba(255, 85, 0, 0.4);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #e2e8f0;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #e31c2d;
+      background: rgba(227, 28, 45, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(227, 28, 45, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.otto-override .character-role {
+      color: #ff5500;
+      border-color: #ff5500;
+      background: rgba(255, 85, 0, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #cbd5e1;
+      border-left: 2px solid rgba(29, 78, 216, 0.4);
+      padding-left: 10px;
+    }
+    .character-card.open.otto-override .character-description {
+      border-left-color: #ff5500;
+    }
+
+    /* セリフ */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #040914;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #e31c2d;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[COMMUNICATION_LOG // DAILY_BUGLE]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #e31c2d;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.otto-override .character-quote {
+      background-color: #140805;
+      border-left-color: #ff5500;
+    }
+    .character-card.open.otto-override .character-quote::before {
+      content: "[NEURAL_INTERFACE_AUDIO_LOG]";
+      color: #ff5500;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>SPIDER-MAN 2</h1>
+      <p>– THE PRICE OF A HERO'S DESTINY –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/スパイダーマン２.jpg" alt="スパイダーマン2 ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ピーター・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン２＿ピーター.jpg" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / スパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">私生活の崩壊に苦しむヒーロー // 苦悩する青年</div>
+            <div class="character-description">
+              ヒーロー活動の代償として大学の成績は落ち、バイトはクビ、家賃は滞納と生活が極限まで崩壊。精神的ストレスからスパイダーパワーを一時的に喪失しスーツを捨てるが、ドック・オクの脅威とMJの危機を前に、再び「責任」を背負う覚悟を決める。名シーンである暴走電車の急停止など、生身を削って人々を護り抜く。
+            </div>
+            <div class="character-quote">「僕はもうスパイダーマンじゃない。自分の人生を生きるんだ。……でも、誰かがやらなきゃいけないんだ。」</div>
+          </div>
+        </div>
+
+        <!-- 2. メリー・ジェーン・ワトソン（MJ） -->
+        <div class="character-card" onclick="toggleCharacter(this, 'mj-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン２＿MJ.webp" alt="メリー・ジェーン・ワトソン">
+            <div class="character-info">
+              <h2>メリー・ジェーン・ワトソン (MJ)</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">舞台女優としての階段を上る恋人</div>
+            <div class="character-description">
+              念願の舞台女優として成功を収めつつあるが、肝心な時にいつも約束を破るピーターに深く傷つき、別の男性との結婚を決意する。しかし心の底ではピーターを想い続けており、終盤ドック・オクに拉致されたことでスパイダーマンの正体がピーターである事実を知ることになる。
+            </div>
+            <div class="character-quote">「わかってるでしょう？ドアの前に立って、あなたを見ていた私の気持ちが。……行って、ピーター。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ハリー・オズボーン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'harry-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン２＿ハリー.jpg" alt="ハリー・オズボーン">
+            <div class="character-info">
+              <h2>ハリー・オズボーン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">オズコープ社の若きボス // 復讐に囚われし男</div>
+            <div class="character-description">
+              亡き父ノーマンの復讐のため、スパイダーマンの命を異常なほど執念深く狙う。トリチウムを提供することを条件にドック・オクと取引し、ついにスパイダーマンを捕獲。そのマスクを剥ぎ取った瞬間、正体が最愛の親友ピーターであるという残酷な真実に直面し、精神が崩壊しかける。
+            </div>
+            <div class="character-quote">「友達だろ？」</div>
+          </div>
+        </div>       
+
+        <!-- 4. オットー・オクタビアス -->
+        <div class="character-card" onclick="toggleCharacter(this, 'otto-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン２＿ドックオク.jpg" alt="オットー・オクタビアス">
+            <div class="character-info">
+              <h2>オットー・オクタビアス / ドック・オク</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">悲劇の天才科学者 // 人工知能アームの傀儡</div>
+            <div class="character-description">
+              画期的な核融合実験を行うため、脊髄に4本の強力な金属製人工知能アームを装着。しかし実験の暴走事故で最愛の妻を失い、さらにアームの意思を抑える「制御チップ」が焼き切れたことで、アームのAIに精神を支配されてしまう。暴走する夢を叶えるため、再び危険な核融合装置を街のど真ん中に建設する。
+            </div>
+            <div class="character-quote">「太陽の力が我が手の中に」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有カラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'mj-override', 'harry-override', 'otto-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

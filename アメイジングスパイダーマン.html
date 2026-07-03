@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【THE AMAZING SPIDER-MAN】 - OS_CORP BIOLOGICAL SECURE NETWORK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       OSCORP 遺伝子交差 ＆ メカニカル・ウェブUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00ffcc; /* オズコープ社のバイオシアン */
+      background-color: #020813; /* スタイリッシュなミッドナイトブルー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* デジタル・遺伝子マトリクスグリッドのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 255, 204, 0.015) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(0, 255, 204, 0.015) 1px, transparent 1px) 0 0 / 20px 20px,
+        radial-gradient(circle at center, rgba(2, 8, 19, 0.3) 0%, #020813 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：高解像度ガラスモニター風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(3, 14, 33, 0.88);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 0 35px rgba(0, 255, 204, 0.1);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 255, 204, 0.25);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "OSCORP_PROJECT: BIOWEAPON_CROSS_GENETICS";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "WEB_SHOOTER_STATUS: FULLY_CHARGED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00aaff; /* ウェブの鮮やかなブルー */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.4em;
+      color: #ffffff;
+      letter-spacing: 10px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+    }
+
+    .header p {
+      color: #00aaff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #00aaff;
+      box-shadow: 0 0 35px rgba(0, 170, 255, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：次世代インターフェースパネル */
+    .character-card {
+      background-color: rgba(3, 20, 46, 0.4);
+      border: 1px solid rgba(0, 255, 204, 0.15);
+      border-left: 4px solid rgba(0, 255, 204, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "DATABASE // RETRIEVAL";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(4, 32, 70, 0.6);
+      border-color: rgba(0, 255, 204, 0.4);
+    }
+
+    /* 🕸️ 開いている状態の個別クラス */
+    .character-card.open.peter-override {
+      background-color: rgba(6, 20, 50, 0.95); /* ピーター：スタイリッシュなアメイジングブルー */
+      border-color: #ff2233; /* 新スーツのシャープな赤 */
+      border-left-color: #00aaff;
+    }
+    .character-card.open.gwen-override {
+      background-color: rgba(20, 28, 45, 0.95); /* グウェン：彼女のコートと聡明さをイメージしたミントブルーグレー */
+      border-color: #00ffcc;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.uncle-override {
+      background-color: rgba(25, 22, 20, 0.95); /* ベンおじさん：温かみのあるセピアダーク */
+      border-color: #94a3b8;
+      border-left-color: #ffaa00;
+    }
+    .character-card.open.connors-override {
+      background-color: rgba(5, 30, 15, 0.98); /* コナーズ博士：狂暴なリザード・アシッドグリーン */
+      border-color: #00ff33;
+      border-left-color: #00ffcc;
+    }
+
+    .character-card.open.connors-override::after {
+      content: "WARNING // GENETIC_MUTATION_CRITICAL";
+      color: #00ff33;
+      text-shadow: 0 0 8px #00ff33;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.connors-override .character-header img {
+      border-color: #00ff33;
+      box-shadow: 0 0 12px rgba(0, 255, 51, 0.4);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1fbf0;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00ffcc;
+      background: rgba(0, 255, 204, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 255, 204, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.connors-override .character-role {
+      color: #00ff33;
+      border-color: #00ff33;
+      background: rgba(0, 255, 51, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #a6f2df;
+      border-left: 2px solid rgba(0, 255, 204, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description {
+      border-left-color: #ffffff;
+    }
+    .character-card.open.peter-override .character-description {
+      border-left-color: #ff2233;
+    }
+    .character-card.open.connors-override .character-description {
+      border-left-color: #00ff33;
+    }
+
+    /* セリフ：ピーターのボイスレコーダー / オズコープ音声ログ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020712;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00ffcc;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[AUDIO_FILE_DESKTOP // RECOVERY_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.connors-override .character-quote {
+      background-color: #031408;
+      border-left-color: #00ff33;
+    }
+    .character-card.open.connors-override .character-quote::before {
+      content: "[OSCORP_RESERVED_LAB_DIARY]";
+      color: #00ff33;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THE AMAZING SPIDER-MAN</h1>
+      <p>– OSCORP GENETIC DATABASE // ACCESS GRANTED –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アメイジングスパイダーマン.jpg" alt="アメイジング・スパイダーマン ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ピーター・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ＿ピーター.png" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / スパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">孤独を抱える天才スケーター高校生 // アメイジングな隣人</div>
+            <div class="character-description">
+              幼い頃に両親が失踪した過去を持つ青年。オズコープ社に潜入した際、父の研究対象であったバイオ・スパイダーに噛まれて超人化。自身の知能を活かして液体ウェブと機械式の「ウェブシューター」を自作する。ベンおじさんを殺した犯人を追う復讐心から、次第に本当の「ヒーロー」の責任へと目覚めていく。
+            </div>
+            <div class="character-quote">「秘密を抱えるのは辛いよ。……でも、僕にしかできない仕事なんだ。ニューヨークの街には、僕が必要なんだ。」</div>
+          </div>
+        </div>
+
+        <!-- 2. グウェン・ステイシー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'gwen-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ＿グウェン.jpg" alt="グウェン・ステイシー">
+            <div class="character-info">
+              <h2>グウェン・ステイシー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">オズコープ社の天才インターン // 警察署長の娘</div>
+            <div class="character-description">
+              ピーターの同級生であり、オズコープ社でコナーズ博士の筆頭助手を務める極めて聡明なヒロイン。ピーターがスパイダーマンであることを割と早い段階で打ち明けられ、恐怖を抱きつつも自らの科学の知識を活かして、リザードの解毒剤開発の最前線に立つ。
+            </div>
+            <div class="character-quote">「ピーター、あなたを見ていると……危なっかしくて目が離せないわ。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ベン・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'uncle-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ＿ベン.avif" alt="ベン・パーカー">
+            <div class="character-info">
+              <h2>ベン・パーカー (ベンおじさん)</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピーターを実の親として育てた最愛の伯父</div>
+            <div class="character-description">
+              失踪した弟夫婦に代わり、ピーターを深い愛情で育ててきた優しい伯父。思春期ゆえに傲慢な態度を取ったピーターと口論になり、その後、ピーターがコンビニで見逃した強盗に銃撃されて命を落としてしまう。彼の残した「責任」にまつわるメッセージがピーターの魂の礎となる。
+            </div>
+            <div class="character-quote">「お前は良い子だ、ピーター。忘れるな。大いなる力には大いなる責任が伴うものだ」</div>
+          </div>
+        </div>       
+
+        <!-- 4. カート・コナーズ博士 -->
+        <div class="character-card" onclick="toggleCharacter(this, 'connors-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ＿コナーズ.avif" alt="カート・コナーズ博士">
+            <div class="character-info">
+              <h2>カート・コナーズ博士 / リザード</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">右腕を失った天才生物学者 // 爬虫類の怪物</div>
+            <div class="character-description">
+              元ピーターの父親の共同研究者であり、トカゲの再生能力を人間に応用する「異種間遺伝子交差」を研究する。会社からの圧迫と「右腕を取り戻したい」という焦りから、未完成の薬品を自らに投与。右腕の再生には成功するが、トカゲの闘争本能に脳を支配され、巨躯の怪物「リザード」へと変貌、街全体をトカゲ化しようと暴走する。
+            </div>
+            <div class="character-quote">「人間は脆弱で不完全な生き物だ！なぜトカゲのように進化しようとしない！？……私は彼らを救おうとしているのだ！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有オズコープカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'gwen-override', 'uncle-override', 'connors-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

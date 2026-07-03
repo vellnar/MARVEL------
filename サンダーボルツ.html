@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【Thunderbolts】 - 機密紹介</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       視認性を改善した極秘作戦ファイルスタイル
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1617302067428-42e4ac8e2c2c?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Roboto Condensed', sans-serif;
+      color: #e0e0e0; /* 文字色を明るいグレーにして視認性を確保 */
+      background-color: #0d1117; /* 真っ黒ではなく、少し青みのある濃いグレーに */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 背景オーバーレイ：暗さを少し緩和し、グリーンのトーンを明るく */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(16, 32, 24, 0.5) 0%, rgba(13, 17, 23, 0.9) 90%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：背景色を少し明るく、枠線を際立たせる */
+    .main-container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(22, 27, 34, 0.95); /* 少し明るいダークグレー */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #30363d; /* 枠線をより明確に */
+      border-radius: 6px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid #30363d; /* 枠線と同じ色で統一 */
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    /* 極秘スタンプ：色は残しつつ、少し明るく */
+    .header::before {
+      content: "TOP SECRET // EYES ONLY";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8em;
+      color: #b91c1c; /* より明るい赤に */
+      border: 1px solid #b91c1c;
+      padding: 2px 6px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      transform: rotate(-2deg);
+      opacity: 0.9; /* 不透明度を上げる */
+    }
+
+    /* STATUSコード：より見やすく */
+    .header::after {
+      content: "STATUS: [REDACTED]";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8em;
+      color: #8b949e; /* より明るいグレーに */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3em;
+      color: #c9d1d9; /* より明るいスチールグレーに */
+      letter-spacing: 8px;
+      margin: 0;
+      text-shadow: none;
+    }
+
+    .header p {
+      color: #f87171; /* より明るい赤に */
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 8px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+      opacity: 1; /* 不透明にする */
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像：モノクロを維持しつつ、明るさを調整 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      border: 1px solid #30363d;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      filter: grayscale(80%) contrast(110%) brightness(95%); /* 明るさを上げ、コントラストを調整 */
+      transition: filter 0.5s ease;
+    }
+    
+    .poster:hover img {
+      filter: grayscale(30%) contrast(100%) brightness(100%);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：背景色を明るく、枠線を強調 */
+    .character-card {
+      background-color: #161b22; /* より明るいダークグレー */
+      border: 1px solid #30363d;
+      border-left: 4px solid #484f58; /* 通常時の左線を少し明るく */
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    /* ファイルID：より見やすく */
+    .character-card::after {
+      content: "FILE // SUB_NO_ID";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: #8b949e;
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: #1c2128;
+      border-color: #484f58;
+    }
+
+    /* 開いている状態：赤枠をより鮮明に */
+    .character-card.open {
+      background-color: #211618; /* 少し明るいダークレッドブラック */
+      border-color: #7f1d1d;
+      border-left: 4px solid #f87171; /* より明るい赤に */
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px; /* パディングを調整 */
+      gap: 20px;
+    }
+
+    /* 顔写真：モノクロを維持しつつ、明るく */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid #30363d;
+      filter: grayscale(100%) brightness(95%) contrast(120%); /* 明るさを上げ、コントラストを調整 */
+      transition: filter 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      filter: grayscale(40%) brightness(100%);
+      border-color: #f87171;
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em; /* フォントサイズを大きく */
+      color: #f0f6fc; /* より白いグレーに */
+      letter-spacing: 0.5px;
+    }
+
+    .character-card.open .character-info h2 {
+      color: #ffffff;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #c9d1d9; /* 文字色を明るいグレーに */
+    }
+
+    /* 役割タグ：より見やすく */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #f87171; /* より明るい赤に */
+      background: rgba(248, 113, 113, 0.15); /* 背景色も調整 */
+      padding: 2px 8px;
+      border: 1px solid #f87171;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* 説明文：文字色を明るく */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em; /* フォントサイズを大きく */
+      color: #e0e0e0; /* より白いグレーに */
+      border-left: 2px solid #30363d;
+      padding-left: 10px;
+    }
+
+    /* セリフ：文字色を明るく、視認性を向上 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #0d1117; /* コンテナより少し暗く */
+      color: #c9d1d9; /* 文字色を明るいグレーに */
+      padding: 12px 16px;
+      border-left: 3px solid #8b949e;
+      border-radius: 4px;
+      font-size: 0.95em; /* フォントサイズを大きく */
+      letter-spacing: 0px;
+      position: relative;
+    }
+
+    /* 音声傍受ログのラベル：より明るく */
+    .character-quote::before {
+      content: "[AUDIO INTERCEPT_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #8b949e; /* より明るいグレーに */
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    /* ==========================================
+       ボブ専用：人格・形態分裂ギミックのスタイル
+       ========================================== */
+    .form-switcher {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 10px;
+    }
+
+    .form-btn {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      background: #0d1117;
+      color: #8b949e;
+      border: 1px solid #30363d;
+      padding: 4px 12px;
+      font-size: 0.8em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .form-btn:hover {
+      color: #f0f6fc;
+      border-color: #8b949e;
+    }
+
+    /* アクティブな（選ばれている）形態のボタンスタイル */
+    .form-btn.active {
+      background: #1f242c;
+      color: #ffffff;
+      border-color: #f87171;
+      box-shadow: 0 0 10px rgba(248, 113, 113, 0.2);
+    }
+
+    /* 形態ごとのコンテンツ表示制御 */
+    .bob-form-content {
+      display: none; /* 普段は非表示 */
+      animation: fadeInForm 0.4s ease forwards;
+    }
+
+    .bob-form-content.active {
+      display: block; /* activeが付いた形態だけ表示 */
+    }
+
+    @keyframes fadeInForm {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THUNDERBOLTS</h1>
+      <p>– CLASSIFIED TEAM PROFILE –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル\サンダーボルツ.jpg" alt="サンダーボルツ ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\バッキー＊.png" alt="バッキー・バーンズ">
+            <div class="character-info">
+              <h2>バッキー・バーンズ/ ウィンター・ソルジャー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">議員</div>
+            <div class="character-description">
+              議員として活動を始めたバッキー。取材対応では心配を連呼し、どこかぎこちなさが見える
+            </div>
+            <div class="character-quote">「その点については非常に心配で...私の故郷がどうなってるかも心配ですし...なんとか心配に対処していこうと思います」</div>
+          </div>
+        </div>
+        
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\エレーナ＊.jpg" alt="エレーナ・ベロワ">
+            <div class="character-info">
+              <h2>エレーナ・ベロワ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">傭兵</div>
+            <div class="character-description">
+              ヴァレンティーナの下で働いていたが仕事に嫌気が差し、直談判しにいった所最期のミッションを言い渡される。
+            </div>
+            <div class="character-quote">「誰も空を飛べない。殴って撃つだけ。」</div>
+          </div>
+        </div>
+<div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\ボブ＊.jpg" alt="ボブ/セントリー/ヴォイド" id="bob-main-img">
+            <div class="character-info">
+              <h2 id="bob-name">ボブ</h2>
+            </div>
+          </div>
+          <div class="character-details" onclick="event.stopPropagation();">
+            
+            <div class="form-switcher">
+              <button class="form-btn active" onclick="switchBobForm('base', event)">ボブ</button>
+              <button class="form-btn" onclick="switchBobForm('sentry', event)">セントリー</button>
+              <button class="form-btn" onclick="switchBobForm('void', event)">ヴォイド</button>
+            </div>
+
+            <div id="form-base" class="bob-form-content active">
+              <div class="character-role">焼却炉内に居た若者。</div>
+              <div class="character-description">
+                ヤクを求めて彷徨っていた所ヴァレンティーナの「セントリー計画」の被験者となり、唯一の成功例となった。
+              </div>
+              <div class="character-quote">「僕？ボブ。」</div>
+            </div>
+
+            <div id="form-sentry" class="bob-form-content">
+              <div class="character-role" style="color: #fbbf24; border-color: #fbbf24; background: rgba(251,191,36,0.1);">太陽100万個分のパワーを持つ黄金の戦士</div>
+              <div class="character-description">
+                ボブが力を制御し、100万個の太陽が爆発したほどのパワーを持つ超人となった。しかし、その強大すぎる光の裏には常に「影」が潜んでいる。
+              </div>
+              <div class="character-quote">「僕はアベンジャーズの全員を合わせたより強いんだろ？あそこには神が居た。だから僕は神だ。」</div>
+            </div>
+
+            <div id="form-void" class="bob-form-content">
+              <div class="character-role" style="color: #a855f7; border-color: #a855f7; background: rgba(168,85,247,0.1);">手をかざすだけで対象を影にする</div>
+              <div class="character-description">
+                セントリーの内に潜む邪悪な暗黒の人格。光が強くなればなるほどその影も色濃くなり、無差別に人を影と化しトラウマ空間に閉じ込める。
+              </div>
+              <div class="character-quote">「お前達に何が出来るっていうんだ？」</div>
+            </div>
+
+          </div>
+        </div>       
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\ヴァレンティーナ＊.jpeg" alt="ヴァレンティーナ・アレグラ・デ・フォンテーヌ">
+            <div class="character-info">
+              <h2>ヴァレンティーナ・アレグラ・デ・フォンテーヌ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">謎多きCIAの長官</div>
+            <div class="character-description">
+              アベンジャーズ不在の世界を守る新たなヒーローの必要性を訴え、サンダーボルツメンバーを集めるがその真意は不明。 
+            </div>
+            <div class="character-quote">「アベンジャーズはもう来ない。」</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    // 通常のキャラクターカードの開閉システム
+    function toggleCharacter(card) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+      }
+    }
+
+    // ボブ専用：形態（人格）と画像・名前を同時に切り替える関数
+    function switchBobForm(formName, e) {
+      const evt = e || window.event;
+
+      document.querySelectorAll('.bob-form-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.form-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      document.getElementById('form-' + formName).classList.add('active');
+      
+      if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add('active');
+      }
+
+      // 🛠️ 画像と名前の切り替えシステム
+      const mainImg = document.getElementById('bob-main-img');
+      const nameTxt = document.getElementById('bob-name'); // 💡 名前を書き換えるターゲットを取得
+      
+      if (formName === 'sentry') {
+        // 1. セントリー選択時
+        if(nameTxt) nameTxt.textContent = 'セントリー';
+        if(mainImg) {
+          mainImg.src = '画像ファイル/セントリー＊.webp'; 
+          mainImg.style.filter = 'grayscale(0%) brightness(125%) contrast(110%) sepia(30%)'; 
+        }
+      } else if (formName === 'void') {
+        // 2. ヴォイド選択時
+        if(nameTxt) nameTxt.textContent = 'ヴォイド';
+        if(mainImg) {
+          mainImg.src = '画像ファイル/ヴォイド＊.png'; 
+          mainImg.style.filter = ''; 
+        }
+      } else {
+        // 3. ボブ（基本）選択時
+        if(nameTxt) nameTxt.textContent = 'ボブ';
+        if(mainImg) {
+          mainImg.src = '画像ファイル/ボブ＊.jpg'; 
+          mainImg.style.filter = ''; 
+        }
+      }
+    }
+  </script>
+</body>
+</html>

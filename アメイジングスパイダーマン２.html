@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【THE AMAZING SPIDER-MAN 2】 - OSCORP GRID CONTROL & HIGH-VOLTAGE ALERT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       高圧電流ハック ＆ オズコープ兵器システムUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00bfff; /* エレクトロの電気ネオンブルー */
+      background-color: #02050c; /* 停電したニューヨークの漆黒 */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 高電圧電流やスパークをイメージした背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at 50% 50%, rgba(0, 191, 255, 0.08) 0%, #02050c 95%),
+        linear-gradient(rgba(0, 191, 255, 0.02) 1px, transparent 1px) 0 0 / 15px 15px,
+        linear-gradient(90deg, rgba(0, 191, 255, 0.02) 1px, transparent 1px) 0 0 / 15px 15px;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：オズコープ社の極秘兵器保管庫インターフェース */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(3, 8, 20, 0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 191, 255, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 191, 255, 0.15);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "POWER_GRID_STATUS: BLACKOUT // OVERLOAD DETECTED";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3300; /* アラートの赤 */
+      letter-spacing: 2px;
+      animation: flash-red 1.5s infinite;
+    }
+
+    @keyframes flash-red {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; text-shadow: 0 0 10px #ff3300; }
+      100% { opacity: 0.5; }
+    }
+
+    .header::after {
+      content: "OSCORP_SPECIAL_PROJECTS // ARCHIVE: UNLOCKED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ff66; /* ゴブリングリーン */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.4em;
+      color: #ffffff;
+      letter-spacing: 10px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(0, 191, 255, 0.6);
+    }
+
+    .header p {
+      color: #00bfff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 191, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #00bfff;
+      box-shadow: 0 0 35px rgba(0, 191, 255, 0.4);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード */
+    .character-card {
+      background-color: rgba(3, 15, 36, 0.4);
+      border: 1px solid rgba(0, 191, 255, 0.15);
+      border-left: 4px solid rgba(0, 191, 255, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "GRID_NODE // SECURE";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(4, 25, 54, 0.6);
+      border-color: rgba(0, 191, 255, 0.4);
+    }
+
+    /* ⚡ 開いている状態の個別クラス（キャラごとのテーマカラー） */
+    .character-card.open.peter-override {
+      background-color: rgba(6, 18, 45, 0.95); /* ピーター：究極に進化したスパイダーブルー */
+      border-color: #ff1122; /* 鮮やかな赤 */
+      border-left-color: #ffffff;
+    }
+    .character-card.open.gwen-override {
+      background-color: rgba(25, 20, 28, 0.95); /* グウェン：時計塔の悲劇をイメージした儚いクラシックバイオレット */
+      border-color: #fda4af;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.electro-override {
+      background-color: rgba(2, 22, 48, 0.98); /* マックス：全身が青く光るエレクトロ・ブルー */
+      border-color: #00bfff;
+      border-left-color: #00ffff;
+      box-shadow: inset 0 0 20px rgba(0, 191, 255, 0.2);
+    }
+    .character-card.open.harry-override {
+      background-color: rgba(10, 28, 15, 0.98); /* ハリー：毒素に蝕まれたグリーン・ゴブリン */
+      border-color: #00ff66;
+      border-left-color: #a855f7; /* 特殊兵器の妖しい紫 */
+    }
+
+    .character-card.open.electro-override::after {
+      content: "VOLTAGE_ALERT // POWER_GRID_DOMINATED";
+      color: #00ffff;
+      text-shadow: 0 0 8px #00ffff;
+    }
+    .character-card.open.harry-override::after {
+      content: "OSCORP_ARMOR // WEAPON_SYSTEM_ACTIVE";
+      color: #00ff66;
+      text-shadow: 0 0 8px #00ff66;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型 */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 191, 255, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.electro-override .character-header img {
+      border-color: #00ffff;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    }
+    .character-card.open.harry-override .character-header img {
+      border-color: #00ff66;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1f4ff;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00bfff;
+      background: rgba(0, 191, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 191, 255, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.electro-override .character-role {
+      color: #00ffff;
+      border-color: #00ffff;
+      background: rgba(0, 255, 255, 0.15);
+    }
+    .character-card.open.harry-override .character-role {
+      color: #00ff66;
+      border-color: #00ff66;
+      background: rgba(0, 255, 102, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bfe7ff;
+      border-left: 2px solid rgba(0, 191, 255, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { border-left-color: #ffffff; }
+    .character-card.open.electro-override .character-description { border-left-color: #00ffff; color: #e1f8ff; }
+    .character-card.open.harry-override .character-description { border-left-color: #00ff66; color: #ebffef; }
+
+    /* セリフ：発電所ハッキングログ / 特殊アーカイブ音声風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020712;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00bfff;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[AUDIO_INTERCEPT // OSCORP_GRID_MONITOR]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00bfff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.electro-override .character-quote {
+      background-color: #03101d;
+      border-left-color: #00ffff;
+    }
+    .character-card.open.electro-override .character-quote::before {
+      content: "[ELECTRICAL_FREQUENCY_INTERCEPT]";
+      color: #00ffff;
+    }
+
+    .character-card.open.harry-override .character-quote {
+      background-color: #05140b;
+      border-left-color: #00ff66;
+    }
+    .character-card.open.harry-override .character-quote::before {
+      content: "[OSCORP_ARMOR_LOG // BIOMARKERS_CRITICAL]";
+      color: #00ff66;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THE AMAZING SPIDER-MAN 2</h1>
+      <p>– OSCORP SYSTEM GRID & WEAPON ARCHIVE –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/アメイジングスパイダーマン２.jpg" alt="アメイジング・スパイダーマン2 ポスター">
+      </div>
+
+      <div class="characters">
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ２＿ピーター.jpg" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / スパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">希望を届けるヒーロー // 運命の岐路に立つ青年</div>
+            <div class="character-description">
+              ヒーロー活動が板につき、ニューヨークの象徴として人々を笑顔にするが、グウェンの父親との「彼女を巻き込まない」という約束の幻影に苦悩する。親友ハリーの絶望や、街の電力を奪うエレクトロの脅威に立ち向かうが、時計塔での決戦で生涯最大の悲劇を迎えることになる。
+            </div>
+            <div class="character-quote">「撃つな！撃たないでくれ！彼は僕の友達だ！」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'gwen-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ２＿グウェン.webp" alt="グウェン・ステイシー">
+            <div class="character-info">
+              <h2>グウェン・ステイシー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">オックスフォード大学進学を控えた秀才 // ピーターの最愛の人</div>
+            <div class="character-description">
+              ピーターを深く愛し、彼のヒーローとしての葛藤もすべて共有する。オックスフォード大学への進学が決まり英国へ旅立とうとするが、エレクトロによる大停電が発生。「街を救うために私の科学の力が必要」とピーターの制止を振り切って戦地に同行し、発電所の再起動を成功させる。
+            </div>
+            <div class="character-quote">「これは私の人生よ、ピーター！私が決めるの！……あなたのウェブは電気を遮断できない、私が手伝うわ。」</div>
+          </div>
+        </div>
+
+        <div class="character-card" onclick="toggleCharacter(this, 'electro-override')">
+          <div class="character-header">
+            <img src="画像ファイル/アメスパ２＿マックス.jpg" alt="マックス・ディロン / エレクトロ">
+            <div class="character-info">
+              <h2>マックス・ディロン / エレクトロ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">誰にも気づかれない電気技師 // 街の電気を支配する男</div>
+            <div class="character-description">
+              オズコープ社の孤独な電気技師。自分を助けてくれたスパイダーマンに異常な執着を抱くが、研究所の事故で電気ウナギの水槽に落下し、生体電気エネルギーの怪物へと変貌。タイムズスクエアでの誤解から「裏切られた」と思い込み、世界中から注目（支配）されるため、ニューヨーク全体の電力をハックする。
+            </div>
+            <div class="character-quote">「皆…みんなが俺を見てる…」</div>
+          </div>
+        </div>       
+
+<!-- 4. ハリー・オズボーン（修正版） -->
+<div class="character-card" onclick="toggleCharacter(this, 'harry-override')">
+  <div class="character-header">
+    <img src="画像ファイル/アメスパ２＿ハリー.jpg" alt="ハリー・オズボーン / グリーン・ゴブリン">
+    <div class="character-info">
+      <h2>ハリー・オズボーン / グリーン・ゴブリン</h2>
+    </div>
+  </div>
+  <div class="character-details">
+    <div class="character-role">絶望の淵に立たされた新社長 // グリーン・ゴブリン</div>
+    <div class="character-description">
+      父ノーマンからオズコープ社と、一族の不治の遺伝病を引き継ぐ。生きるためにスパイダーマンの血液を求めるがピーターに拒絶され、裏切られた絶望から狂気へ走る。役員に会社を追われた後、オズコープの地下に隠された試作アーマーを強奪し、蜘蛛の毒素を注入。異形の怪物「グリーン・ゴブリン」へと覚醒し、ピーターから最も大切なものを奪い去る。
+    </div>
+    <div class="character-quote">「お前は俺に希望を与えて、それを奪ったんだ！……ピーター、お前がスパイダーマンだったのか。なら、お前の希望を奪ってやる！！」</div>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有オズコープカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'gwen-override', 'electro-override', 'harry-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

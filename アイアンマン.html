@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【IRON MAN】 - STARK INDUSTRIES SYSTEM OS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       J.A.R.V.I.S. / スターク・インダストリーズ HUDスタイル
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00f0ff; /* J.A.R.V.I.S.のネオンブルー */
+      background-color: #050b14; /* 深海のようなディープネイビー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* デジタルグリッド・ホログラムのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px) 0 0 / 20px 20px,
+        radial-gradient(circle at center, rgba(5, 27, 44, 0.4) 0%, rgba(5, 11, 20, 0.95) 90%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：ガラスモーフィズムとサイバーライン */
+    .main-container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(5, 16, 26, 0.75);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+    }
+
+    /* ヘッダー：ホログラムインターフェース風 */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "STARK IND. OS v16.4 // ONLINE";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff;
+      letter-spacing: 2px;
+      opacity: 0.8;
+    }
+
+    .header::after {
+      content: "POWER GRID: 100% [ARC REACTOR CORRELATION]";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff;
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5em;
+      color: #ffffff;
+      letter-spacing: 12px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+    }
+
+    .header p {
+      color: #e67e22; /* ホットロッドゴールドをイメージしたオレンジ/ゴールド */
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(230, 126, 34, 0.4);
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+      transition: all 0.5s ease;
+    }
+    
+    .poster:hover img {
+      border-color: rgba(0, 240, 255, 0.8);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：ホログラムパネル */
+    .character-card {
+      background-color: rgba(5, 22, 36, 0.5);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-left: 4px solid rgba(0, 240, 255, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "SYS_REF // 001-STARK";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(0, 240, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(5, 32, 54, 0.7);
+      border-color: rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+    }
+
+    /* 開いている状態：アイアンマンのホットロッド・レッド */
+    .character-card.open {
+      background-color: rgba(30, 8, 10, 0.8); /* 深みのあるレッドブラック */
+      border-color: #9d0a0e;
+      border-left: 4px solid #f1c40f; /* ゴールドのライン */
+      box-shadow: 0 0 20px rgba(157, 10, 14, 0.3);
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：サンダーボルツのスタイル（四角形・70x70）を適用 */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px; /* 四角形に変更 */
+      object-fit: cover;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #f1c40f;
+      box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.3em;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .character-card.open .character-info h2 {
+      color: #f1c40f; /* 開いた時はゴールドに */
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1f4ff;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00f0ff;
+      background: rgba(0, 240, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      border-radius: 4px; /* タグも四角形ベースに調整 */
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #f1c40f;
+      border-color: #f1c40f;
+      background: rgba(241, 196, 15, 0.1);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bbf0ff;
+      border-left: 2px solid rgba(0, 240, 255, 0.3);
+      padding-left: 10px;
+    }
+
+    .character-card.open .character-description {
+      border-left-color: #9d0a0e;
+    }
+
+    /* セリフ欄：HUD音声ログ風 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: rgba(5, 11, 20, 0.8);
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00f0ff;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    .character-card.open .character-quote {
+      border-left-color: #f1c40f;
+      box-shadow: inset 0 0 10px rgba(241, 196, 15, 0.05);
+    }
+
+    .character-quote::before {
+      content: "[J.A.R.V.I.S. AUDIO INTERCEPT_]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00f0ff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote::before {
+      color: #f1c40f;
+    }
+    
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>IRON MAN</h1>
+      <p>– ARCHIVE DATA ACCESS: ACCESS GRANTED –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル\アイアンマン.jpg" alt="アイアンマン ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. トニー・スターク -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/トニースターク.jpg" alt="トニー・スターク">
+            <div class="character-info">
+              <h2>トニー・スターク / アイアンマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">天才発明家 / 慈善家 / CEO</div>
+            <div class="character-description">
+              スターク・インダストリーズのCEO。テロ組織に自社兵器が不正流用されている現実を知り、自ら開発した最高機密のパワードスーツを身にまとって戦うことを決意する。
+            </div>
+            <div class="character-quote">「私がアイアンマンだ。」</div>
+          </div>
+        </div>
+        
+        <!-- 2. ペッパー・ポッツ -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/ペッパー.webp" alt="ペッパー・ポッツ">
+            <div class="character-info">
+              <h2>ペッパー・ポッツ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">トニーの有能な秘書</div>
+            <div class="character-description">
+              トニーの破天荒な行動に振り回されながらも、誰よりも彼を理解しサポートする女性。古いアーク・リアクターを「トニー・スタークに心臓があることの証明」として残した。
+            </div>
+            <div class="character-quote">「トニー、あなたをお手伝いするのが私の仕事です。すべてにおいて。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ローディ -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/ローズ＿テレンス.png" alt="ジェームズ・ローディ・ローズ">
+            <div class="character-info">
+              <h2>ジェームズ・“ローディ”・ローズ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">アメリカ空軍中佐 / トニーの親友</div>
+            <div class="character-description">
+              軍とスターク社の橋渡し役であり、トニーの良き理解者。勝手気ままなトニーに激怒しつつも、窮地には必ず駆けつける。
+            </div>
+            <div class="character-quote">「次の機会にな。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. オバディア・ステイン -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/オバディア.png" alt="オバディア・ステイン">
+            <div class="character-info">
+              <h2>オバディア・ステイン / アイアンモンガー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">スターク・インダストリーズ副社長</div>
+            <div class="character-description">
+              ハワードの代から会社を支える重鎮だが、裏ではテロ組織に兵器を密売。トニーの技術を強奪し、巨大な「アイアンモンガー」を作り上げる。
+            </div>
+            <div class="character-quote">「トニー・スタークはやってのけたぞ！洞窟の中でガラクタを使ってな！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 通常のキャラクターカードの開閉システム
+    function toggleCharacter(card) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+      }
+    }
+  </script>
+</body>
+</html>

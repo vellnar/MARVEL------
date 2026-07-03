@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>映画用語解説</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #0b0e14;
+          --card-bg: rgba(22, 28, 38, 0.65);
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding-bottom: 60px; 
+        }
+
+        header {
+            background-color: var(--marvel-red);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(230, 0, 51, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: #111827;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: white;
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--marvel-red);
+            box-shadow: 0 0 8px var(--marvel-red);
+        }
+
+        main {
+            padding: 3rem 1rem 4rem 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-container {
+            margin-bottom: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .search-box:focus {
+            border-color: var(--marvel-red);
+            box-shadow: 0 0 12px rgba(230, 0, 51, 0.4);
+            background-color: #111827;
+        }
+
+        .terms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .term-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-sizing: border-box;
+        }
+
+        .term-card img {
+            width: 100%;
+            height: 200px; 
+            object-fit: cover; 
+            transition: transform 0.5s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .term-card h2 {
+            margin: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .term-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding: 0 1.2rem 1.5rem 1.2rem;
+            margin: 0;
+            text-align: justify; 
+            flex-grow: 1; 
+            white-space: pre-line; 
+        }
+
+        .term-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(230, 0, 51, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 0, 51, 0.2);
+            background-color: #1f2937;
+        }
+
+        .term-card:hover img {
+            transform: scale(1.03); 
+        }
+
+        footer {
+            background-color: #111827;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>映画用語解説</h1>
+    </header>
+    <nav>
+        <a href="index.html">TOP</a>
+        <a href="映画一覧.html">映画一覧</a>
+        <a href="視聴順.html">時系列順</a>
+        <a href="キャラ紹介ページ.html">キャラ解説</a>
+        <a href="用語解説.html" class="active">用語解説</a>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="search" class="search-box" placeholder="用語を検索...">
+            </div>
+
+            <div class="terms-container" id="terms-container">
+                <div class="term-card">
+                    <img src="画像ファイル/Marvel_Studios.jpg" alt="MCU">
+                    <h2>MCU</h2>
+                    <p>MCU（マーベル・シネマティック・ユニバース）とは、MARVELstudioが主体となって制作している実写映画作品群の総称。ヒーローたちが人類を守るために戦う物語で、作品はすべて同じ世界観で描かれていてストーリーが繋がっている。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/SSU.webp" alt="SSU">
+                    <h2>SSU</h2>
+                    <p>ソニーズ・スパイダーマン・ユニバース（SSU）は、コロンビア・ピクチャーズがマーベルと共同で製作するシェアード・ユニバース。「ヴェノム」「モービウス」等スパイダーマンに関連するキャラを中心に独自の世界観を展開している。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/インフィニティストーン.jpg" alt="インフィニティストーン">
+                    <h2>インフィニティストーン</h2>
+                    <p>作中のキーアイテムとなる存在。宇宙誕生時に生まれた6つの特異点の残滓でありエネルギーの結晶。1つでも容易に惑星を消滅させる力を持ち、6つ全部揃えたものは宇宙を支配する力を得る。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/スナップ.jpg" alt="指パッチン">
+                    <h2>指パッチン</h2>
+                    <p>サノスがインフィニティストーンをすべて揃えて行った行為。全世界の半分の命が5年の間、塵となって消滅していた。消えていた人々にとっては一瞬で5年が経過したように感じている。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/マルチバース.webp" alt="マルチバース">
+                    <h2>マルチバース</h2>
+                    <p>日本語で「多元宇宙」と訳される、私たちの宇宙以外に存在するパラレルワールドの概念。一つのユニバースに対し、異なる複数の宇宙が物理学的に共存している考え方を表す。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/ヴィブラニウム.jpg" alt="ヴィブラニウム">
+                    <h2>ヴィブラニウム</h2>
+                    <p>地上で最も高い硬度を持つ超金属。ブラックパンサーの故郷であるワカンダで産出され、スーツやキャプテン・アメリカの盾の素材としても有名。ダイヤモンド以上の硬度を持ち、振動や衝撃を吸収・蓄積する特性がある。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/ジャーヴィス.jpg" alt="J.A.R.V.I.S.">
+                    <h2>J.A.R.V.I.S.</h2>
+                    <p>トニー・スタークの創り出した人工知能。融合してヴィジョンとなる前はトニーのサポーターとしてスーツ等にインストールされていた。ハワード・スタークの執事の名前が由来。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/イーディス.webp" alt="E.D.I.T.H.">
+                    <h2>E.D.I.T.H.</h2>
+                    <p>トニー・スタークの遺作である拡張現実防衛システム。人工知能を宿した特殊な眼鏡型デバイスであり、スターク・インダストリーズの全データベースおよび衛星ドローン兵器へのアクセスが可能。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/レッドルーム.webp" alt="レッドルーム">
+                    <h2>レッドルーム</h2>
+                    <p>ソビエトの極秘スパイ養成施設。「ブラック・ウィドウズ」と呼ばれる暗殺者を養成し続けてきた。ナターシャやエレーナの出身地であり、基地は上空を隠密に飛行している。ラピュタをイメージして貰うと分かりやすい。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/SHIELD.webp" alt="S.H.I.E.L.D.">
+                    <h2>S.H.I.E.L.D.</h2>
+                    <p>国際平和維持組織の略称。公共機関を大きく上回る組織力を有し、長官ニック・フューリーによりアベンジャーズが結成された。しかし内部にはヒドラのスパイが多数紛れ込んでいる。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/ヒドラ.webp" alt="ヒドラ">
+                    <h2>ヒドラ</h2>
+                    <p>元はナチスの極秘化学部門であった秘密結社。四次元キューブを手に入れた事で新兵器を開発し独立、世界征服を目論む。壊滅後も平和維持組織の影に深く潜伏し続けていた。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/TVA.avif" alt="TVA">
+                    <h2>TVA</h2>
+                    <p>時間変異取締局。マルチバースにおける時間の連続性を監視し、剪定（リセット）する役割を担う組織。本部内はレトロな雰囲気だが、インフィニティストーンすら無効化する絶対的な技術力を持つ。というかただの綺麗な石として扱われるレベルである</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/虚無.jpg" alt="虚無空間">
+                    <h2>虚無空間</h2>
+                    <p>TVAによって剪定されたタイムラインの物や変異体が送り込まれる、削除前のごみ箱のような終末空間。ここに落ちた者は、最奥に潜むアライオスによって喰らい尽くされる運命にある。</p>
+                </div>
+
+                <div class="term-card">
+                    <img src="画像ファイル/アライオス.webp" alt="アライオス">
+                    <h2>アライオス</h2>
+                    <p>虚無空間に巣食う紫色の巨煙の怪物。あらゆるタイムラインの調停者「在り続ける者」の領域への扉を守っており、虚無に送られた物質や時間を腐食させ、完全に消滅させる生態を持つ。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MARVELファンサイト</p>
+    </footer>
+
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const termCards = document.querySelectorAll('.term-card');
+
+            termCards.forEach(card => {
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                const text = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(query) || text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

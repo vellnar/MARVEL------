@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>【SPIDER-MAN 3】 - SYMBIOTE INFECTION & DARK SIDE OF THE WEB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       シンビオート侵食 ＆ 復讐のダークウェブUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #94a3b8; /* 少し明度を落とした不穏なグレー */
+      background-color: #030712; /* 漆黒の闇 */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* シンビオートの粘着質な糸や侵食をイメージした背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at center, rgba(3, 7, 18, 0.2) 0%, #030712 95%),
+        linear-gradient(rgba(168, 85, 247, 0.01) 1px, transparent 1px) 0 0 / 25px 25px,
+        linear-gradient(90deg, rgba(168, 85, 247, 0.01) 1px, transparent 1px) 0 0 / 25px 25px;
+      z-index: 1;
+    }
+
+    /* メインコンテナ：シンビオートにハックされたシステム */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(7, 10, 18, 0.93);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(168, 85, 247, 0.2); /* 邪悪なパープルの細い枠線 */
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px solid #6b21a8; /* ディープパープル */
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "SYMBIOTE_INFESTATION: CRITICAL LEVEL";
+      position: absolute;
+      top: -20px;
+      left: 0;
+      font-family: 'Bangers', cursive;
+      font-size: 1.2em;
+      color: #a855f7; /* ネオンパープル */
+      letter-spacing: 2px;
+      animation: pulsate 2s infinite;
+    }
+
+    @keyframes pulsate {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; text-shadow: 0 0 10px #a855f7; }
+      100% { opacity: 0.5; }
+    }
+
+    .header::after {
+      content: "SUBJECT_DATA // VENOMOUS_MUTATION";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7em;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Bangers', 'Orbitron', sans-serif;
+      font-size: 4.5em;
+      color: #ffffff;
+      letter-spacing: 8px;
+      margin: 0;
+      text-shadow: 3px 3px 0px #1e1b4b, 6px 6px 0px #a855f7; /* 漆黒とパープルのダブルシャドウ */
+    }
+
+    .header p {
+      color: #a855f7; 
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      filter: grayscale(20%);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #a855f7;
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.25);
+      filter: grayscale(0%);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード */
+    .character-card {
+      background-color: rgba(10, 15, 30, 0.4);
+      border: 1px solid rgba(168, 85, 247, 0.1);
+      border-left: 4px solid rgba(107, 33, 168, 0.5);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "BUGLE_COMMS // LOG_03";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(18, 24, 43, 0.6);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    /* 🕷️ 開いている状態の個別クラス（シンビオートブラックとそれぞれの対比） */
+    .character-card.open.peter-override {
+      background-color: rgba(12, 12, 18, 0.98); /* ピーター：漆黒のシンビオートブラック */
+      border-color: #a855f7;
+      border-left-color: #ffffff; /* 浮き出る蜘蛛のマーク */
+    }
+    .character-card.open.harry-override {
+      background-color: rgba(15, 25, 20, 0.95); /* ハリー：ニュー・ゴブリンのメタリックダークグリーン */
+      border-color: #10b981;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.flint-override {
+      background-color: rgba(30, 25, 15, 0.95); /* フリント：砂（サンドマン）のインダストリアルアースカラー */
+      border-color: #d97706;
+      border-left-color: #fbbf24;
+    }
+    .character-card.open.eddie-override {
+      background-color: rgba(10, 5, 15, 0.98); /* エディ：凶悪なヴェノム・ヴァイレット */
+      border-color: #ff0055;
+      border-left-color: #a855f7;
+    }
+
+    .character-card.open.eddie-override::after {
+      content: "WE_ARE_VENOM // PROTOCOL_BREACH";
+      color: #ff0055;
+      text-shadow: 0 0 8px #ff0055;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+    }
+
+    /* 顔写真：スクエア型 */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.peter-override .character-header img {
+      border-color: #a855f7;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #cbd5e1;
+      letter-spacing: 0.5px;
+    }
+
+    .character-card.open .character-info h2 {
+      color: #ffffff;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #cbd5e1;
+    }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .character-card.open.eddie-override .character-role {
+      color: #ff0055;
+      border-color: #ff0055;
+      background: rgba(255, 0, 85, 0.1);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #94a3b8;
+      border-left: 2px solid rgba(168, 85, 247, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description {
+      color: #cbd5e1;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.peter-override .character-description {
+      border-left-color: #a855f7;
+    }
+
+    /* セリフ */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #05070f;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #6b21a8;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[AUDIO_CAPTURE // EMOTIONAL_OVERDRIVE]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #a855f7;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.peter-override .character-quote {
+      background-color: #09090e;
+      border-left-color: #ffffff;
+    }
+    .character-card.open.eddie-override .character-quote {
+      background-color: #0f050c;
+      border-left-color: #ff0055;
+    }
+    .character-card.open.eddie-override .character-quote::before {
+      content: "[SYMBIOTE_SYMBIOSIS_VOICE_LOG]";
+      color: #ff0055;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>SPIDER-MAN 3</h1>
+      <p>– THE ENEMY WITHIN THE SHADOWS –</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/スパイダーマン３.jpg" alt="スパイダーマン3 ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ピーター・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン３＿ピーター.jpg" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / ブラックスパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">心の闇に囚われた隣人 // 復讐の黒きスパイダーマン</div>
+            <div class="character-description">
+              MJへのプロポーズの失敗や、ベンおじさんを殺した真犯人への怒りに苦しむ中、宇宙の生命体「シンビオート」に寄生される。能力が大幅に強化され攻撃的な黒いスーツへと変貌するが、引き換えに自身の傲慢さと冷酷さが引き出され、周囲の人々を深く傷つけていく。
+            </div>
+            <div class="character-quote">「復讐ほど甘いものはない……。お前がベンおじさんを殺したんだ。覚悟しろ、フリント！」</div>
+          </div>
+        </div>
+
+        <!-- 2. ハリー・オズボーン -->
+        <div class="character-card" onclick="toggleCharacter(this, 'harry-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン３＿ハリー.avif" alt="ハリー・オズボーン">
+            <div class="character-info">
+              <h2>ハリー・オズボーン / ニュー・ゴブリン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">父の遺志を継ぐ執念の戦士 // 絆を取り戻せし親友</div>
+            <div class="character-description">
+              父ノーマンの装備を改良し「ニュー・ゴブリン」としてピーターを急襲する。戦闘の衝撃で一時的に記憶を失い優しい親友に戻るが、記憶を取り戻すと再び復讐の鬼となりMJを脅迫。しかし最後は真実を知り、傷ついた親友ピーターを救うためにグライダーを駆って決戦の地へ現れる。
+            </div>
+            <div class="character-quote">「親父の仇だ。」</div>
+          </div>
+        </div>
+
+        <!-- 3. フリント・マルコ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'flint-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン３＿フリント.jpg" alt="フリント・マルコ">
+            <div class="character-info">
+              <h2>フリント・マルコ / サンドマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">病の娘を救いたい父親 // 砂の巨人</div>
+            <div class="character-description">
+              不治の病に冒された娘の治療費を稼ぐため脱獄。逃走中に素粒子融合作戦の実験場に迷い込み、肉体が砂と同化する「サンドマン」となる。ベンおじさんを殺害した過去の真の真相を抱えており、悪人になりきれない苦悩を抱えながら戦う。
+            </div>
+            <div class="character-quote">「俺は悪い人間じゃない……ただ、運がなかっただけだ。あの日、あんなことになるはずじゃなかった。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. エディ・ブロック -->
+        <div class="character-card" onclick="toggleCharacter(this, 'eddie-override')">
+          <div class="character-header">
+            <img src="画像ファイル/スパイダーマン３＿エディ.webp" alt="エディ・ブロック">
+            <div class="character-info">
+              <h2>エディ・ブロック / ヴェノム</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピーターを憎むカメラマン // 最凶の怪物</div>
+            <div class="character-description">
+              デイリー・ビューグル紙に現れたピーターのライバル。写真を捏造したことをピーターに暴かれ、職とプライドを失う。ピーターへの激しい憎悪に満ちていたところ、ピーターが教会で引き剥がしたシンビオートと融合。最悪のヴィラン「ヴェノム」として覚醒する。
+            </div>
+            <div class="character-quote">「パーカー、お前の大好きなものを全て奪ってやる。……俺たちがスパイダーマンを殺すんだ！」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有カラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'harry-override', 'flint-override', 'eddie-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

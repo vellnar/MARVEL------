@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アベンジャーズ：ドゥームズデイ - 紹介</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-storm-cloud-top: #151d20;
+      --bg-storm-cloud-bottom: #0a0e10;
+      --doom-green: #00ff87;
+      --doom-green-glow: rgba(0, 255, 135, 0.6);
+      --iron-silver: #4b5563;
+      --text-white: #f8fafc;
+      --card-bg: rgba(16, 21, 26, 0.85);
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--bg-storm-cloud-bottom);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      color: var(--text-white);
+      position: relative;
+    }
+
+    /* 💡 ポスター再現：メインカードの真後ろから差し込む「強烈な緑の光」 */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* メインコンテナ（1100px）より一回り大きいサイズで背後を照らす */
+      width: 1300px;
+      height: 900px;
+      /* 中心はまばゆいほど強く、外側に向かって不気味に溶けていくグラデーション */
+      background: radial-gradient(circle at center, var(--doom-green-glow) 0%, rgba(0, 255, 135, 0.2) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 2; /* 背景（1）とコンテナ（10）の間 */
+      opacity: 0.85;
+    }
+
+    /* 💡 嵐の直前の重苦しい空（雲のベース背景） */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, var(--bg-storm-cloud-top) 0%, var(--bg-storm-cloud-bottom) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 舞い散る塵・世界の崩壊を表現するCanvas */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 3; /* 光の層より手前に配置して、光の中を塵が舞うように */
+    }
+
+    .main-container {
+      max-width: 1100px;
+      width: 90%;
+      margin: 40px auto;
+      background-color: rgba(10, 13, 16, 0.88); /* 後ろの光が強いため、中身が見やすいよう少しだけ黒を濃く */
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 16px;
+      
+      /* メインカード自体の常時発光 */
+      border: 1px solid rgba(0, 255, 135, 0.35);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 
+                  0 0 40px rgba(0, 255, 135, 0.25),
+                  inset 0 0 20px rgba(0, 0, 0, 0.6);
+                  
+      position: relative;
+      z-index: 10;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #fff 20%, #64748b 60%, var(--doom-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      color: #94a3b8;
+      line-height: 1.6;
+      letter-spacing: 1px;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .poster {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      max-height: 550px;
+      border-radius: 8px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 350px;
+    }
+
+    .character-card {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+    }
+
+    .character-card:hover {
+      transform: translateX(5px);
+      border-color: var(--doom-green);
+      background-color: rgba(24, 31, 38, 0.9);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 135, 0.3);
+    }
+
+    .character-header {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .character-card img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 4px; 
+      border: 1px solid var(--iron-silver);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .character-card:hover img {
+      border-color: var(--doom-green);
+      transform: scale(1.03);
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-size: 1.4em;
+      letter-spacing: 1px;
+      color: #f1f5f9;
+    }
+
+    .character-details-wrapper {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+    }
+
+    .character-details {
+      padding: 0 20px 20px 130px;
+    }
+
+    .character-role {
+      color: var(--doom-green);
+      font-size: 0.85em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(0, 255, 135, 0.2);
+    }
+
+    .character-description {
+      line-height: 1.7;
+      margin-bottom: 15px;
+      color: #94a3b8;
+      font-size: 0.95em;
+    }
+
+    .character-quote {
+      font-family: 'Kaisei Tokumin', serif;
+      font-style: italic;
+      color: #e2e8f0;
+      background-color: rgba(9, 11, 13, 0.8);
+      padding: 12px 16px;
+      border-left: 4px solid var(--doom-green);
+      border-radius: 0 6px 6px 0;
+      display: block;
+      font-size: 0.95em;
+      line-height: 1.5;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .character-card.open {
+      background-color: rgba(18, 24, 30, 0.95);
+      border-color: var(--doom-green);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 255, 135, 0.4);
+    }
+
+    .character-card.open .character-details-wrapper {
+      max-height: 400px;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .character-details {
+        padding: 0 20px 20px 20px;
+      }
+      .main-container {
+        padding: 20px;
+        margin: 20px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 舞い散る塵・エネルギー粒子エフェクト -->
+  <canvas id="ash-canvas"></canvas>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>アベンジャーズ：ドゥームズデイ</h1>
+      <p>神聖時間軸の崩壊、そして新たなる最凶の絶対威圧。<br>
+        ドクター・ドゥームがもたらす、全宇宙破滅のカウントダウン。</p>
+    </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル\アベンジャーズ＿ドゥームズデイ.webp" alt="アベンジャーズ：ドゥームズデイ ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- ドクター・ドゥーム -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\RDJ＿ドゥーム.jpg" alt="ドクター・ドゥーム">
+            <div class="character-info">
+              <h2>ビクター・フォン・ドゥーム／ドクター・ドゥーム</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">マルチバース最大の脅威 / 天才科学者・魔術師</div>
+              <div class="character-description">
+                トニー・スタークと瓜二つの容貌を持つ、別のタイムラインの天才。スターク並みの圧倒的な科学テクノロジーと、ドクター・ストレンジにも匹敵する最高峰の魔術を操る。
+              </div>
+              <div class="character-quote">「」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- サム -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/サム.jpeg" alt="サム・ウィルソン">
+            <div class="character-info">
+              <h2>サム・ウィルソン／キャプテン・アメリカ</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">アベンジャーズを率いるリーダー</div>
+              <div class="character-description">
+                三代目キャプテン・アメリカとしてリーダーを倒しレッドハルクとの戦いに決着がついたサムが未だかつてない出来事に巻き込まれていく。
+              </div>
+              <div class="character-quote">「」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- リード・リチャーズ -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル/リード・リチャーズ.jpg" alt="リード・リチャーズ">
+            <div class="character-info">
+              <h2>リード・リチャーズ</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">ファンタスティック・フォーの一員。身体がゴムのように伸びる</div>
+              <div class="character-description">
+                Earth-828にてギャラクタスから世界と息子を守り切ったリードに、マルチバースの境界線を越えて新たな災厄が降りかかる。
+              </div>
+              <div class="character-quote">「」</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- プロフェッサーX -->
+        <div class="character-card" onclick="toggleCharacter(this)">
+          <div class="character-header">
+            <img src="画像ファイル\チャールズ・エグゼビア.webp" alt="プロフェッサーX">
+            <div class="character-info">
+              <h2>チャールズ・エグゼビア／プロフェッサーX</h2>
+            </div>
+          </div>
+          <div class="character-details-wrapper">
+            <div class="character-details">
+              <div class="character-role">X-MENの創設者 / 最強のサイキック能力者</div>
+              <div class="character-description">
+                生まれながらに特殊能力を持つ人類の亜種「ミュータント」達を世間から守る為「恵まれし子らの学園」を創設した。念力やテレパシー等の強力な精神感応能力を操り、迫り来る世界の終焉を察知する。
+              </div>
+              <div class="character-quote">「」</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleCharacter(card) {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open');
+      });
+      if (!isOpen) {
+        card.classList.add('open');
+      }
+    }
+
+    // 荒廃した世界の塵・灰エフェクト
+    const canvas = document.getElementById('ash-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function createParticles() {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 10000); 
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2.5 + 0.5,          
+          speedX: Math.random() * 0.4 - 0.2,       
+          speedY: -(Math.random() * 0.5 + 0.1),     
+          wobble: Math.random() * Math.PI,
+          wobbleSpeed: Math.random() * 0.015,
+          color: Math.random() > 0.82 ? 'rgba(0, 255, 135, ' : 'rgba(100, 116, 139, '
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let p of particles) {
+        let alpha = (Math.sin(p.wobble) * 0.25 + 0.35).toFixed(2);
+        ctx.fillStyle = p.color + alpha + ')';
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.15; 
+        p.wobble += p.wobbleSpeed;
+
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x < -10) p.x = canvas.width + 10;
+        if (p.x > canvas.width + 10) p.x = -10;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+
+    createParticles();
+    drawParticles();
+    window.addEventListener('resize', createParticles);
+  </script>
+</body>
+</html>

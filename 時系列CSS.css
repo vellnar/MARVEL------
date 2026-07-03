@@ -1,0 +1,195 @@
+/* timeline.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav {
+    background-color: #444;
+    overflow: hidden;
+}
+
+nav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 10px;
+}
+
+.container {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+}
+
+.container.left {
+    left: 0;
+}
+
+.container.right {
+    left: 50%;
+}
+
+.container.left::after, .container.right::after {
+    content: "";
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border: 4px solid #FF5733;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.container.left::after {
+    right: -17.5px;
+}
+
+.container.right::after {
+    left: -17.5px;
+}
+
+.container.left::before, .container.right::before {
+    content: " ";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 10px;
+    background-color: #FF5733;
+    z-index: -1;
+}
+
+.container.left::before {
+    right: -9px;
+}
+
+.container.right::before {
+    left: -9px;
+}
+
+.content {
+    padding: 20px 30px;
+    background-color: white;
+    position: relative;
+    border-radius: 6px;
+}
+
+.content h2 {
+    margin: 0 0 10px;
+}
+
+.content p {
+    margin: 10px 0 0;
+}
+
+.container.right .content {
+    border: 2px solid #FF5733;
+}
+
+.container.left .content {
+    border: 2px solid #33C3FF;
+}
+
+.container.split::before {
+    content: " ";
+    height: 50%;
+    width: 0;
+    border-left: 10px solid #FF5733;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -5px;
+}
+
+.container.split.left::before {
+    border-left: none;
+    border-right: 10px solid #33C3FF;
+    left: auto;
+    right: 50%;
+    margin-right: -5px;
+}
+
+.container.split.left::after {
+    border-right: 10px solid #33C3FF;
+    right: -5px;
+    top: 50%;
+    width: 0;
+    height: 50%;
+}
+
+.container.split.right::after {
+    border-left: 10px solid #FF5733;
+    left: -5px;
+    top: 50%;
+    width: 0;
+    height: 50%;
+}
+
+.container.merge::before {
+    border-left: 10px solid #33C3FF;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -5px;
+    height: 50%;
+    width: 0;
+}
+
+.container.merge::after {
+    border-left: 10px solid #33C3FF;
+    left: 50%;
+    margin-left: -5px;
+    top: 50%;
+    width: 0;
+    height: 50%;
+}
+
+.container.merge.left::before {
+    border-left: none;
+    border-right: 10px solid #FF5733;
+    left: auto;
+    right: 50%;
+    margin-right: -5px;
+}
+
+.container.merge.left::after {
+    border-right: 10px solid #FF5733;
+    right: 50%;
+    margin-right: -5px;
+}
+
+/* Adjust the height of the split and merge containers */
+.container.split::before, .container.split::after,
+.container.merge::before, .container.merge::after {
+    height: 100%;
+}
+
+.container.split.left::before, .container.split.left::after,
+.container.merge.left::before, .container.merge.left::after {
+    height: 100%;
+}
