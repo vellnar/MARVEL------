@@ -1,49 +1,495 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【THOR: RAGNAROK】 - SAKAAR ARENA CHAMPION SYSTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       サカール星・格闘競技場 ＆ ネオンサイバーUI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #ff00ff; /* グランドマスター好みのネオンマゼンタ */
+      background-color: #05020c; /* サカールのディスコダークな漆黒 */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* レトロゲームのブラウン管や、サイケデリックなスキャンラインのオーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(255, 0, 255, 0.02) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px) 0 0 / 20px 20px,
+        radial-gradient(circle at center, rgba(5, 2, 12, 0.2) 0%, #05020c 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：サカール星のVIP観客席コントロールモニター風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(14, 5, 28, 0.88);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 2px solid #ff00ff; /* ハデハデなマゼンタ枠 */
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.2);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 2px dashed #00ffff; /* シアンの破線 */
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "GRANDMASTER_CONTEST // MAIN_EVENT: CHAMPION_VS_LORD_OF_THUNDER";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffff;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "ASGARD_STATUS: RAGNAROK_IMMINENT";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3300;
+      letter-spacing: 1px;
+      font-weight: bold;
+      animation: text-flash 1s infinite alternate;
+    }
+
+    @keyframes text-flash {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; text-shadow: 0 0 10px #ff3300; }
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.6em;
+      color: #ffff00; /* 鮮烈なイエロー */
+      letter-spacing: 14px;
+      margin: 0;
+      text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+    }
+
+    .header p {
+      color: #00ffff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ffff00;
+      box-shadow: 0 0 35px rgba(255, 255, 0, 0.4);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：基本スタイル */
+    .character-card {
+      background-color: rgba(25, 10, 48, 0.4);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      border-left: 5px solid #ff00ff;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "CONTESTANT // STATUS: READY";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(0, 255, 255, 0.3);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(43, 18, 82, 0.6);
+      border-color: #ff00ff;
+    }
+
+    /* 🟢 開いている状態の個別クラス ＋ 各種固有アニメーション */
+    
+    /* ⚡ ソー：覚醒の神雷ライトニング・フラッシュ */
+    .character-card.open.thor-override {
+      background-color: rgba(5, 25, 48, 0.96);
+      border-color: #00ffff;
+      border-left-color: #ffff00;
+      animation: lightning-strike 0.2s infinite alternate;
+    }
+    @keyframes lightning-strike {
+      0% { box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.2); }
+      100% { box-shadow: inset 0 0 35px rgba(0, 255, 255, 0.5); filter: contrast(110%); }
+    }
+    .character-card.open.thor-override::after {
+      content: "GOD_OF_THUNDER // AWAKENED";
+      color: #00ffff;
+      text-shadow: 0 0 8px #00ffff;
+    }
+
+    /* 🟢 ロキ：サカールVIP・エメラルド流動 */
+    .character-card.open.loki-override {
+      background: linear-gradient(135deg, #041a12 0%, #0d3a24 50%, #041a12 100%);
+      background-size: 200% 200%;
+      border-color: #00ffcc;
+      border-left-color: #ff00ff;
+      animation: loki-glam 4s infinite ease-in-out;
+    }
+    @keyframes loki-glam {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; box-shadow: inset 0 0 25px rgba(0, 255, 204, 0.3); }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 👊 ハルク：絶対王者のアースクエイク（震動） */
+    .character-card.open.hulk-override {
+      background-color: rgba(10, 35, 12, 0.98);
+      border-color: #00ff33;
+      border-left-color: #eab308; /* 王者のゴールド */
+      animation: hulk-quake 0.3s infinite ease-in-out;
+    }
+    @keyframes hulk-quake {
+      0% { transform: translate(0, 0); box-shadow: inset 0 0 15px rgba(0,255,51,0.2); }
+      25% { transform: translate(-0.5px, 0.5px); }
+      50% { transform: translate(0.5px, -0.5px); box-shadow: inset 0 0 25px rgba(0,255,51,0.4); }
+      75% { transform: translate(-0.5px, -0.5px); }
+      100% { transform: translate(0, 0); }
+    }
+    .character-card.open.hulk-override::after {
+      content: "ARENA_CHAMPION // UNSTOPPABLE";
+      color: #00ff33;
+      text-shadow: 0 0 10px #00ff33;
+    }
+
+    /* 💀 ヘラ：ネクロブレード・ダークスライス */
+    .character-card.open.hela-override {
+      background: linear-gradient(90deg, #040d08 0%, rgba(16, 185, 129, 0.1) 50%, #040d08 100%);
+      background-size: 200% 100%;
+      border-color: #10b981;
+      border-left-color: #000000;
+      animation: hela-slice 2.5s infinite linear;
+    }
+    @keyframes hela-slice {
+      0% { background-position: 200% 0%; }
+      100% { background-position: -200% 0%; }
+    }
+    .character-card.open.hela-override::after {
+      content: "GOD_OF_DEATH // RAGNAROK_PROTOCOL";
+      color: #10b981;
+      text-shadow: 0 0 8px #10b981;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid #00ffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.thor-override .character-header img { border-color: #00ffff; box-shadow: 0 0 12px #00ffff; }
+    .character-card.open.loki-override .character-header img { border-color: #00ffcc; }
+    .character-card.open.hulk-override .character-header img { border-color: #00ff33; box-shadow: 0 0 12px #00ff33; }
+    .character-card.open.hela-override .character-header img { border-color: #10b981; box-shadow: 0 0 15px #10b981; }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #e2d9f3;
+      position: relative;
+      z-index: 2;
+    }
+    .character-card.open.thor-override .character-details { color: #e0f2fe; }
+    .character-card.open.loki-override .character-details { color: #e6fbf4; }
+    .character-card.open.hulk-override .character-details { color: #f0fdf4; }
+    .character-card.open.hela-override .character-details { color: #ecfdf5; }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #ff00ff;
+      background: rgba(255, 0, 255, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(255, 0, 255, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role { border-color: currentColor; background: rgba(255, 255, 255, 0.15); color: #ffffff; }
+    .character-card.open.thor-override .character-role { color: #00ffff; border-color: #00ffff; background: rgba(0, 255, 255, 0.15); }
+    .character-card.open.loki-override .character-role { color: #00ffcc; border-color: #00ffcc; background: rgba(0, 255, 204, 0.15); }
+    .character-card.open.hulk-override .character-role { color: #00ff33; border-color: #00ff33; background: rgba(0, 255, 51, 0.15); }
+    .character-card.open.hela-override .character-role { color: #10b981; border-color: #10b981; background: rgba(16, 185, 129, 0.15); }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #c0a8e0;
+      border-left: 2px solid #ff00ff;
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { color: inherit; border-left-color: currentColor; }
+
+    /* セリフ欄 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #0a0414;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #ff00ff;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[SAKAAR_ARENA_COMMS // INTERCEPTED]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff00ff;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.thor-override .character-quote {
+      background-color: #020f1a;
+      border-left-color: #00ffff;
+    }
+    .character-card.open.thor-override .character-quote::before {
+      content: "[LORD_OF_THUNDER_POWER_RESONANCE]";
+      color: #00ffff;
+    }
+
+    .character-card.open.hulk-override .character-quote {
+      background-color: #021404;
+      border-left-color: #00ff33;
+    }
+    .character-card.open.hulk-override .character-quote::before {
+      content: "[CHAMPION_VITAL_TELEMETRY]";
+      color: #00ff33;
+    }
+
+    .character-card.open.hela-override .character-quote {
+      background-color: #010a05;
+      border-left-color: #10b981;
+    }
+    .character-card.open.hela-override .character-quote::before {
+      content: "[EXECUTIONER_HELA_DECREE]";
+      color: #10b981;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>マイティーソー　バトルロイヤル</h1>
-        <img src="C:\Users\2318090\Downloads\マイティーソー　バトルロイヤル.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2017年</p>
-            <p><strong>監督:</strong> タイカ・ワイティティ</p>
-            <p><strong>出演:</strong> クリス・ヘムズワース,トム・ヒドルストン,ケイト・ブランシェット,イドリス・エルバ,ジェフ・ゴールドブラム,テッサ・トンプソン,カール・アーバン</p>
-            <p><strong>概要:</strong> アベンジャーズの一員ソーの前に＜死の女神・ヘラ＞が現れた。復讐と野望に燃えるヘラは、ソーの故郷へ攻撃をはじめる。故郷を奪われたソーは、この最強の敵を倒すため盟友ハルク、宿敵ロキらと型破りのチーム“リベンジャーズ”を組み極限バトルに挑む。果たして、ソーたちは史上最強の敵からこの世界を守ることができるのか？死の女神・ヘラの復讐の目的は！？そこには、ソーの運命を変える秘密が隠されていたー。新『アベンジャーズ』へのカウントダウンが始まる！</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=7ZcBnbe1ma8" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>THOR: RAGNAROK</h1>
+      <p>– GRANDMASTER'S GLADIATOR CONTEST MANAGEMENT –</p>
     </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/マイティーソー＿バトルロイヤル.jpg" alt="マイティ・ソー／バトルロイヤル ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ソー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'thor-override')">
+          <div class="character-header">
+            <img src="画像ファイル/バトルロイヤル＿ソー.webp" alt="ソー">
+            <div class="character-info">
+              <h2>ソー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">髪を刈られた闘士 // 真の雷神へ覚醒するアスガルドの王</div>
+            <div class="character-description">
+              姉ヘラの襲撃により最愛のハンマー「ムジョルニア」を粉砕され、未知の辺境惑星サカールへ売られてしまう。自慢の長髪を刈られ、闘技場でかつての盟友ハルクと殺し合いをさせられる羽目に。ハンマーという「道具」に頼っていた己の未熟さを悟り、自身の肉体から直接凄まじい雷光を放つ「真の雷神」の力に覚醒、故郷を救うためロキらと即興チーム「リベンジャーズ」を結成する。
+            </div>
+            <div class="character-quote">「助けて～をやるか。好きだったろう。」</div>
+          </div>
+        </div>
+
+        <!-- 2. ロキ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'loki-override')">
+          <div class="character-header">
+            <img src="画像ファイル/バトルロイヤル＿ロキ.jpg" alt="ロキ">
+            <div class="character-info">
+              <h2>ロキ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">グランドマスターの遊び友達 // 憎みきれない悪戯の神</div>
+            <div class="character-description">
+              オーディンに変装してアスガルドを統治していたがソーに見破られ、地球へ父を捜しに行く途中でヘラに襲撃され、ソーより数週間早くサカール星へ漂着。持ち前の世渡り上手さで支配者グランドマスターの懐に入り込み、VIP席で優雅に暮らしていた。相変わらずソーを裏切ろうとするが、兄の成長と信頼の言葉に動かされ、巨大戦艦を駆ってアスガルドの民を救うべく決戦に駆けつける。
+            </div>
+            <div class="character-quote">「やらない。嫌いだ絶対にやらない。」</div>
+          </div>
+        </div>
+
+        <!-- 3. ハルク / ブルース・バナー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'hulk-override')">
+          <div class="character-header">
+            <img src="画像ファイル/バトルロイヤル＿ハルク.webp" alt="ハルク">
+            <div class="character-info">
+              <h2>ハルク / ブルース・バナー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">サカール闘技場の絶対王者 // クインジェットの迷子</div>
+            <div class="character-description">
+              ソコヴィア決戦の後、クインジェットで地球を去り、サカール星に墜落。2年間ずっとバナーに戻ることなく「ハルク」の状態で過ごし、グランドマスターお気に入りの絶対無敵の王者として国民から崇拝されていた。カタコトの言葉を喋るなど知性がやや発達しており、ソーとの喧嘩を経てクインジェットの映像（ナターシャの声）を見たことで、ようやくバナーの姿を取り戻す。
+            </div>
+            <div class="character-quote">「（咆哮）」</div>
+          </div>
+        </div>       
+
+        <!-- 4. ヘラ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'hela-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ヘラ.jpg" alt="ヘラ">
+            <div class="character-info">
+              <h2>ヘラ / 死の女神</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">封印を解かれたオーディンの長女 // アスガルドの絶対的支配者</div>
+            <div class="character-description">
+              オーディンと共に数々の世界を血の歴史で征服した、ソーとロキの邪悪な実の姉。あまりの残虐性と野心ゆえに父によって数千年間封印されていたが、オーディンの崩御によって復活。圧倒的な死の魔術でソーの片目を奪い、無尽蔵に鋭利なネクロブレードを出現させてアスガルドの軍隊を単身で壊滅させる。アスガルドの土地そのものから無限に力を得るため、彼女を倒すには「ラグナロク（故郷の崩壊）」を引き起こすしかなかった。
+            </div>
+            <div class="character-quote">「私は死の女神だ。」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有アニメーションカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'thor-override', 'loki-override', 'hulk-override', 'hela-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
 </body>
 </html>

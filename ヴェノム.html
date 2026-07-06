@@ -1,50 +1,476 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【VENOM】 - LIFE_FOUNDATION BIO-CONTAINMENT NETWORK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       ライフ財団バイオサーバー ＆ シンビオート侵食UI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00ffcc; /* ライフ財団のバイオシアン */
+      background-color: #02050a; /* 密閉された実験室の漆黒 */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 被験者監視グリッド・液状スライムの粘着質な背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 255, 204, 0.01) 1px, transparent 1px) 0 0 / 25px 25px,
+        linear-gradient(90deg, rgba(0, 255, 204, 0.01) 1px, transparent 1px) 0 0 / 25px 25px,
+        radial-gradient(circle at center, rgba(2, 5, 10, 0.3) 0%, #02050a 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：ライフ財団の生体サンプラー管理パネル風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(3, 8, 15, 0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 255, 204, 0.1);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 255, 204, 0.25);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "LIFE_FOUNDATION // SYMBIOTE_CONTAINMENT_UNIT_01";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "ALERT: BIOMASS_OVERRIDE_DETECTED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff0055; /* シンビオート侵食の赤紫 */
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.6em;
+      color: #ffffff;
+      letter-spacing: 14px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    }
+
+    .header p {
+      color: #ff0055;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 204, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ff0055;
+      box-shadow: 0 0 35px rgba(255, 0, 85, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：基本スタイル */
+    .character-card {
+      background-color: rgba(4, 15, 26, 0.4);
+      border: 1px solid rgba(0, 255, 204, 0.12);
+      border-left: 4px solid rgba(0, 255, 204, 0.4);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "SPECIMEN // METABOLISM_LIVE";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(6, 25, 41, 0.6);
+      border-color: rgba(255, 0, 85, 0.3);
+    }
+
+    /* 🟢 開いている状態の個別クラス ＋ 各種固有アニメーション */
+    
+    /* 🕷️ エディ／ヴェノム：液状グラデーションがうごめく（シンビオート・シンク） */
+    .character-card.open.eddie-override {
+      background: linear-gradient(135deg, #050508 0%, #170414 50%, #050508 100%);
+      background-size: 200% 200%;
+      border-color: #a855f7;
+      border-left-color: #ffffff;
+      animation: venom-ooze 6s infinite ease-in-out;
+    }
+    @keyframes venom-ooze {
+      0% { background-position: 0% 50%; box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.1); }
+      50% { background-position: 100% 50%; box-shadow: inset 0 0 35px rgba(168, 85, 247, 0.3); }
+      100% { background-position: 0% 50%; box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.1); }
+    }
+    .character-card.open.eddie-override::after {
+      content: "WE_ARE_VENOM // SYMBIOSIS_100%";
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    /* アン：適合パルス */
+    .character-card.open.anne-override {
+      background-color: rgba(22, 10, 24, 0.95);
+      border-color: #f43f5e;
+      border-left-color: #fda4af;
+    }
+
+    /* 🧪 ドレイク／ライオット：銀刃の鋭利なフラッシュカッティング */
+    .character-card.open.drake-override {
+      background: linear-gradient(90deg, rgba(10,12,18,0.98) 0%, rgba(148,163,184,0.1) 50%, rgba(10,12,18,0.98) 100%);
+      background-size: 200% 100%;
+      border-color: #94a3b8;
+      border-left-color: #ff0055; /* 残虐な赤 */
+      animation: riot-blade 2s infinite linear;
+    }
+    @keyframes riot-blade {
+      0% { background-position: 200% 0%; }
+      100% { background-position: -200% 0%; }
+    }
+    .character-card.open.drake-override::after {
+      content: "HOSTILE_ALERT // RIOT_SYSTEM_DOMINATED";
+      color: #ff0055;
+      text-shadow: 0 0 8px #ff0055;
+    }
+
+    /* 🧬 ドーラ・スカース博士：財団ラボインデックス */
+    .character-card.open.skirth-override {
+      background-color: rgba(5, 25, 22, 0.95);
+      border-color: #00ffcc;
+      border-left-color: #ff0055;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.eddie-override .character-header img {
+      border-color: #a855f7;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+    }
+    .character-card.open.drake-override .character-header img {
+      border-color: #ff0055;
+      box-shadow: 0 0 12px #ff0055;
+    }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1fbf4;
+      position: relative;
+      z-index: 2;
+    }
+    .character-card.open.eddie-override .character-details { color: #f3e8ff; }
+    .character-card.open.drake-override .character-details { color: #ffe6eb; }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #00ffcc;
+      background: rgba(0, 255, 204, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 255, 204, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role {
+      color: #ffffff;
+      border-color: currentColor;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .character-card.open.eddie-override .character-role {
+      color: #a855f7;
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.15);
+    }
+    .character-card.open.drake-override .character-role {
+      color: #ff0055;
+      border-color: #ff0055;
+      background: rgba(255, 0, 85, 0.15);
+    }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #a6f2e3;
+      border-left: 2px solid rgba(0, 255, 204, 0.3);
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { border-left-color: #ffffff; }
+    .character-card.open.eddie-override .character-description { border-left-color: #a855f7; }
+    .character-card.open.drake-override .character-description { border-left-color: #ff0055; }
+
+    /* セリフ欄 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020710;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #00ffcc;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[LIFE_FOUNDATION // INTERCEPTED_AUDIO_LOG]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.eddie-override .character-quote {
+      background-color: #09030e;
+      border-left-color: #a855f7;
+    }
+    .character-card.open.eddie-override .character-quote::before {
+      content: "[SYMBIOTE_INTERNAL_MIND_CONVERSATION]";
+      color: #a855f7;
+    }
+
+    .character-card.open.drake-override .character-quote {
+      background-color: #140206;
+      border-left-color: #ff0055;
+    }
+    .character-card.open.drake-override .character-quote::before {
+      content: "[SUBJECT_RIOT // AUDIO_FREQUENCY_BREACH]";
+      color: #ff0055;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>ヴェノム</h1>
-        <img src="C:\Users\2318090\Downloads\ヴェノム.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2018年</p>
-            <p><strong>監督:</strong> ルーベン・フライシャー</p>
-            <p><strong>出演:</strong> トム・ハーディ,ミシェル・ウィリアムズ,リズ・アーメッド,スコット・ヘイズ,リード・スコット,ウディ・ハレルソン,ジェニー・スレイト</p>
-            <p><strong>概要:</strong> 《誰もが望む、歴史的偉業》を発見した＜ライフ財団＞。それは、世界を変えるはずだった――。正義感溢れるジャーナリスト、エディ・ブロック（トム・ハーディ）は、そのライフ財団が人体実験で死者を出しているという噂を突き止めるために取材を試みるも、人体実験の被験者との接触により、“シンビオート”（地球外生命体）に寄生されてしまう。この意思を持った生命体が語りかける声が聞こえ始めたエディの体には、とてつもない変化が起きていた。彼の中で解き放たれた<悪>が、体を蝕み、増殖していく――。
-エディと一体となったヴェノムは、「俺たちは――ヴェノム」と名乗りをあげ、ヴェノム誕生の時がついに訪れた！</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=stxs1ck8X6E" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>VENOM</h1>
+      <p>– BIOLOGICAL ALIEN MUTATION LOG // TRAPPED –</p>
     </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/ヴェノム.jpg" alt="ヴェノム ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. エディ・ブロック -->
+        <div class="character-card" onclick="toggleCharacter(this, 'eddie-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ヴェノム＿エディ.avif" alt="エディ・ブロック">
+            <div class="character-info">
+              <h2>エディ・ブロック / ヴェノム</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">正義感あふれる落ちぶれたジャーナリスト // 宿主</div>
+            <div class="character-description">
+              ライフ財団の闇を暴こうとして職と恋人を失った記者。財団のラボに潜入した際、宇宙から連れ帰られた液状生命体「シンビオート」に寄生される。当初は脳内で響く凶暴な声（ヴェノム）に恐怖するが、次第に奇妙な信頼関係を築き、人間を喰らう残虐性と悪を挫くヒーロー性を併せ持つ「ヴェノム」として覚醒する。
+            </div>
+            <div class="character-quote">「『俺たちはヴェノムだ。』」</div>
+          </div>
+        </div>
+
+        <!-- 2. アン・ウェイング -->
+        <div class="character-card" onclick="toggleCharacter(this, 'anne-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ヴェノム＿アン.jpg" alt="アン・ウェイング">
+            <div class="character-info">
+              <h2>アン・ウェイング</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">優秀な弁護士 // エディの元婚約者</div>
+            <div class="character-description">
+              ライフ財団の顧問を務める法律事務所の弁護士。エディが自分のPCを盗み見て財団を追及したため巻き添えで解雇され、彼と破局する。しかしエディがシンビオートに命を握られていると知ると、危険を顧みず救出に奔走。一時的にシンビオートを自身に宿し「シー・ヴェノム」としてエディを危機から救い出すタフさを持つ。
+            </div>
+            <div class="character-quote">「頭の中の怪物を何とかしなきゃ。」</div>
+          </div>
+        </div>
+
+        <!-- 3. カールトン・ドレイク -->
+        <div class="character-card" onclick="toggleCharacter(this, 'drake-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ヴェノム＿カールトン.jpg" alt="カールトン・ドレイク">
+            <div class="character-info">
+              <h2>カールトン・ドレイク / ライオット</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ライフ財団CEO // 最凶のシンビオート・ライオット</div>
+            <div class="character-description">
+              「地球は滅びる」という独自の終末思想を持ち、人類が宇宙で生き残るためにシンビオートとの融合実験を非道な手段で繰り返す天才科学者。宇宙船から脱走したシンビオートのリーダー格「ライオット」の宿主となり、両腕を巨大な銀刃に変形させて無双する。ヴェノムを遥かに凌ぐ圧倒的な戦闘力でエディを追い詰める。
+            </div>
+            <div class="character-quote">「人類は脆弱だ。これは進化なのだよ、ブロック。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. ドーラ・スカース博士 -->
+        <div class="character-card" onclick="toggleCharacter(this, 'skirth-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ヴェノム＿ドーラ.jpg" alt="ドーラ・スカース博士">
+            <div class="character-info">
+              <h2>ドーラ・スカース博士</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ライフ財団の良心的な筆頭研究員</div>
+            <div class="character-description">
+              ドレイクの側近としてシンビオートの融合実験を行っていたが、ホームレスや弱者を使い殺害し続けるドレイクの冷酷な臨床試験に耐えかね、財団を裏切る決意をする。ジャーナリストのエディに接触し、機密であるラボ内部へと彼を招き入れたことで、ヴェノム誕生の最大のキッカケを作った人物。
+            </div>
+            <div class="character-quote">「ドレイクは狂っています。死者が出続けているのに実験を止めない。……ブロックさん、中を見て、世界に告発してください。」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有アニメーションカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'eddie-override', 'anne-override', 'drake-override', 'skirth-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
 </body>
 </html>

@@ -1,49 +1,498 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【SPIDER-MAN: HOMECOMING】 - STARK IND. SUIT TELEMETRY SYSTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       スターク・インダストリーズ スーツUI ＆ 学園ギーク
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #00d2ff; /* スターク・HUDのシアンブルー */
+      background-color: #020715; /* クイーンズの夜空のディープブルー */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* スタークHUD・ファインダーパターンの背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(0, 210, 255, 0.015) 1px, transparent 1px) 0 0 / 20px 20px,
+        linear-gradient(90deg, rgba(0, 210, 255, 0.015) 1px, transparent 1px) 0 0 / 20px 20px,
+        radial-gradient(circle at center, rgba(2, 7, 21, 0.3) 0%, #020715 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：スタークスーツの裏内部OS「カレン」の診断モニター風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(3, 11, 28, 0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 210, 255, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 210, 255, 0.15);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(0, 210, 255, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "STARK_INDUSTRIES_V3.2 // SPIDERMAN_PROTOTYPE_OS";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3344; /* スパイダー・レッド */
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "TRAINING_WHEELS_PROTOCOL: BYPASSED";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.4em;
+      color: #ffffff;
+      letter-spacing: 12px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(0, 210, 255, 0.5);
+    }
+
+    .header p {
+      color: #ff3344;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 210, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #ff3344;
+      box-shadow: 0 0 35px rgba(255, 51, 68, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：基本スタイル */
+    .character-card {
+      background-color: rgba(3, 16, 36, 0.4);
+      border: 1px solid rgba(0, 210, 255, 0.15);
+      border-left: 4px solid #ff3344;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "SUIT_ACCESS // GRANTED";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(4, 26, 54, 0.6);
+      border-color: rgba(0, 210, 255, 0.4);
+    }
+
+    /* 🟢 開いている状態の個別クラス ＋ 各種固有アニメーション */
+    
+    /* 🕷️ ピーター：AIカレン・HUDターゲット照準駆動 */
+    .character-card.open.peter-override {
+      background-color: rgba(5, 22, 46, 0.96);
+      border-color: #00d2ff;
+      border-left-color: #ffffff;
+    }
+    /* 背景に照準線のドット円とスキャンラインをアニメーションで配置 */
+    .character-card.open.peter-override::before {
+      content: "";
+      position: absolute;
+      bottom: -30px;
+      right: 30px;
+      width: 160px;
+      height: 160px;
+      border: 2px dashed #00d2ff;
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: spider-hud-spin 6s infinite linear;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes spider-hud-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .character-card.open.peter-override::after {
+      content: "AI_KAREN // DRONE_LAUNCHED // WEBSHOOTER_V2";
+      color: #00d2ff;
+      text-shadow: 0 0 8px #00d2ff;
+    }
+
+    /* 🔴 トニー：アイアン・緊急警告パルス */
+    .character-card.open.tony-override {
+      background: linear-gradient(135deg, #0f0406 0%, #300a12 50%, #0f0406 100%);
+      background-size: 200% 200%;
+      border-color: #ef4444;
+      border-left-color: #f59e0b;
+      animation: tony-warning 4s infinite ease-in-out;
+    }
+    @keyframes tony-warning {
+      0% { background-position: 0% 50%; box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.1); }
+      50% { background-position: 100% 50%; box-shadow: inset 0 0 30px rgba(239, 68, 68, 0.35); }
+      100% { background-position: 0% 50%; box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.1); }
+    }
+    .character-card.open.tony-override::after {
+      content: "MONITORING_ACTIVE // COMPLY_WITH_D.A.M.N";
+      color: #ef4444;
+    }
+
+    /* 🦅 バルチャー：チタウリ・プラズマキャノン侵食 */
+    .character-card.open.vulture-override {
+      background: linear-gradient(90deg, #07030f 0%, rgba(168, 85, 247, 0.12) 50%, #07030f 100%);
+      background-size: 200% 100%;
+      border-color: #a855f7;
+      border-left-color: #3b82f6; /* 羽の冷酷なメタリックブルー */
+      animation: chitauri-energy 2s infinite linear;
+    }
+    @keyframes chitauri-energy {
+      0% { background-position: 200% 0%; }
+      100% { background-position: -200% 0%; }
+    }
+    .character-card.open.vulture-override::after {
+      content: "ILLEGAL_TECH // ALIEN_RELICT_POWERED";
+      color: #a855f7;
+      text-shadow: 0 0 8px #a855f7;
+    }
+
+    /* 🟢 ネッド：椅子に座る男のハッキング・グリーンコード */
+    .character-card.open.ned-override {
+      background-color: rgba(4, 24, 12, 0.98);
+      border-color: #22c55e;
+      border-left-color: #ff3344;
+    }
+    .character-card.open.ned-override::after {
+      content: "GUY_IN_THE_CHAIR // BYPASS_STARK_FIREWALL_SUCCESS";
+      color: #22c55e;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(0, 210, 255, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.peter-override .character-header img { border-color: #00d2ff; box-shadow: 0 0 12px #00d2ff; }
+    .character-card.open.tony-override .character-header img { border-color: #ef4444; }
+    .character-card.open.vulture-override .character-header img { border-color: #a855f7; box-shadow: 0 0 12px #a855f7; }
+    .character-card.open.ned-override .character-header img { border-color: #22c55e; }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #d1f1ff;
+      position: relative;
+      z-index: 2;
+    }
+    .character-card.open.peter-override .character-details { color: #e0f2fe; }
+    .character-card.open.tony-override .character-details { color: #ffe4e6; }
+    .character-card.open.vulture-override .character-details { color: #f3e8ff; }
+    .character-card.open.ned-override .character-details { color: #f0fdf4; }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #ff3344;
+      background: rgba(255, 51, 68, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(255, 51, 68, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role { border-color: currentColor; background: rgba(255, 255, 255, 0.15); color: #ffffff; }
+    .character-card.open.peter-override .character-role { color: #00d2ff; border-color: #00d2ff; background: rgba(0, 210, 255, 0.15); }
+    .character-card.open.tony-override .character-role { color: #ef4444; border-color: #ef4444; background: rgba(239, 68, 68, 0.15); }
+    .character-card.open.vulture-override .character-role { color: #a855f7; border-color: #a855f7; background: rgba(168, 85, 247, 0.15); }
+    .character-card.open.ned-override .character-role { color: #22c55e; border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #bfe7ff;
+      border-left: 2px solid #ff3344;
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { color: inherit; border-left-color: currentColor; }
+
+    /* セリフ欄 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #020b18;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #ff3344;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[STARK_SUIT_LOG // DATA_STREAM]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #ff3344;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.peter-override .character-quote {
+      background-color: #041224;
+      border-left-color: #00d2ff;
+    }
+    .character-card.open.peter-override .character-quote::before {
+      content: "[SUIT_AI_KAREN_INTERFACE_AUDIO]";
+      color: #00d2ff;
+    }
+
+    .character-card.open.vulture-override .character-quote {
+      background-color: #0f0217;
+      border-left-color: #a855f7;
+    }
+    .character-card.open.vulture-override .character-quote::before {
+      content: "[ILLEGAL_RADIO_FREQUENCY_INTERCEPT]";
+      color: #a855f7;
+    }
+
+    .character-card.open.ned-override .character-quote {
+      background-color: #021408;
+      border-left-color: #22c55e;
+    }
+    .character-card.open.ned-override .character-quote::before {
+      content: "[NED_BEDROOM_DESKTOP_LOG]";
+      color: #22c55e;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>スパイダーマン　ホームカミング</h1>
-        <img src="C:\Users\2318090\Downloads\iloveimg-converted\スパイダーマン　ホームカミング.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2017年</p>
-            <p><strong>監督:</strong> ジョン・ワッツ</p>
-            <p><strong>出演:</strong> トム・ホランド,マイケル・キートン,ロバート・ダウニー・ジュニア,マリサ・トメイ,ジョン・ファブロー,グウィネス・パルトロー,ゼンデイヤ</p>
-            <p><strong>概要:</strong> ニューヨーク。15歳のピーター・パーカーはスパイダーマンだ。部活のノリで街を救う、ヒーロー気取りの高校生。そんなピーターの能力を見出し、真のヒーローとしての“道”へと導こうとするのがアイアンマンことトニー・スターク。スタークに新しいスーツまで作ってもらい興奮するピーターは、自分の力を認めてもらおうと街に飛び出す日々。そんなある日、巨大な翼で飛行する怪物が街に突如現れる。ピーターはここぞとばかり、ニューヨークの平和のために怪物退治に乗り出そうとするが、スタークに「アベンジャーズに任せておけ」と止められてしまう。「ガキ扱いは、ゴメンだ！」とピーターはその忠告を聞かずに戦いに挑むが―。</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=IO-wgJT6qNY" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>SPIDER-MAN: HOMECOMING</h1>
+      <p>– STARK INDUSTRIES SUIT TELEMETRY & USER MANAGEMENT –</p>
     </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/スパイダーマン＿ホームカミング.jpg" alt="スパイダーマン：ホームカミング ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ピーター・パーカー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'peter-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ホームカミング＿ピーター.jpg" alt="ピーター・パーカー">
+            <div class="character-info">
+              <h2>ピーター・パーカー / スパイダーマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">親愛なる隣人 // アベンジャーズに憧れる15歳</div>
+            <div class="character-description">
+              アベンジャーズへの加入を夢見て、放課後に地道な街のパトロールに励む高校生。トニー・スタークから贈られたハイテクスーツの「研修期間モード」を親友ネッドと共に強引に解除し、576通りものウェブシューター機能やAI「カレン」のサポートを得て大はしゃぎする。しかし、自分の力を過信してフェリー切断の大事故を招いてしまい、トニーにスーツを没収されてしまうが、手製の手作りスーツで本当のヒーローの覚悟を証明する。
+            </div>
+            <div class="character-quote">「立て…立つんだスパイダーマン。」</div>
+          </div>
+        </div>
+
+        <!-- 2. トニー・スターク -->
+        <div class="character-card" onclick="toggleCharacter(this, 'tony-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ホームカミング＿トニー.png" alt="トニー・スターク">
+            <div class="character-info">
+              <h2>トニー・スターク / アイアンマン</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ピーターのメンター // 厳しく見守るアイアン・ボス</div>
+            <div class="character-description">
+              ピーターの才能を認めつつも、まだ若すぎる彼が命を落とすことを最も恐れており、あえて連絡を絶って地道な「隣人」の活動に専念させようとする。ピーターの暴走によってフェリーが崩壊した際は自らアーマーで修復に駆けつけ、激しく叱責してスーツを没収。かつて自分を甘やかして失敗した父親（ハワード）のようにはなるまいと、不器用ながら父親代わりとしてピーターを導く。
+            </div>
+            <div class="character-quote">「スーツ無しじゃダメならスーツを着る資格は無い。」</div>
+          </div>
+        </div>
+
+        <!-- 3. エイドリアン・トゥームス -->
+        <div class="character-card" onclick="toggleCharacter(this, 'vulture-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ホームカミング＿ヴァルチャー.jpg" alt="エイドリアン・トゥームス">
+            <div class="character-info">
+              <h2>エイドリアン・トゥームス / バルチャー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">瓦礫撤去の元業者 // 家族のために羽ばたく怪鳥ヴィラン</div>
+            <div class="character-description">
+              ニューヨーク決戦（アベンジャーズ1作目）の瓦礫撤去業者だったが、トニーらが設立したダメージ統制局（D.A.M.N.）に仕事を理不尽に奪われ失業。政府や大企業への復讐と家族の平穏な生活のため、盗み出していた宇宙人（チタウリ）のハイテク兵器の残骸を改造・密売する裏社会のボスとなる。自ら巨大な金属翼「バルチャー・ウイング」を纏い、スターク社の輸送機強奪を狙う。
+            </div>
+            <div class="character-quote">「……世界は変わった、俺たちも変わるしかねえんだよ、ピーター。」</div>
+          </div>
+        </div>       
+
+        <!-- 4. ネッド・リーズ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'ned-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ホームカミング＿ネッド.jpg" alt="ネッド・リーズ">
+            <div class="character-info">
+              <h2>ネッド・リーズ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">レゴが大好きな大親友 // 自称「椅子に座る男（ハッカー）」</div>
+            <div class="character-description">
+              ピーターの高校の同級生で、科学オタクの愛すべき大親友。ある日、ピーターの部屋で彼が天井に張り付いているのを目撃し、スパイダーマンの正体を知ってしまう。激しく興奮しながらも秘密を徹底的に守り、自慢のプログラミングスキルでスターク・スーツのプロトコルをハッキング。体育館のデスクトップPCからピーターへ逃走経路や敵の現在地を指示する「椅子に座る男（Guy in the chair）」として完璧にサポートする。
+            </div>
+            <div class="character-quote">「俺は『椅子の人』になりたいんだ」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有アニメーションカラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'peter-override', 'tony-override', 'vulture-override', 'ned-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
 </body>
 </html>

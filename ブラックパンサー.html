@@ -1,49 +1,473 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【BLACK PANTHER】 - WAKANDA VIBRANIUM INTELLIGENCE SYSTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       ワカンダ・ヴィブラニウム・ホログラム UI
+       ========================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Share Tech Mono', 'Noto Sans JP', sans-serif;
+      color: #a78bfa; /* ワカンダの象徴・ヴィブラニウムパープル */
+      background-color: #03020a; /* 鉱山深部の漆黒 */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 超先進的な幾何学グリッド・パターンの背景オーバーレイ */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: 
+        linear-gradient(rgba(167, 139, 250, 0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        linear-gradient(90deg, rgba(167, 139, 250, 0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        radial-gradient(circle at center, rgba(3, 2, 10, 0.3) 0%, #03020a 95%);
+      z-index: 1;
+    }
+
+    /* メインコンテナ：シュリのラボにある最先端ホログラム制御パネル風 */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: rgba(6, 4, 18, 0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.15);
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(167, 139, 250, 0.3);
+      padding-bottom: 25px;
+      position: relative;
+    }
+
+    .header::before {
+      content: "WAKANDA_ROYAL_DATABASE // ACCESS: KING_T_CHALLA";
+      position: absolute;
+      top: -15px;
+      left: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #a78bfa;
+      letter-spacing: 2px;
+    }
+
+    .header::after {
+      content: "VIBRANIUM_ENERGY_CORE // KINETIC_STATUS: STABLE";
+      position: absolute;
+      top: -15px;
+      right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #00ffcc; /* 安定を示すクリーンなシアン */
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      font-weight: 900;
+      font-size: 3.5em;
+      color: #ffffff;
+      letter-spacing: 14px;
+      margin: 0;
+      text-shadow: 0 0 25px rgba(167, 139, 250, 0.6);
+    }
+
+    .header p {
+      color: #a78bfa;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1em;
+      letter-spacing: 6px;
+      margin: 12px 0 0 0;
+      font-weight: bold;
+    }
+
+    .content {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* ポスター画像 */
+    .poster {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: all 0.4s ease;
+    }
+    
+    .poster:hover img {
+      border-color: #00ffcc;
+      box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
+    }
+
+    .characters {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* キャラクターカード：基本スタイル */
+    .character-card {
+      background-color: rgba(10, 6, 28, 0.4);
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-left: 4px solid #7c3aed;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .character-card::after {
+      content: "WAKANDAN_CITIZEN // ID_VERIFIED";
+      position: absolute;
+      right: 20px;
+      top: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65em;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .character-card:hover {
+      background-color: rgba(21, 14, 46, 0.6);
+      border-color: rgba(167, 139, 250, 0.4);
+    }
+
+    /* 🟢 開いている状態の個別クラス ＋ 各種固有アニメーション */
+    
+    /* 🔮 ティ・チャラ：ヴィブラニウム・キネティックチャージ波 */
+    .character-card.open.tchalla-override {
+      background: linear-gradient(135deg, #05040f 0%, #20103b 50%, #05040f 100%);
+      background-size: 200% 200%;
+      border-color: #c084fc;
+      border-left-color: #ffffff;
+      animation: kinetic-wave 5s infinite ease-in-out;
+    }
+    @keyframes kinetic-wave {
+      0% { background-position: 0% 50%; box-shadow: inset 0 0 15px rgba(167, 139, 250, 0.15); }
+      50% { background-position: 100% 50%; box-shadow: inset 0 0 30px rgba(167, 139, 250, 0.4); }
+      100% { background-position: 0% 50%; box-shadow: inset 0 0 15px rgba(167, 139, 250, 0.15); }
+    }
+    .character-card.open.tchalla-override::after {
+      content: "VIBRANIUM_SUIT // ABSORB_PROTOCOLS_ENGAGED";
+      color: #c084fc;
+      text-shadow: 0 0 8px #c084fc;
+    }
+
+    /* 👑 シュリ：キモヨビーズ・ラボホログラムスライド */
+    .character-card.open.shuri-override {
+      background-color: rgba(8, 24, 38, 0.95);
+      border-color: #38bdf8; /* ライトブルー */
+      border-left-color: #00ffcc;
+      animation: shuri-pulse 4s infinite alternate;
+    }
+    @keyframes shuri-pulse {
+      0% { box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.1); }
+      100% { box-shadow: inset 0 0 25px rgba(56, 189, 248, 0.3); }
+    }
+
+    /* 🌊 ナキア：リバー・トライブ・シアンパルス */
+    .character-card.open.nakia-override {
+      background-color: rgba(6, 26, 26, 0.95);
+      border-color: #00ffcc;
+      border-left-color: #a78bfa;
+    }
+
+    /* 👑 キルモンガー：黄金の豹・激情のゴールドバースト */
+    .character-card.open.killmonger-override {
+      background: linear-gradient(90deg, #120902 0%, rgba(245, 158, 11, 0.12) 50%, #120902 100%);
+      background-size: 200% 100%;
+      border-color: #f59e0b; /* 黄金 */
+      border-left-color: #000000;
+      animation: gold-burst 2s infinite linear;
+    }
+    @keyframes gold-burst {
+      0% { background-position: 200% 0%; box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.1); }
+      100% { background-position: -200% 0%; box-shadow: inset 0 0 30px rgba(245, 158, 11, 0.3); }
+    }
+    .character-card.open.killmonger-override::after {
+      content: "ALERT // ROYAL_THONE_CHALLENGER_ENGAGED";
+      color: #f59e0b;
+      text-shadow: 0 0 8px #f59e0b;
+    }
+
+    .character-header {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 顔写真：スクエア型（70x70） */
+    .character-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .character-card.open .character-header img {
+      border-color: #ffffff;
+    }
+    .character-card.open.tchalla-override .character-header img { border-color: #c084fc; box-shadow: 0 0 12px #c084fc; }
+    .character-card.open.shuri-override .character-header img { border-color: #38bdf8; }
+    .character-card.open.killmonger-override .character-header img { border-color: #f59e0b; box-shadow: 0 0 12px #f59e0b; }
+
+    .character-info h2 {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1.25em;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    /* 詳細部分 */
+    .character-details {
+      display: none;
+      padding: 0px 20px 25px 110px;
+      color: #ebdfff;
+      position: relative;
+      z-index: 2;
+    }
+    .character-card.open.shuri-override .character-details { color: #e0f2fe; }
+    .character-card.open.nakia-override .character-details { color: #e6fbf7; }
+    .character-card.open.killmonger-override .character-details { color: #fef3c7; }
+
+    /* 役割タグ */
+    .character-role {
+      font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+      display: inline-block;
+      font-size: 0.8em;
+      color: #a78bfa;
+      background: rgba(167, 139, 250, 0.1);
+      padding: 3px 10px;
+      border: 1px solid rgba(167, 139, 250, 0.4);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-role { border-color: currentColor; background: rgba(255, 255, 255, 0.15); color: #ffffff; }
+    .character-card.open.tchalla-override .character-role { color: #c084fc; border-color: #c084fc; background: rgba(168, 85, 247, 0.15); }
+    .character-card.open.shuri-override .character-role { color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+    .character-card.open.nakia-override .character-role { color: #00ffcc; border-color: #00ffcc; background: rgba(0, 255, 204, 0.15); }
+    .character-card.open.killmonger-override .character-role { color: #f59e0b; border-color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
+
+    /* 説明文 */
+    .character-description {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1em;
+      color: #d8b4fe;
+      border-left: 2px solid #7c3aed;
+      padding-left: 10px;
+    }
+    .character-card.open .character-description { color: inherit; border-left-color: currentColor; }
+
+    /* セリフ欄 */
+    .character-quote {
+      font-style: normal;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #05020c;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-left: 3px solid #7c3aed;
+      border-radius: 4px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .character-quote::before {
+      content: "[WAKANDA_LOG // SUB-NET_INTERCEPTED]";
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75em;
+      color: #a78bfa;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .character-card.open .character-quote { border-left-color: currentColor; }
+    
+    .character-card.open.tchalla-override .character-quote {
+      background-color: #0d041a;
+      border-left-color: #c084fc;
+    }
+    .character-card.open.tchalla-override .character-quote::before {
+      content: "[KING_T_CHALLA_ROYAL_DECREE]";
+      color: #c084fc;
+    }
+
+    .character-card.open.shuri-override .character-quote {
+      background-color: #020b14;
+      border-left-color: #38bdf8;
+    }
+    .character-card.open.shuri-override .character-quote::before {
+      content: "[PRINCESS_SHURI_LAB_COMMS]";
+      color: #38bdf8;
+    }
+
+    .character-card.open.killmonger-override .character-quote {
+      background-color: #170b02;
+      border-left-color: #f59e0b;
+    }
+    .character-card.open.killmonger-override .character-quote::before {
+      content: "[ERIK_KILLMONGER_MANIFESTO]";
+      color: #f59e0b;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .character-details {
+        padding-left: 20px;
+      }
+      .character-card::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>ブラックパンサー</h1>
-        <img src="C:\Users\2318090\Downloads\iloveimg-converted\ブラックパンサー.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2018年</p>
-            <p><strong>監督:</strong> ライアン・クーグラー</p>
-            <p><strong>出演:</strong> チャドウィック・ボーズマン,マイケル・B・ジョーダン,ルピタ・ニョンゴ,ダナイ・グリラ,マーティン・フリーマン,ダニエル・カルーヤ,レティーシャ・ライト</p>
-            <p><strong>概要:</strong> 若き国王ティ・チャラ、またの名を漆黒のヒーロー＜ブラックパンサー＞。2つの顔を持つ彼の使命は、祖国である超文明国家ワカンダの“秘密” ──“ヴィブラニウム”を守ること。それは、世界を破壊するパワーを秘めた鉱石だった。突然の父の死によって王位を継いだティ・チャラは、人類の未来をも脅かすこの国の“秘密”を守る使命を負う事に。だが――「私に、使命が果たせるのか…？」</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=hjm9TvyPzxo" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="main-container">
+    <div class="header">
+      <h1>BLACK PANTHER</h1>
+      <p>– WAKANDA ADVANCED TECHNOLOGICAL NETWORK –</p>
     </div>
+
+    <div class="content">
+      <div class="poster">
+        <img src="画像ファイル/ブラックパンサー.jpg" alt="ブラックパンサー ポスター">
+      </div>
+
+      <div class="characters">
+        <!-- 1. ティ・チャラ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'tchalla-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ブラックパンサー＿ティチャラ.png" alt="ティ・チャラ">
+            <div class="character-info">
+              <h2>ティ・チャラ / ブラックパンサー</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">新国王 // ワカンダの守護豹</div>
+            <div class="character-description">
+              父ティ・チャカの崩御に伴い、超文明国家ワカンダの新たな王として即位した若き指導者。ハーブの力で超人的な身体能力を得て、妹シュリが開発した「キネティック・エネルギー（受けた衝撃を蓄積して放出する）」を纏う新型漆黒スーツを身につけて戦う。ワカンダを世界から隠し通すという祖国の伝統と、苦しむ世界の人々を救うべきという革新の間で葛藤し、王としての真の決断を下す。
+            </div>
+            <div class="character-quote">「賢き者は橋を架け、愚者は壁を作る。我々は一つの民として手を取り合うべきなのです。」</div>
+          </div>
+        </div>
+
+        <!-- 2. シュリ -->
+        <div class="character-card" onclick="toggleCharacter(this, 'shuri-override')">
+          <div class="character-header">
+            <img src="画像ファイル/シュリ.jpg" alt="シュリ">
+            <div class="character-info">
+              <h2>シュリ</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">ワカンダの王女 // 天才天才科学者</div>
+            <div class="character-description">
+              ティ・チャラの妹であり、トニー・スタークをも凌駕するMCU史上最高峰のIQを持つ天才科学者。ワカンダのテクノロジー中枢であるデザイン・グループを統括し、キモヨビーズやソニック・ブラスター、遠隔操縦システムなど、ヴィブラニウムを用いた無数の最先端ガジェットを開発、ユーモアを忘れずに兄の戦いを全力でサポートする。
+            </div>
+            <div class="character-quote">「次は衝撃を吸収する機能をつけたわよ」</div>
+          </div>
+        </div>
+
+        <!-- 3. ナキア -->
+        <div class="character-card" onclick="toggleCharacter(this, 'nakia-override')">
+          <div class="character-header">
+            <img src="画像ファイル/ナキア.png" alt="ナキア">
+            <div class="character-info">
+              <h2>ナキア</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">川の部族（リバー・トライブ） // 国際スパイ（ウォー・ドッグ）</div>
+            <div class="character-description">
+              ワカンダの秘密諜報員「ウォー・ドッグ」として世界中で潜入任務をこなす凄腕スパイ。ティ・チャラの元恋人。ワカンダの力を他国の難民や弱者の救済のために使うべきだという強い信念を持っており、王位がキルモンガーに奪われた際も冷静に状況を判断、ハーブを奪取して逆転の布石を打つ強さを持つ。
+            </div>
+            <div class="character-quote">「私は自分の国が世界を助けられると信じてる」</div>
+          </div>
+        </div>       
+
+        <!-- 4. エリック・キルモンガー -->
+        <div class="character-card" onclick="toggleCharacter(this, 'killmonger-override')">
+          <div class="character-header">
+            <img src="画像ファイル/キルモンガー.jpg" alt="エリック・キルモンガー">
+            <div class="character-info">
+              <h2>エリック・キルモンガー（ウンジャダカ）</h2>
+            </div>
+          </div>
+          <div class="character-details">
+            <div class="character-role">捨てられた悲劇の従兄弟 // 王座を奪う黄金の豹</div>
+            <div class="character-description">
+              かつてティ・チャカ国王に殺害された叔父ズリの息子であり、アメリカの貧民街で孤独に育ったティ・チャラの従兄弟。米軍の秘密忘却部隊「シールズ」で数多の暗殺をこなし、全身に殺害した人数の傷を刻んできた。虐げられる黒人同胞を解放するため、ワカンダのハイテク兵器で世界を恐怖で支配しようと画策。儀式でティ・チャラを圧倒し、王座を力ずくで強奪する。
+            </div>
+            <div class="character-quote">「俺を海に沈めてくれ。祖先たちが飛び降りた海へな……彼らは知っていた、奴隷になるより『死』を選ぶ方が高潔だと。」</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // キャラクターカードの開閉システム + 固有ヴィブラニウム＆激情カラー制御
+    function toggleCharacter(card, overrideClass) {
+      const details = card.querySelector('.character-details');
+      const isOpen = card.classList.contains('open');
+
+      // 全カードを初期化
+      document.querySelectorAll('.character-card').forEach(c => {
+        c.classList.remove('open', 'tchalla-override', 'shuri-override', 'nakia-override', 'killmonger-override');
+        c.querySelector('.character-details').style.display = 'none';
+      });
+
+      // 開く処理
+      if (!isOpen) {
+        details.style.display = 'block';
+        card.classList.add('open');
+        if (overrideClass) {
+          card.classList.add(overrideClass);
+        }
+      }
+    }
+  </script>
 </body>
 </html>
