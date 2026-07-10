@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャラ解説 - AVENGERS ARCHIVE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           ナナオリ完全再現・縦型カルーセル ＆ 属性タグシステム
+           ========================================== */
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #070a13; 
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+          --accent-cyan: #00d2ff;
+          --accent-gold: #dfb36c;
+          --tag-bg: rgba(230, 0, 51, 0.15);
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            box-sizing: border-box;
+        }
+
+        /* 🔙 カテゴリメニューに戻るボタン */
+        .back-to-menu {
+            position: absolute;
+            top: 25px;
+            left: 40px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            border: 1px solid var(--accent-cyan);
+            padding: 6px 14px;
+            border-radius: 4px;
+            background: rgba(0, 210, 255, 0.05);
+            z-index: 100;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        .back-to-menu:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+
+        /* 🎬 メインステージ（3エリアセパレート） */
+        .stage-wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            background-color: #060911;
+        }
+
+        /* ==========================================
+           ① 【左側エリア】テキスト情報（幅：全体の55%）
+           ========================================== */
+        .info-panel {
+            width: 55vw;
+            height: 100vh;
+            padding: 0 40px 0 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 30;
+            box-sizing: border-box;
+            background: linear-gradient(90deg, rgba(7,10,19,1) 85%, rgba(7,10,19,0.8) 95%, transparent 100%);
+        }
+
+        .char-title-tag {
+            font-family: 'Oswald', sans-serif;
+            color: var(--marvel-red);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+        }
+
+        .char-name {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.8rem, 3.8vw, 2.8rem); 
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 0.8rem 0;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            word-break: break-all;
+        }
+
+        /* 🛡️ ナナオリ式：属性・武器ステータスタグ */
+        .status-tags-container {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .status-tag {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--tag-bg);
+            border: 1px solid rgba(230, 0, 51, 0.4);
+            padding: 4px 12px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .char-slogan {
+            font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 1.2rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .char-description {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            max-width: 540px;
+            text-align: justify;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* ==========================================
+           ② 【中央エリア】縦型回転カルーセル（幅：全体の12%）
+           ========================================== */
+        .nav-wheel-panel {
+            width: 12vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+            background: linear-gradient(90deg, rgba(7,10,19,0.5) 0%, rgba(5,7,12,0.9) 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .carousel-window {
+            height: 340px; 
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wheel-axis {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+
+        .circle-thumb {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            overflow: hidden;
+            background-color: #000;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+            padding: 0;
+            outline: none;
+            flex-shrink: 0;
+        }
+
+        .circle-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(40%) grayscale(40%);
+            transition: all 0.3s ease;
+        }
+
+        .circle-thumb.active {
+            border-color: var(--accent-cyan);
+            transform: scale(1.18);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.6), 0 6px 20px rgba(0,0,0,0.7);
+        }
+
+        .circle-thumb.active img, .circle-thumb:hover img {
+            filter: brightness(110%) grayscale(0%);
+        }
+
+        .carousel-arrow {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 50;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .carousel-arrow:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px var(--accent-cyan);
+            transform: scale(1.2);
+        }
+        .arrow-up { margin-bottom: 5px; }
+        .arrow-down { margin-top: 5px; }
+
+        /* ==========================================
+           ③ 【右側エリア】キャラクター大画像専用（幅：33%）
+           ========================================== */
+        .character-graphic-stage {
+            width: 33vw; 
+            height: 100vh;
+            z-index: 10;
+            position: relative;
+            background-color: #03050a;
+        }
+
+        .huge-character-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: scale(1.02);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .huge-character-photo.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ==========================================
+           📱 モバイルレイアウト
+           ========================================== */
+        @media (max-width: 900px) {
+            body { overflow-y: auto; }
+            .stage-wrapper { flex-direction: column; height: auto; }
+            
+            .character-graphic-stage { width: 100vw; height: 45vh; }
+            .nav-wheel-panel { width: 100vw; height: auto; padding: 15px 0; background-color: #090c12; border-right: none; }
+            .carousel-window { height: 90px; }
+            .wheel-axis { flex-direction: row; justify-content: center; top: auto !important; left: 0; }
+            .carousel-arrow { display: none; }
+            
+            .info-panel { width: 100vw; height: auto; padding: 40px 20px; background: var(--bg-dark); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stage-wrapper">
+        <!-- 【左】テキスト領域（全体の55%） -->
+        <div class="info-panel">
+            <div class="char-title-tag">AVENGERS ARCHIVE</div>
+            <h2 class="char-name" id="display-name"></h2>
+            
+            <!-- 🛡️ ナナオリ式属性タグコンテナ -->
+            <div class="status-tags-container" id="display-tags"></div>
+            
+            <div class="char-slogan" id="display-slogan"></div>
+            <div class="char-description" id="display-desc"></div>
+        </div>
+
+        <!-- 【中央】縦型ホイールカルーセル（全体の12%） -->
+        <div class="nav-wheel-panel">
+            <button class="carousel-arrow arrow-up" onclick="scrollCarousel(-1)">▲</button>
+            
+            <div class="carousel-window">
+                <div class="wheel-axis" id="icon-wheel">
+                    <!-- JSで丸型アイコンが自動生成されます -->
+                </div>
+            </div>
+            
+            <button class="carousel-arrow arrow-down" onclick="scrollCarousel(1)">▼</button>
+        </div>
+
+        <!-- 【右】巨大画像ステージ（全体の33%） -->
+        <div class="character-graphic-stage" id="main-viewer"></div>
+    </div>
+
+    <!-- ==========================================
+       コア・データエンジン ＆ カルーセル同期スクリプト
+       ========================================== -->
+    <script>
+        // 💾 【完全分離型】アイコン用（thumb）と右側大画像用（large）を個別設定
+        const avengersData = [
+            { 
+                name: "アイアンマン / トニー・スターク", 
+                thumb: "画像ファイル/アイアンマン２＿トニー.jpg",  // アイコン用パス
+                large: "画像ファイル/アイアンマン＿アーマー.jpg",       // 右側大画面用パス
+                tags: ["天才科学者", "ハイテクアーマー", "大富豪"], // ナナオリ式属性
+                quote: "「真実は…私がアイアンマンだ。」", 
+                desc: "アーマースーツを着て戦う天才的な頭脳の持ち主であり、発明家。兵器産業を続けていたが、悪事に利用されたため生産を中止、自ら開発したアーマーを着て悪事に立ち向かう。アーマーはそれぞれ用途別に作られており、戦いを経る度に改良されている。" 
+            },
+            { 
+                name: "キャプテン・アメリカ / スティーブ・ロジャース", 
+                thumb: "画像ファイル/キャップ_icon.jpg", 
+                large: "画像ファイル/キャップ.jpg", 
+                tags: ["🧪超人血清", "🛡️ヴィブラニウムシールド", "🦅リーダーシップ"],
+                quote: "「一人でも戦うが、一人ではないと信ぜる。」", 
+                desc: "超人兵士計画の被験者。超人血清を打たれたおかげで元来抱いていた正義の心が強く反映されている。人間の能力を極限まで高めた存在であり、あらゆる面でオリンピック級の実力の持ち主である。" 
+            },
+            { 
+                name: "ハルク / ブルース・バナー", 
+                thumb: "画像ファイル/ハルク_icon.jpg", 
+                large: "画像ファイル/ハルク.jpg", 
+                tags: ["☢️ガンマ線科学者", "💪無限の怪力", "🟢絶対的破壊性"],
+                quote: "「僕の秘密を教えようか。いつも怒ってる」", 
+                desc: "生化学や核物理学、ガンマ線の研究で知られている。ブルース博士は怒りによって別人格であるハルクへと変身する。怒りが大きければ大きいほどパワーが増していく、チーム最高クラスの破壊力の持ち主。" 
+            },
+            { 
+                name: "ホークアイ / クリント・バートン", 
+                thumb: "画像ファイル/ホークアイ_icon.jpg", 
+                large: "画像ファイル/ホークアイ.jpg", 
+                tags: ["🎯絶対精密射撃", "🏹仕掛け特殊矢", "👁️最高峰の死角ナシ"],
+                quote: "「一歩外に出たら、君はアベンジャーズだ」", 
+                desc: "S.H.I.E.L.Dの元特別エージェントであり、創設メンバーの一人。特殊能力は持たないが卓越した弓の技術を持ち、狙った的は外さない。矢じりには様々な仕掛けが施されている。" 
+            },
+            { 
+                name: "ブラック・ウィドウ / ナターシャ・ロマノフ", 
+                thumb: "画像ファイル/ブラックウィドウ_icon.jpg", 
+                large: "画像ファイル/ブラックウィドウ.jpg", 
+                tags: ["🕷️超一流アサシン", "🕵️潜入工作の天才", "🩸レッドルーム出身"],
+                quote: "「まったく男の子は散らかすのが好きなんだから」", 
+                desc: "諜報に関するあらゆる分野で訓練を積み、最新鋭の技術を装備している。S.H.I.E.L.Dの最重要エージェントの一人としていくつもの任務を成功させてきた。アベンジャーズのメンバーとしてその能力を悪に立ち向かう為に惜しみなく使用している。" 
+            }
+        ];
+
+        let currentActiveIndex = 0;
+        const iconHeight = 68; 
+        const gapHeight = 24;  
+
+        function initViewer() {
+            const wheel = document.getElementById('icon-wheel');
+            const viewer = document.getElementById('main-viewer');
+
+            avengersData.forEach((char, idx) => {
+                // アイコン側（char.thumb を使用）
+                const btn = document.createElement('button');
+                btn.className = `circle-thumb ${idx === 0 ? 'active' : ''}`;
+                btn.setAttribute('id', `thumb-${idx}`);
+                btn.setAttribute('onclick', `selectCharacter(${idx})`);
+
+                const thumbImg = document.createElement('img');
+                thumbImg.src = char.thumb;
+                thumbImg.alt = char.name;
+                btn.appendChild(thumbImg);
+                wheel.appendChild(btn);
+
+                // 右側大画像側（char.large を使用）
+                const largeImg = document.createElement('img');
+                largeImg.src = char.large;
+                largeImg.className = `huge-character-photo ${idx === 0 ? 'active' : ''}`;
+                largeImg.setAttribute('id', `huge-img-${idx}`);
+                viewer.appendChild(largeImg);
+            });
+
+            selectCharacter(0);
+        }
+
+        function selectCharacter(index) {
+            currentActiveIndex = index;
+            const char = avengersData[index];
+
+            // 1. 左側テキスト ＆ 属性タグの動的生成
+            document.getElementById('display-name').innerText = char.name;
+            document.getElementById('display-slogan').innerText = char.quote;
+            document.getElementById('display-desc').innerText = char.desc;
+
+            // 属性タグの入れ替え処理
+            const tagsContainer = document.getElementById('display-tags');
+            tagsContainer.innerHTML = ''; // 一度空にする
+            char.tags.forEach(tagText => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'status-tag';
+                tagSpan.innerText = tagText;
+                tagsContainer.appendChild(tagSpan);
+            });
+
+            // 2. 右側巨大画像のフェード制御
+            const largeImages = document.querySelectorAll('.huge-character-photo');
+            largeImages.forEach((img, i) => {
+                img.classList.toggle('active', i === index);
+            });
+
+            // 3. 中央サークルボタンのアクティブ制御
+            const thumbs = document.querySelectorAll('.circle-thumb');
+            thumbs.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+
+            // 4. カルーセル追従計算
+            const wheel = document.getElementById('icon-wheel');
+            const offset = -(index - 1) * (iconHeight + gapHeight);
+            
+            if (index === 0) {
+                wheel.style.transform = `translateY(0px)`;
+            } else if (index === avengersData.length - 1) {
+                const maxOffset = -(avengersData.length - 3) * (iconHeight + gapHeight);
+                wheel.style.transform = `translateY(${maxOffset}px)`;
+            } else {
+                wheel.style.transform = `translateY(${offset}px)`;
+            }
+        }
+
+        function scrollCarousel(direction) {
+            let nextIndex = currentActiveIndex + direction;
+            if (nextIndex < 0) {
+                nextIndex = avengersData.length - 1;
+            } else if (nextIndex >= avengersData.length) {
+                nextIndex = 0;
+            }
+            selectCharacter(nextIndex);
+        }
+
+        window.onload = initViewer;
+    </script>
+</body>
+</html>

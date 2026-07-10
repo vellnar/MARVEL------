@@ -1,49 +1,397 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【GUARDIANS OF THE GALAXY: VOL.1】 - AWESOME MIX & SPACE JUNK TERMINAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       レトロポップ・宇宙海賊ジャンクUI（文字被り修正版）
+       ========================================== */
+    :root {
+      --gotg-orange: #f97316; 
+      --gotg-teal: #14b8a6;   
+      --bg-space: #050b14;
+      --text-light: #f3f4f6;
+      --panel-dark: rgba(10, 20, 32, 0.85);
+    }
+
+    body {
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #0c1a30 0%, #030710 100%) fixed;
+      color: var(--text-light);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255, 255, 255, 0.005) 50%, rgba(0, 0, 0, 0.05) 50%) 0 0 / 100% 4px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* 🔙 メラノ号計器風・戻るボタン */
+    .back-to-hub {
+      position: absolute;
+      top: 25px;
+      left: 40px;
+      font-family: 'Oswald', 'Share Tech Mono', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gotg-orange);
+      text-decoration: none;
+      border: 1px solid var(--gotg-orange);
+      padding: 6px 14px;
+      border-radius: 4px;
+      background: rgba(249, 115, 22, 0.05);
+      z-index: 100;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    .back-to-hub:hover {
+      background: var(--gotg-orange);
+      color: #000;
+      box-shadow: 0 0 15px var(--gotg-orange);
+      font-weight: bold;
+    }
+
+    .stage-wrapper {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ==========================================
+       ① 【左側エリア】テキスト情報（位置微調整）
+       ========================================== */
+    .info-panel {
+      width: 52vw;
+      height: 100vh;
+      padding: 60px 40px 0 60px; /* 上部にマージンを設けて被りを完全防止 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 30;
+      box-sizing: border-box;
+      background: linear-gradient(90deg, rgba(5,11,20,1) 80%, rgba(5,11,20,0.8) 95%, transparent 100%);
+    }
+
+    .movie-tag {
+      font-family: 'Oswald', sans-serif;
+      color: var(--gotg-teal);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 0.2rem;
+    }
+
+    .char-name {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 0.8rem 0;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+    }
+
+    .status-tags-container {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #000000;
+      background-color: var(--gotg-teal);
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      font-family: 'Oswald', sans-serif;
+    }
+    .status-tag.style-tag {
+      background-color: transparent;
+      color: var(--gotg-orange);
+      border: 1px solid var(--gotg-orange);
+    }
+
+    .char-slogan {
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--gotg-orange);
+      padding-left: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .char-description {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 500px;
+      text-align: justify;
+      background: rgba(13, 27, 42, 0.6);
+      padding: 1.2rem 1.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(20, 184, 166, 0.15);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    /* ==========================================
+       ② 【中央エリア】カセットテープ型UI
+       ========================================== */
+    .nav-wheel-panel {
+      width: 16vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
+      background: linear-gradient(90deg, rgba(5,11,20,0.4) 0%, rgba(8,20,35,0.95) 100%);
+      border-right: 1px solid rgba(249, 115, 22, 0.15);
+      box-sizing: border-box;
+    }
+
+    .cassette-deck {
+      background: #182232;
+      border: 3px solid #2d3d52;
+      border-radius: 12px;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+      width: 110px;
+    }
+
+    .cassette-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gotg-orange);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+      width: 100%;
+      padding-bottom: 4px;
+    }
+
+    .circle-thumb {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: 3px dashed rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      overflow: hidden;
+      background-color: #050a12;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.6);
+      padding: 0;
+      outline: none;
+      flex-shrink: 0;
+    }
+
+    .circle-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(40%) grayscale(50%);
+      transition: all 0.3s ease;
+    }
+
+    .circle-thumb.active {
+      border-color: var(--gotg-orange);
+      transform: scale(1.12);
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
+    }
+
+    .circle-thumb.active img {
+      filter: brightness(110%) grayscale(0%);
+      animation: reel-spin 8s linear infinite;
+    }
+
+    @keyframes reel-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ==========================================
+       ③ 【右側エリア】大画像ステージ（幅：32%）
+       ========================================== */
+    .character-graphic-stage {
+      width: 32vw; 
+      height: 100vh;
+      z-index: 10;
+      position: relative;
+      background-color: #02050a;
+    }
+
+    .huge-character-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: scale(1.03) rotate(0.5deg);
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .huge-character-photo.active {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    @media (max-width: 900px) {
+      body { overflow-y: auto; }
+      .stage-wrapper { flex-direction: column; height: auto; }
+      .character-graphic-stage { width: 100vw; height: 45vh; }
+      .nav-wheel-panel { width: 100vw; height: auto; padding: 20px 0; border-right: none; }
+      .cassette-deck { flex-direction: row; width: auto; height: 90px; padding: 10px 20px; }
+      .cassette-label { display: none; }
+      .circle-thumb.active img { animation: none; }
+      .info-panel { width: 100vw; height: auto; padding: 40px 20px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>ガーディアンズ・オブ・ギャラクシー</h1>
-        <img src="C:\Users\2318090\Downloads\iloveimg-converted\ガーディアンズオブギャラクシー.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2014年</p>
-            <p><strong>監督:</strong> ジェームズ・ガン</p>
-            <p><strong>出演:</strong> クリス・プラット,ゾーイ・サルダナ,デイヴ・バウティスタ,ヴィン・ディーゼル,ブラッドリー・クーパー,リー・ペイス,マイケル・ルーカー</p>
-            <p><strong>概要:</strong> 「アベンジャーズ」のスタジオが贈る。全員お尋ね者たちの宇宙最凶チームが、宇宙を救う為に立ち上がる、アクション・アドベンチャー超大作誕生</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=jHPvHQCAxLY" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="stage-wrapper">
+    <a href="映画一覧.html" class="back-to-hub">&lt; RETURN_TO_ARCHIVE_HUB</a>
+
+    <div class="info-panel">
+      <div class="movie-tag">GUARDIANS OF THE GALAXY VOL.1</div>
+      <h2 class="char-name" id="display-name"></h2>
+      <div class="status-tags-container" id="display-tags"></div>
+      <div class="char-slogan" id="display-slogan"></div>
+      <div class="char-description" id="display-desc"></div>
     </div>
+
+    <div class="nav-wheel-panel">
+      <div class="cassette-deck">
+        <div class="cassette-label">AWESOME MIX VOL.1</div>
+        <div class="wheel-axis" id="icon-wheel"></div>
+      </div>
+    </div>
+
+    <div class="character-graphic-stage" id="main-viewer"></div>
+  </div>
+
+  <script>
+    const gotgData = [
+      { 
+        name: "ピーター・クイル / スター・ロード", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー＿クイル.webp", 
+        large: "画像ファイル/スターロード.jpg", 
+        race: "人間（地球人） / 古代宇宙人ハーフ", 
+        style: "二丁エレメンタル・ガン // レトロガジェット駆使",
+        quote: "「俺はピーター・クイル。別名『スター・ロード』。……誰も知らないか？」", 
+        desc: "幼い頃に地球からラヴェジャーズに拉致され、宇宙海賊として育ったお調子者。盗み出した球体（オーブ）を巡る争奪戦の中で、偶然出会った仲間たちと「銀河の落ちこぼれチーム」を結成することになる。亡き母の形見であるカセットテープの音楽を常に愛聴している。" 
+      },
+      { 
+        name: "ガモーラ", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー＿ガモーラ.webp", 
+        large: "画像ファイル/ガモーラ.jpg", 
+        race: "ゼホベレイ族（サイバネティクス改造）", 
+        style: "白兵剣術 // 暗殺格闘術",
+        quote: "「私はサノスの娘ではない。自分の道を歩む。」", 
+        desc: "「宇宙で最も危険な女」と恐れられる超一流の暗殺者。幼い頃に故郷を滅ぼされ、サノスの養女として体をサイバネティクス改造されながら暗殺・戦闘訓練を叩き込まれた。しかしサノスを激しく憎んでおり、オーブを売却して組織から脱走を企てる。" 
+      },
+      { 
+        name: "ロケット", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー＿ロケット.jpg", 
+        large: "画像ファイル/ロケット.jpg", 
+        race: "遺伝子遺伝・サイバネティクス強化生物", 
+        style: "重火器重砲撃 // 特殊矢・爆弾製造",
+        quote: "「俺をアライグマと呼ぶな！バラバラに吹き飛ばすぞ！」", 
+        desc: "違法な遺伝子実験とサイバネティクス手術によって、高度な知性と戦闘能力を植え付けられた元実験体。見た目はアライグマだが、宇宙船の操縦や天才的な兵器製造、爆弾解体の技術を持つ。相棒のグルートと共に宇宙の賞金稼ぎとして荒稼ぎしていた。" 
+      },
+      { 
+        name: "グルート", 
+        thumb: "画像ファイル/グルート.jpg", 
+        large: "画像ファイル/ガーディアンズ・オブ・ギャラクシー＿グルート.jpg", 
+        race: "フローラ・コロッサス（植物型地球外生命体）", 
+        style: "肉体樹木伸縮 // 圧倒的広範囲制圧",
+        quote: "「アイ・アム・グルート（俺はグルート）」", 
+        desc: "「アイ」「アム」「グルート」の3つの言葉しか喋ることができない、樹木型の巨生命体。心優しくおっとりしているが、戦闘時は体の一部（枝や根）を急激に伸縮・肥大化させて無数の敵を圧倒する。ロケットの相棒であり、唯一言葉の意図を正確に理解してもらえる親友。" 
+      }
+    ];
+
+    function initGotgViewer() {
+      const wheel = document.getElementById('icon-wheel');
+      const viewer = document.getElementById('main-viewer');
+
+      gotgData.forEach((char, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `circle-thumb ${idx === 0 ? 'active' : ''}`;
+        btn.setAttribute('id', `gotg-thumb-${idx}`);
+        btn.setAttribute('onclick', `selectGotgCharacter(${idx})`);
+
+        const thumbImg = document.createElement('img');
+        thumbImg.src = char.thumb;
+        thumbImg.alt = char.name;
+        btn.appendChild(thumbImg);
+        wheel.appendChild(btn);
+
+        const largeImg = document.createElement('img');
+        largeImg.src = char.large;
+        largeImg.className = `huge-character-photo ${idx === 0 ? 'active' : ''}`;
+        largeImg.setAttribute('id', `gotg-huge-${idx}`);
+        viewer.appendChild(largeImg);
+      });
+
+      selectGotgCharacter(0);
+    }
+
+    function selectGotgCharacter(index) {
+      const char = gotgData[index];
+
+      document.getElementById('display-name').innerText = char.name;
+      document.getElementById('display-slogan').innerText = char.quote;
+      document.getElementById('display-desc').innerText = char.desc;
+
+      const tagsContainer = document.getElementById('display-tags');
+      tagsContainer.innerHTML = '';
+      
+      const raceSpan = document.createElement('span');
+      raceSpan.className = 'status-tag';
+      raceSpan.innerText = `RACE: ${char.race}`;
+      tagsContainer.appendChild(raceSpan);
+
+      const styleSpan = document.createElement('span');
+      styleSpan.className = 'status-tag style-tag';
+      styleSpan.innerText = `STYLE: ${char.style}`;
+      tagsContainer.appendChild(styleSpan);
+
+      const largeImages = document.querySelectorAll('.huge-character-photo');
+      largeImages.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+      });
+
+      const thumbs = document.querySelectorAll('.circle-thumb');
+      thumbs.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+    }
+
+    window.onload = initGotgViewer;
+  </script>
 </body>
 </html>

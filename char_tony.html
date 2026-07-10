@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHARACTER FILE: TONY STARK - MARVEL ARCHIVE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           マルチバース・キャラクターデータファイル UI
+           ========================================== */
+        :root {
+          --marvel-red: #e60033;
+          --bg-dark: #060913; 
+          --panel-bg: rgba(13, 20, 38, 0.8);
+          --text-light: #f3f4f6;
+          --text-muted: #9ca3af;
+          --accent-cyan: #00d2ff;
+          --accent-gold: #dfb36c;
+          --tag-bg: rgba(0, 210, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Noto Sans JP', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            background: radial-gradient(circle at center, #0f172a 0%, #050811 100%) fixed;
+            min-height: 100vh;
+        }
+
+        /* 🔙 共通：キャラクターメニューに戻るボタン */
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            border: 1px solid var(--accent-cyan);
+            padding: 8px 18px;
+            border-radius: 4px;
+            background: rgba(0, 210, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 100;
+            letter-spacing: 1px;
+        }
+
+        .back-button:hover {
+            background: var(--accent-cyan);
+            color: #000000;
+            box-shadow: 0 0 20px var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 90px auto 60px auto;
+            padding: 40px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        /* 🌌 カウンタ：世界線インジケータ */
+        .universe-id {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+            background: rgba(223, 179, 108, 0.07);
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(223, 179, 108, 0.2);
+        }
+
+        /* 📋 左右分割スプリットコンテナ */
+        .profile-wrapper {
+            display: flex;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        /* 🖼️ 左カラム：画像 ＆ ナナオリ式スペック */
+        .profile-left {
+            flex: 1;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .char-image-frame {
+            width: 100%;
+            height: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            background-color: #000;
+        }
+
+        .char-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .status-box {
+            background-color: rgba(9, 13, 24, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        .status-box h3 {
+            font-family: 'Oswald', sans-serif;
+            margin: 0 0 1.2rem 0;
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            padding-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .spec-item {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed rgba(255,255,255,0.03);
+            padding-bottom: 8px;
+        }
+
+        .spec-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .spec-item span:first-child { font-weight: 700; color: #ffffff; }
+        .spec-item span:last-child { font-family: 'Share Tech Mono', monospace; color: #cbd5e1; text-align: right; }
+
+        .spec-item.highlight span:last-child {
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           📑 右カラム：情報 ＆ タイムライン
+           ========================================== */
+        .profile-right {
+            flex: 1.6;
+            min-width: 360px;
+        }
+
+        .id-section {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .codename {
+            font-family: 'Oswald', sans-serif;
+            color: var(--marvel-red);
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0 0 0.4rem 0;
+        }
+
+        .realname {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .quote-box {
+            font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+            font-weight: 700;
+            line-height: 1.6;
+            color: #ffffff;
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1.2rem 1.5rem;
+            margin: 2.5rem 0;
+            background: linear-gradient(90deg, rgba(0, 210, 255, 0.03) 0%, transparent 100%);
+            border-radius: 0 8px 8px 0;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .section-title {
+            font-family: 'Oswald', 'Noto Sans JP', sans-serif;
+            font-size: 1.3rem;
+            color: white;
+            border-left: 4px solid var(--marvel-red);
+            padding-left: 0.8rem;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .biography {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        /* 🎬 ナナオリ風構造化出演作タイムライン */
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .timeline-phase-divider {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            margin-top: 1.5rem;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .timeline-phase-divider::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(0, 210, 255, 0.3), transparent);
+        }
+        .timeline-phase-divider:first-child { margin-top: 0; }
+
+        /* 🔗 映画リンク用のデザインスタイル */
+        .movie-link {
+            text-decoration: none; /* 下線を消す */
+            display: block; /* ブロック要素にして1行丸ごとクリック可能に */
+        }
+
+        .timeline-item {
+            background-color: rgba(9, 13, 24, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        /* ホバー時に枠線がネオンシアンに光り、全体が少し明るくなる */
+        .movie-link:hover .timeline-item {
+            border-color: rgba(0, 210, 255, 0.4);
+            background-color: rgba(14, 22, 38, 0.6);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+        }
+        
+        .movie-link:hover .movie-title {
+            color: var(--accent-cyan); /* タイトルをシアンブルーに発光 */
+            transition: color 0.3s ease;
+        }
+
+        .movie-title {
+            font-weight: 700;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .movie-year {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            background-color: rgba(223, 179, 108, 0.08);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(223, 179, 108, 0.15);
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 768px) {
+            .main-container { padding: 25px 20px; margin-top: 90px; }
+            .profile-wrapper { gap: 2.5rem; }
+            .back-button { top: 20px; left: 20px; }
+            .universe-id { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔙 大元のキャラクターメニューに戻るボタン -->
+    <a href="キャラ紹介ページ.html" class="back-button">&lt; RETURN_TO_MENU</a>
+
+    <div class="main-container">
+        <!-- 🌌 ナナオリ風世界線インデックス -->
+        <div class="universe-id">REGISTRY: EARTH-616 // MCU MAIN</div>
+
+        <div class="profile-wrapper">
+            
+            <!-- 【左カラム】画像 ＆ データスペック -->
+            <div class="profile-left">
+                <div class="char-image-frame">
+                    <img src="画像ファイル\AOU＿トニー.jpg" alt="アイアンマン">
+                </div>
+                
+                <div class="status-box">
+                    <h3>DATA SPECIFICATION</h3>
+                    <div class="spec-item highlight"><span>種族（Race）</span><span>人間（地球人）</span></div>
+                    <div class="spec-item highlight"><span>戦闘スタイル</span><span>リパルサー // 近接格闘</span></div>
+                    
+                    <div class="spec-item"><span>所属チーム</span><span>AVENGERS (創設メンバー)</span></div>
+                    <div class="spec-item"><span>主な装備</span><span>パワードアーマー (MARK 1 ~ 85)</span></div>
+                    <div class="spec-item"><span>特殊能力</span><span>なし</span></div>
+                    <div class="spec-item"><span>地球脅威度</span><span>LEVEL: OMNI (最高警戒)</span></div>
+                </div>
+            </div>
+
+            <!-- 【右カラム】詳細記述 ＆ 構造化タイムライン -->
+            <div class="profile-right">
+                <div class="id-section">
+                    <div class="codename">IRON MAN</div>
+                    <h1 class="realname">トニー・スターク</h1>
+                </div>
+
+                <div class="quote-box">
+                    「真実は…私がアイアンマンだ。」
+                </div>
+
+                <h2 class="section-title">キャラクター概要</h2>
+                <p class="biography">
+                    アーマースーツを着て戦う天才的な頭脳の持ち主であり、発明家。自作兵器が悪用されていた現実を契機に兵器開発から撤退、自ら開発した最先端アーマーを纏い世界を守る。最初は利己的な大富豪であったが、数々の死線を越える中で、全宇宙を救うために自らを捧げる高潔なヒーローへと覚醒していく。彼が開発するアーマーは、作品を跨ぐ毎にナノテクノロジー等を用いていくようになり、驚異的な変形機構を備え、常に戦闘データを基に極限までアップデートされ続けている。
+                </p>
+
+                <h2 class="section-title">出演作品（MCU PHASE TIMELINE）</h2>
+                <div class="timeline-list">
+                    <!-- PHASE 1 -->
+                    <div class="timeline-phase-divider">MCU PHASE 1</div>
+                    <a href="アイアンマン.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アイアンマン</span><span class="movie-year">2008</span></div>
+                    </a>
+                    <a href="アイアンマン2.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アイアンマン２</span><span class="movie-year">2010</span></div>
+                    </a>
+                    <a href="アベンジャーズ.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アベンジャーズ</span><span class="movie-year">2012</span></div>
+                    </a>
+                    
+                    <!-- PHASE 2 -->
+                    <div class="timeline-phase-divider">MCU PHASE 2</div>
+                    <a href="アイアンマン３.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アイアンマン３</span><span class="movie-year">2013</span></div>
+                    </a>
+                    <a href="エイジオブウルトロン.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アベンジャーズ／エイジ・オブ・ウルトロン</span><span class="movie-year">2015</span></div>
+                    </a>
+                    
+                    <!-- PHASE 3 -->
+                    <div class="timeline-phase-divider">MCU PHASE 3</div>
+                    <a href="シビルウォー.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">シビル・ウォー／キャプテン・アメリカ</span><span class="movie-year">2016</span></div>
+                    </a>
+                    <a href="スパイダーマン＿ホームカミング.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">スパイダーマン／ホームカミング</span><span class="movie-year">2017</span></div>
+                    </a>
+                    <a href="アベンジャーズ_インフィニティウォー.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アベンジャーズ／インフィニティ・ウォー</span><span class="movie-year">2018</span></div>
+                    </a>
+                    <a href="アベンジャーズ_エンドゲーム.html" class="movie-link">
+                        <div class="timeline-item"><span class="movie-title">アベンジャーズ／エンドゲーム</span><span class="movie-year">2019</span></div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

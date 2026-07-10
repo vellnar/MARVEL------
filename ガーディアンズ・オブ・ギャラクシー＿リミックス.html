@@ -1,49 +1,424 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【GUARDIANS OF THE GALAXY: REMIX】 - AWESOME MIX VOL.2 TERMINAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       サイケデリック・ネオンディスコUI
+       ========================================== */
+    :root {
+      --remix-magenta: #ec4899; /* ビヴィッドなファンキーピンク */
+      --remix-cyan: #06b6d4;    /* レーザー光線のようなシアン */
+      --remix-purple: #6366f1;  /* コズミックなパープル */
+      --bg-space: #03040b;
+      --text-light: #f3f4f6;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #1e1135 0%, #03040b 100%) fixed;
+      color: var(--text-light);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ディスコナイトのようなグリッド光 overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(236, 72, 153, 0.01) 1px, transparent 1px) 0 0 / 20px 20px,
+                  linear-gradient(rgba(236, 72, 153, 0.01) 1px, transparent 1px) 0 0 / 20px 20px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* 🔙 共通：映画リストに戻るボタン（スペースディスコ・パネル風） */
+    .back-to-hub {
+      position: absolute;
+      top: 25px;
+      left: 40px;
+      font-family: 'Oswald', 'Share Tech Mono', sans-serif;
+      font-size: 0.85rem;
+      color: var(--remix-magenta);
+      text-decoration: none;
+      border: 1px solid var(--remix-magenta);
+      padding: 6px 14px;
+      border-radius: 4px;
+      background: rgba(236, 72, 153, 0.03);
+      z-index: 100;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+    .back-to-hub:hover {
+      background: var(--remix-magenta);
+      color: #000;
+      box-shadow: 0 0 20px var(--remix-magenta);
+      font-weight: bold;
+    }
+
+    /* 🎬 メインステージ（3エリア・完全セパレート） */
+    .stage-wrapper {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ==========================================
+       ① 【左側エリア】ポップレコーダー風テキスト情報（52%）
+       ========================================== */
+    .info-panel {
+      width: 52vw;
+      height: 100vh;
+      padding: 90px 40px 0 60px; /* 上部マージンをガッツリ取って被りを絶対防止 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 30;
+      box-sizing: border-box;
+      background: linear-gradient(90deg, rgba(3,4,11,1) 80%, rgba(3,4,11,0.8) 95%, transparent 100%);
+    }
+
+    .movie-tag {
+      font-family: 'Oswald', sans-serif;
+      color: var(--remix-cyan);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 0.3rem;
+    }
+
+    .char-name {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 0.8rem 0;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    /* 🛡️ 属性・スタイルタグ（ボリュームメーター調） */
+    .status-tags-container {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .status-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      background-color: var(--remix-purple);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 3px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      font-family: 'Oswald', sans-serif;
+    }
+    .status-tag.style-tag {
+      background-color: transparent;
+      color: var(--remix-magenta);
+      border: 1px solid var(--remix-magenta);
+    }
+
+    /* 💬 名言スローガン */
+    .char-slogan {
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--remix-magenta);
+      padding-left: 1.2rem;
+      text-shadow: 0 2px 10px rgba(236, 72, 153, 0.3);
+    }
+
+    /* 解説文 */
+    .char-description {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 500px;
+      text-align: justify;
+      background: rgba(22, 12, 44, 0.6);
+      padding: 1.2rem 1.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(236, 72, 153, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* ==========================================
+       ② 【中央エリア】AWESOME MIX Vol.2 イコライザーUI（16%）
+       ========================================== */
+    .nav-wheel-panel {
+      width: 16vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
+      background: linear-gradient(90deg, rgba(3,4,11,0.4) 0%, rgba(20,10,38,0.95) 100%);
+      border-right: 1px solid rgba(236, 72, 153, 0.15);
+      box-sizing: border-box;
+    }
+
+    /* イコライザーラック風デバイダ */
+    .equalizer-rack {
+      background: #110924;
+      border: 2px solid #31184a;
+      border-radius: 16px;
+      padding: 24px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
+      width: 115px;
+      position: relative;
+    }
+
+    .rack-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--remix-cyan);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px dashed rgba(6, 182, 212, 0.3);
+      width: 100%;
+      padding-bottom: 6px;
+    }
+
+    /* 🔊 ネオンサークルボタン ＆ 音波アニメーション */
+    .circle-thumb {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      overflow: hidden;
+      background-color: #000;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      padding: 0;
+      outline: none;
+      position: relative;
+    }
+
+    .circle-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(40%) grayscale(60%);
+      transition: all 0.3s ease;
+    }
+
+    /* アクティブ時：ピンクネオン発光 ＆ 音波がパルスする上下バウンス */
+    .circle-thumb.active {
+      border-color: var(--remix-magenta);
+      transform: scale(1.12);
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+    }
+
+    .circle-thumb.active img {
+      filter: brightness(110%) grayscale(0%);
+      animation: audio-bounce 1.2s ease-in-out infinite alternate; /* リズムに乗るバウンス */
+    }
+
+    @keyframes audio-bounce {
+      0% { transform: scale(1); filter: contrast(100%); }
+      100% { transform: scale(1.05); filter: contrast(120%) brightness(120%); }
+    }
+
+    /* ==========================================
+       ③ 【右側エリア】大画像ステージ（幅：32%）
+       ========================================== */
+    .character-graphic-stage {
+      width: 32vw; 
+      height: 100vh;
+      z-index: 10;
+      position: relative;
+      background-color: #020307;
+    }
+
+    .huge-character-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: scale(1.01) translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .huge-character-photo.active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* ==========================================
+       📱 モバイルレイアウト変換
+       ========================================== */
+    @media (max-width: 900px) {
+      body { overflow-y: auto; }
+      .stage-wrapper { flex-direction: column; height: auto; }
+      .character-graphic-stage { width: 100vw; height: 45vh; }
+      .nav-wheel-panel { width: 100vw; height: auto; padding: 20px 0; border-right: none; }
+      .equalizer-rack { flex-direction: row; width: auto; height: 90px; padding: 10px 20px; }
+      .rack-title { display: none; }
+      .circle-thumb.active img { animation: none; }
+      .info-panel { width: 100vw; height: auto; padding: 40px 20px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>ガーディアンズ・オブ・ギャラクシー　リミックス</h1>
-        <img src="C:\Users\2318090\Downloads\iloveimg-converted\ガーディアンズオブギャラクシー　リミックス.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2017年</p>
-            <p><strong>監督:</strong> ジェームズ・ガン</p>
-            <p><strong>出演:</strong> クリス・プラット,ゾーイ・サルダナ,ブラッドリー・クーパー,ヴィン・ディーゼル,デイヴ・バウティスタ,カレン・ギラン,マイケル・ルーカー</p>
-            <p><strong>概要:</strong> “スター・ロード”ことピーター・クイルをリーダーに、凶暴なアライグマのロケット、マッチョな破壊王ドラックス、ツンデレ暗殺者ガモーラなど、たまたま出会ったノリで結成された宇宙の“はみ出し者”チーム、＜ガーディアンズ・オブ・ギャラクシー＞。小遣い稼ぎに請けた仕事をきっかけに、強大な力を持つ“黄金の惑星”の指導者アイーシャ率いる無敵艦隊から総攻撃を受け、彼らの宇宙船ミラノ号は壊滅寸前に…。間一髪、ガーディアンズを救ったのは“ピーターの父親”と名乗る謎の男エゴと、触れただけで相手の感情が分かる能力を持つマンティスだった。仲間からの忠告にも関わらずエゴに魅了されていくピーターの姿を見て、次第にチームの絆に亀裂が…。そこへ“ピーター育ての親”ヨンドゥが率いる宇宙海賊の襲撃や、さらに銀河全体を脅かす恐るべき陰謀が交錯していく。はたして、ピーターの出生に隠された衝撃の真実とは？ そして、彼らは絆を取り戻し、銀河を救うことが出来るのか？ その運命の鍵を握るのは、チーム一小さくてキュートな、ガーディアンズの最終兵“木”グルートだった…。</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=D6Dou3vqL8E" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <div class="stage-wrapper">
+    <!-- 🔙 映画ハブに戻るボタン -->
+    <a href="映画一覧.html" class="back-to-hub">&lt; RETURN_TO_ARCHIVE_HUB</a>
+
+    <!-- 【左】テキスト領域（全体の52%） -->
+    <div class="info-panel">
+      <div class="movie-tag">GUARDIANS OF THE GALAXY: REMIX</div>
+      <h2 class="char-name" id="display-name"></h2>
+      
+      <!-- 🛡️ 属性・種族スペック -->
+      <div class="status-tags-container" id="display-tags"></div>
+      
+      <div class="char-slogan" id="display-slogan"></div>
+      <div class="char-description" id="display-desc"></div>
     </div>
+
+    <!-- 【中央】AWESOME MIX Vol.2 イコライザーラック型セレクター -->
+    <div class="nav-wheel-panel">
+      <div class="equalizer-rack">
+        <div class="rack-title">VOLUME 2</div>
+        <div class="wheel-axis" id="icon-wheel">
+          <!-- JSでネオンイコライザーアイコンが自動生成されます -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 【右】巨大画像ステージ（全体の32%） -->
+    <div class="character-graphic-stage" id="main-viewer"></div>
+  </div>
+
+  <!-- ==========================================
+     コア・データエンジン ＆ イコライザー同期スクリプト
+     ========================================== -->
+  <script>
+    // 💾 カウンタ・4人セパレートマトリクスデータ
+    const remixData = [
+      { 
+        name: "ピーター・クイル / スター・ロード", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿クイル.webp", 
+        large: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿クイル＿右.jpeg", 
+        race: "ハーフ（地球人 × 天界人エゴ）", 
+        style: "エレメンタル・ブラスター // 天界光エネルギー",
+        quote: "「時には、自分が求めているものが、ずっと目の前にあったりするんだ」", 
+        desc: "ガーディアンズを率いるリーダー。ある惑星での任務をきっかけに、長年謎だった自身の父親であり、神のような力を持つ天界人「エゴ」と衝撃の再会を果たす。エゴの楽園のような惑星に招かれるが、その裏に隠された恐ろしい野望を知ることになる。" 
+      },
+      { 
+        name: "ロケット", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿ロケット.jpg", 
+        large: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿ロケット.jpg", 
+        race: "高度遺伝子強化サイバネティクス生物", 
+        style: "トラップ・即興ブービートラップ // 重火器乱射",
+        quote: "「俺たちが救えるのは、このクソ銀河だけだからな！」", 
+        desc: "口の悪さとひねくれた性格は健在だが、根はチームを誰よりも想うアライグマ（本人は否定）。ソヴリン人の高級電池を盗み出したことでチームを大危機に陥れる。ヨンドゥに「傷つくのを恐れて仲間を突き放している」という本質を見抜かれ、不器用な絆を育んでいく。" 
+      },
+      { 
+        name: "ベイビー・グルート", 
+        thumb: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿グルート.jpg", 
+        large: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿グルート.jpg", 
+        race: "フローラ・コロッサス（幼木期）", 
+        style: "愛嬌 // 小樹枝触手攻撃 // 爆弾スイッチ起動",
+        quote: "「アイ・アム・グルート！」", 
+        desc: "前作のラストで挿し木から生まれ変わった、チームの超マスコット。体は小さく知能も幼児並みになったが、音楽に合わせて踊るマイペースさは健在。チーム全員から我が子のように過保護に、かつ大雑把に育てられている。怒ると結構凶暴。" 
+      },
+      { 
+        name: "ヨンドゥ・ウドンタ", 
+        thumb: "画像ファイル/ヨンドゥ.jpg", 
+        large: "画像ファイル/ガーディアンズ・オブ・ギャラクシー2＿ヨンドゥ.avif", 
+        race: "ケンタウリ人（ラヴェジャーズ元リーダー）", 
+        style: "口笛制御型ヤカの矢 // 圧倒的一矢全滅",
+        quote: "「クイル、あいつは親父かもしれないが、俺は……お前の父親（ダディ）だ。」", 
+        desc: "宇宙海賊ラヴェジャーズの一派を率いていた青い皮膚の男。掟を破って幼いクイルをエゴに引き渡さず、手元で泥棒の技術を叩き込みながら育てた。今作では部下に裏切られ拘束されるが、ロケット達と共闘し、本当の「父親」としてのプライドを賭けた最後の戦いに挑む。" 
+      }
+    ];
+
+    function initRemixViewer() {
+      const wheel = document.getElementById('icon-wheel');
+      const viewer = document.getElementById('main-viewer');
+
+      remixData.forEach((char, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `circle-thumb ${idx === 0 ? 'active' : ''}`;
+        btn.setAttribute('id', `remix-thumb-${idx}`);
+        btn.setAttribute('onclick', `selectRemixCharacter(${idx})`);
+
+        const thumbImg = document.createElement('img');
+        thumbImg.src = char.thumb;
+        thumbImg.alt = char.name;
+        btn.appendChild(thumbImg);
+        wheel.appendChild(btn);
+
+        const largeImg = document.createElement('img');
+        largeImg.src = char.large;
+        largeImg.className = `huge-character-photo ${idx === 0 ? 'active' : ''}`;
+        largeImg.setAttribute('id', `remix-huge-${idx}`);
+        viewer.appendChild(largeImg);
+      });
+
+      selectRemixCharacter(0);
+    }
+
+    function selectRemixCharacter(index) {
+      const char = remixData[index];
+
+      document.getElementById('display-name').innerText = char.name;
+      document.getElementById('display-slogan').innerText = char.quote;
+      document.getElementById('display-desc').innerText = char.desc;
+
+      const tagsContainer = document.getElementById('display-tags');
+      tagsContainer.innerHTML = '';
+      
+      const raceSpan = document.createElement('span');
+      raceSpan.className = 'status-tag';
+      raceSpan.innerText = `RACE: ${char.race}`;
+      tagsContainer.appendChild(raceSpan);
+
+      const styleSpan = document.createElement('span');
+      styleSpan.className = 'status-tag style-tag';
+      styleSpan.innerText = `STYLE: ${char.style}`;
+      tagsContainer.appendChild(styleSpan);
+
+      const largeImages = document.querySelectorAll('.huge-character-photo');
+      largeImages.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+      });
+
+      const thumbs = document.querySelectorAll('.circle-thumb');
+      thumbs.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+    }
+
+    window.onload = initRemixViewer;
+  </script>
 </body>
 </html>

@@ -1,49 +1,465 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>映画タイトルの紹介</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .movie-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        .movie-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .movie-container h1 {
-            margin-top: 0;
-        }
-        .movie-details {
-            margin-top: 20px;
-        }
-        .movie-details p {
-            margin: 5px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>【AVENGERS: INFINITY WAR】 - THE END OF THE UNIVERSE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700;900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       インフィニティ・ウォー：6ストーン連動型シネマティックUI
+       ========================================== */
+    :root {
+      --bg-ruins: #05060b;      
+    }
+
+    body {
+      font-family: 'Noto Sans JP', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 30% 50%, #150b10 0%, var(--bg-ruins) 100%) fixed;
+      color: #f3f4f6;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+      box-sizing: border-box;
+      transition: opacity 2s ease, filter 2s ease, transform 2s ease;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 0) 0 0 / 8px 8px,
+        linear-gradient(rgba(0,0,0,0.15) 50%, transparent 50%) 0 0 / 100% 6px;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.6;
+    }
+
+    /* 🌪️ ページが塵（灰）になって消滅するエフェクト */
+    body.snap-decimation {
+      pointer-events: none;
+      opacity: 0;
+      filter: blur(10px) contrast(140%) brightness(40%) grayscale(90%);
+      transform: scale(1.03) translateY(-40px);
+    }
+
+    /* ==========================================
+       🛡️ 上部ヘッダー（固定隔離エリア）
+       ========================================== */
+    .terminal-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 90px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 45px;
+      box-sizing: border-box;
+      z-index: 150;
+    }
+
+    .snap-back-trigger {
+      font-family: 'Share Tech Mono', 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 8px 18px;
+      background: rgba(5, 6, 11, 0.7);
+      border-radius: 4px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .snap-back-trigger:hover {
+      color: #dfb36c;
+      border-color: #dfb36c;
+      box-shadow: 0 0 15px rgba(223, 179, 108, 0.2);
+    }
+
+    .universe-id {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: #dfb36c;
+      letter-spacing: 2px;
+      background: rgba(223, 179, 108, 0.05);
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(223, 179, 108, 0.15);
+    }
+
+    /* 🎬 メインレイアウトコンテナ */
+    .universe-canvas {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    /* ==========================================
+       ① 【左半分エリア】テキスト情報（幅60%）
+       ========================================== */
+    .info-panel {
+      width: 60vw;
+      height: 100vh;
+      padding: 110px 40px 40px 60px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 40;
+      box-sizing: border-box;
+      background: linear-gradient(90deg, rgba(5,6,11,1) 85%, rgba(5,6,11,0.8) 95%, transparent 100%);
+    }
+
+    .movie-sub-info {
+      font-family: 'Share Tech Mono', monospace;
+      color: #dfb36c;
+      font-size: 0.85rem;
+      letter-spacing: 5px;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      transition: color 0.5s ease;
+    }
+
+    .massive-name {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(1.8rem, 3.8vw, 2.8rem); 
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 1.2rem 0;
+      letter-spacing: 1px;
+      line-height: 1.3;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    }
+
+    .status-tags-container {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #000000;
+      background-color: #dfb36c;
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      font-family: 'Oswald', sans-serif;
+    }
+    .status-tag.style-tag {
+      background-color: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .epic-quote {
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.5;
+      margin-bottom: 1.8rem;
+      border-left: 4px solid #ffffff;
+      padding-left: 1.2rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      transition: border-color 0.5s ease;
+    }
+
+    .detailed-biography {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.85;
+      max-width: 540px;
+      text-align: justify;
+      background: rgba(13, 15, 26, 0.5);
+      padding: 1.2rem 1.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    /* ==========================================
+       ② 【右半分エリア】キャラクター画像専用ステージ（幅40%）
+       ========================================== */
+    .character-graphic-stage {
+      width: 40vw;
+      height: 100vh;
+      position: relative;
+      z-index: 10;
+      background-color: #020306;
+    }
+
+    .giant-photo-view {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .giant-photo-view.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ==========================================
+       ③ 【前面】インフィニティ・ボトムナビ（6つのストーン発光）
+       ========================================== */
+    .bottom-selector-belt {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      z-index: 60;
+      display: flex;
+      gap: 1.2rem;
+      background: rgba(5, 6, 11, 0.75);
+      padding: 12px 24px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+    }
+
+    .stone-node {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      background: #000;
+      cursor: pointer;
+      overflow: hidden;
+      padding: 0;
+      outline: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stone-node img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(35%) grayscale(70%);
+      transition: all 0.3s ease;
+    }
+
+    /* ホバー時とアクティブ時に固有のカラー画像へ復元 */
+    .stone-node.active img, .stone-node:hover img {
+      filter: brightness(110%) grayscale(0%);
+    }
+
+    /* 🔮 動的パルスアニメーション（JSから色がここに流し込まれます） */
+    @keyframes stone-glow-pulse {
+      0% { box-shadow: 0 0 8px var(--active-stone-color); }
+      100% { box-shadow: 0 0 25px var(--active-stone-color); transform: scale(1.15); }
+    }
+
+    /* 📱 モバイルレイアウト自動変換 */
+    @media (max-width: 900px) {
+      body { overflow-y: auto; }
+      .terminal-header { position: relative; height: auto; padding: 20px; flex-direction: column; gap: 10px; }
+      .universe-canvas { flex-direction: column; height: auto; }
+      .character-graphic-stage { width: 100vw; height: 45vh; }
+      .info-panel { width: 100vw; height: auto; padding: 30px 20px; background: #05060b; }
+      .bottom-selector-belt { position: relative; bottom: auto; right: auto; margin: 20px auto 40px auto; width: max-content; display: flex; flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
-    <div class="movie-container">
-        <h1>アベンジャーズ　インフィニティ・ウォー</h1>
-        <img src="C:\Users\2318090\Downloads\iloveimg-converted\アベンジャーズ　インフィニティウォー.jpg" alt="映画タイトルのポスター">
-        <div class="movie-details">
-            <p><strong>公開年:</strong> 2018年</p>
-            <p><strong>監督:</strong> アンソニー・ルッソ,ジョー・ルッソ</p>
-            <p><strong>出演:</strong> ロバート・ダウニー・ジュニア,クリス・ヘムズワース,マーク・ラファロ,クリス・エヴァンス,スカーレット・ヨハンソン,ベネディクト・カンバーバッチ,トム・ホランド</p>
-            <p><strong>概要:</strong> ６つすべてを手に入れると世界を滅ぼす無限大の力を得るインフィニティ・ストーン。その究極の力を秘めた石を狙う“最凶”にして最悪の敵＜ラスボス＞サノスを倒すため、アイアンマン、キャプテン・アメリカ、スパイダーマンら最強ヒーローチーム“アベンジャーズ”が集結。人類の命運をかけた壮絶なバトルの幕が開ける。果たして、彼らは人類を救えるのか？今、アベンジャーズ全滅へのカウントダウンが始まる！</p>
-            <p><strong>予告編:</strong> <a href="https://www.youtube.com/watch?v=7rmUFAgsI4M" target="_blank">こちらをクリック</a></p>
-        </div>
+
+  <!-- 🌐 上部ヘッダーエリア -->
+  <div class="terminal-header">
+    <div class="snap-back-trigger" onclick="snapAndGoBack()">[ DISCONNECT_TERMINAL ]</div>
+    <div class="universe-id">REGISTRY: EARTH-616 // SYSTEM_DECAY</div>
+  </div>
+
+  <div class="universe-canvas">
+    <!-- 【左】テキスト領域（全体の60%） -->
+    <div class="info-panel">
+      <div class="movie-sub-info" id="display-meta"></div>
+      <h2 class="massive-name" id="display-name"></h2>
+      <div class="status-tags-container" id="display-tags"></div>
+      <div class="epic-quote" id="display-quote"></div>
+      <div class="detailed-biography" id="display-desc"></div>
     </div>
+
+    <!-- 【右】画像領域（全体の40%） -->
+    <div class="character-graphic-stage" id="giant-container"></div>
+
+    <!-- 下部インフィニティ・ストーンナビベルト -->
+    <div class="bottom-selector-belt" id="node-belt"></div>
+  </div>
+
+  <!-- ==========================================
+     サノス・スナップ ＆ 6ストーンライト連動システム
+     ========================================== -->
+  <script>
+    // 💾 6ストーン連動型完全拡張マトリクスデータ
+    const infinityWarDatabase = [
+      {
+        name: "アイアンマン / トニー・スターク",
+        meta: "REALITY STONE // TITAN FRONT",
+        color: "#e60033", // 🟥 赤い光 (現実)
+        thumb: "画像ファイル/IW＿トニー.jpg",
+        large: "画像ファイル/IW＿アイアンマン.png",
+        race: "人間（地球人）",
+        style: "ナノテクノロジーアーマー（MARK 50） // 全戦況即興武装展開",
+        quote: "「悪いが地球はもう店じまいなんだ」",
+        desc: "ニューヨークに現れた宇宙船へ潜入し、サノスの故郷タイタンへ急行。魔術師ストレンジやスパイダーマン、ガーディアンズの面々と即興で手を組み、サノスを奇襲する。極限まで進化させたナノテク兵器「マーク50」の全火力を叩き込み、死力を尽くして戦うが、圧倒的なパワーの前に敗北。全宇宙の半分を賭けたストレンジの苦渋の取引により、タイム・ストーンを奪われる。"
+      },
+      {
+        name: "キャプテン・アメリカ / スティーブ・ロジャース",
+        meta: "SPACE STONE // WAKANDA FRONT",
+        color: "#3b82f6", // 🟦 青い光 (空間)
+        thumb: "画像ファイル/IW＿スティーブ.avif",
+        large: "画像ファイル/IW＿キャプテン.jpg",
+        race: "人間（超人血清適合者）",
+        style: "ワカンダ製ツイン・シールド // 近接ミリタリー格闘術",
+        quote: "「命の重さに、大小なんてない。私たちは仲間を犠牲にはしない」",
+        desc: "シビル・ウォーでの決別以降、影の逃亡チームとして世界を守っていた。ヴィジョンの額にあるマインド・ストーンを死守するため、ワカンダ王国へと前線復帰。圧倒的な数で押し寄せるサノスの軍勢を前に、ワカンダの戦士たちを率いて命がけの防衛戦を展開する。最後はストーンをすべて集め終えたサノスを素手で押し止めるという驚異の闘志を見せるが、一撃のもとに沈む。"
+      },
+      {
+        name: "ソー・オーディンソン",
+        meta: "MIND STONE // GOD OF THUNDER",
+        color: "#eab308", // 🟨 黄色の光 (精神)
+        thumb: "画像ファイル/IW＿ソー.webp",
+        large: "画像ファイル/IW＿雷神ソー.webp",
+        race: "アスガルド神族",
+        style: "究極神斧ストームブレイカー // 覚醒雷電魔術",
+        quote: "「サノスを　呼んで来い！」",
+        desc: "民と弟ロキをサノスに惨殺され、凄まじい復讐の執念に燃える雷神。ロケット達と共に神の武器を鍛える惑星ニダベリアへ向かい、星の全エネルギーをその身に浴びながら究極の斧「ストームブレイカー」を鍛え上げる。ワカンダの戦場へ電撃と共に降臨し軍勢を壊滅。ガントレットの光線を押し破ってサノスの胸に斧を突き刺すが、あと一歩及ばなかった。"
+      },
+      {
+        name: "ロキ・ラウフェイソン",
+        meta: "SOUL STONE // GOD OF MISCHIEF",
+        color: "#22c55e", // 🟩 緑の光 (魂 - 本作冒頭のロキの魂を讃えて)
+        thumb: "画像ファイル/IW＿ロキ.jpg",
+        large: "画像ファイル/IW＿悪戯の神ロキ.avif",
+        race: "霜の巨人族（アスガルド育ち）",
+        style: "アスガルド短剣術 // 幻影幻惑魔術",
+        quote: "「アスガルドの王オーディンの息子、ヨトゥンヘイムの正統なる王……そしてソーの弟だ」",
+        desc: "映画冒頭、アスガルドの避難船がサノスの急撃を受け窮地に陥る。ソーの命を救うため、保管していた四次元キューブ（スペース・ストーン）をサノスに差し出す。その後、臣下を装ってサノスに近づき、隠し持った短剣でその首を狙うという決死の奇襲を仕掛けるが、力及ばずサノスの手によって絞殺され、今作最初の衝撃的な犠牲者となる。"
+      },
+      {
+        name: "ドクター・ストレンジ / スティーブン・ストレンジ",
+        meta: "TIME STONE // MASTER OF MYSTIC ARTS",
+        color: "#f97316", // 🟧 オレンジの光 (時間)
+        thumb: "画像ファイル/IW＿ストレンジ.webp",
+        large: "画像ファイル/IW＿ストレンジ.avif",
+        race: "人間（地球人）",
+        style: "エルドリッチ・ライト魔術 // アガモットの目（タイム・ストーン）",
+        quote: "「1400万と605の未来を見てきた。……私たちが勝てる世界線は、1つだけだ」",
+        desc: "地球に現れたサノスの伏兵に拉致されるも、トニーらに救出されタイタン星へ。タイム・ストーンを用いて、これから起こるサノスとの未来の戦いを1400万通り以上超越して予視する。タイタンでの決戦でトニーが殺されかけた際、ストーンをサノスに渡すことでトニーの命を救う。「これしか方法がなかった」と言い残し、指パッチン後に塵となって消え去る。"
+      },
+      {
+        name: "サノス",
+        meta: "POWER STONE // THE MAD TITAN",
+        color: "#a855f7", // 🟪 紫の光 (力)
+        thumb: "画像ファイル/サノス.jpg",
+        large: "画像ファイル/IW＿サノス.webp",
+        race: "タイタン星人",
+        style: "インフィニティ・ガントレット // 宇宙物理法則の絶対掌握",
+        quote: "「小さな代償で大勢を救っただけだ。これは簡単な計算だ。宇宙は限られてる。資源も限られてる。命が増えるがままにしておいたら、やがては全滅する。修正が必要なんだ。」",
+        desc: "今作の絶対的なヴィラン。人口増加による滅亡の危機を止めるため、「生命の半分を無作為に消し去る」という狂気の救済を信じるタイタン族の生き残り。ヒーローたちを圧倒的な武力とストーンの力でなぎ倒し、ついに6つのインフィニティ・ストーンをガントレットに揃える。ソーに致命傷を負わされながらも、指パッチン（スナップ）を敢行する。"
+      }
+    ];
+
+    function initThanosTerminal() {
+      const belt = document.getElementById('node-belt');
+      const giantStage = document.getElementById('giant-container');
+
+      infinityWarDatabase.forEach((char, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `stone-node ${idx === 0 ? 'active' : ''}`;
+        btn.setAttribute('id', `stone-${idx}`);
+        btn.setAttribute('onclick', `triggerShift(${idx})`);
+
+        // それぞれに固有の発光用カスタムカラー変数をCSSに埋め込む
+        btn.style.setProperty('--active-stone-color', char.color);
+
+        const img = document.createElement('img');
+        img.src = char.thumb;
+        img.alt = char.name;
+        btn.appendChild(img);
+        belt.appendChild(btn);
+
+        const largeImg = document.createElement('img');
+        largeImg.src = char.large;
+        largeImg.className = `giant-photo-view ${idx === 0 ? 'active' : ''}`;
+        largeImg.setAttribute('id', `giant-view-${idx}`);
+        giantStage.appendChild(largeImg);
+      });
+
+      triggerShift(0);
+    }
+
+    function triggerShift(index) {
+      const char = infinityWarDatabase[index];
+
+      // 前面テキスト・メタデータの入れ替え
+      document.getElementById('display-meta').innerText = char.meta;
+      document.getElementById('display-name').innerText = char.name;
+      document.getElementById('display-quote').innerText = char.quote;
+      document.getElementById('display-desc').innerText = char.desc;
+
+      // 🛡️ ナナオリ式：種族 ＆ スタイルタグの動的生成
+      const tagsContainer = document.getElementById('display-tags');
+      tagsContainer.innerHTML = '';
+      
+      const raceSpan = document.createElement('span');
+      raceSpan.className = 'status-tag';
+      raceSpan.innerText = `RACE: ${char.race}`;
+      tagsContainer.appendChild(raceSpan);
+
+      const styleSpan = document.createElement('span');
+      styleSpan.className = 'status-tag style-tag';
+      styleSpan.innerText = `STYLE: ${char.style}`;
+      tagsContainer.appendChild(styleSpan);
+
+      // ✨ 【連動ギミック】左側の文字や枠線の色も、ストーンの魔力に合わせてシンクロ発光させる
+      document.getElementById('display-meta').style.color = char.color;
+      document.getElementById('display-quote').style.borderColor = char.color;
+
+      // 画像のフェードアクティブ制御
+      const photos = document.querySelectorAll('.giant-photo-view');
+      photos.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+      });
+
+      // ナびボタンのアクティブ制御（アニメーションの付帰属）
+      const nodes = document.querySelectorAll('.stone-node');
+      nodes.forEach((node, i) => {
+        if (i === index) {
+          node.classList.add('active');
+          node.style.animation = 'stone-glow-pulse 1.2s ease-in-out infinite alternate';
+          node.style.borderColor = char.color;
+        } else {
+          node.classList.remove('active');
+          node.style.animation = 'none';
+          node.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+        }
+      });
+    }
+
+    function snapAndGoBack() {
+      document.body.classList.add('snap-decimation');
+      setTimeout(() => {
+        window.location.href = "映画一覧.html";
+      }, 2000);
+    }
+
+    window.onload = initThanosTerminal;
+  </script>
 </body>
 </html>
